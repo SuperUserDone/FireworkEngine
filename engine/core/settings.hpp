@@ -16,7 +16,7 @@ struct render_settings
     uint32_t width = 800;
     uint32_t height = 600;
 
-    bool vsync = false;
+    bool vsync = true;
     int monitor = 0;
 };
 

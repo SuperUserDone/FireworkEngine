@@ -5,11 +5,14 @@ project(BloodEngine VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 
-include_directories("engine" "extern/include" "extern/include/entt")
+include_directories("engine" "extern/include" "extern/include/entt"
+                    "extern/fmt/include")
 
 include(FindPkgConfig)
 
 pkg_check_modules(SDL sdl2)
+
+add_subdirectory(extern/fmt)
 
 include_directories(${SDL_INCLUDE_DIRS})
 

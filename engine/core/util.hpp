@@ -2,12 +2,15 @@
 
 #include <stdint.h>
 
+#include "logger.hpp"
+
 #ifdef __linux__
 
 #include <time.h>
 
 #else
 
+// FIXME
 // Pray for wsl/cygwin/mingw for now
 #include <time.h>
 
@@ -22,5 +25,3 @@ inline void sleep_precise(uint64_t time_us)
 
     nanosleep(&t, nullptr);
 }
-
-#define BLOODENGINE_ASSERT(c) s ? ; : throw std::runtime_error 

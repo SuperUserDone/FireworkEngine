@@ -4,6 +4,8 @@
 
 #include <glad/gl.h>
 
+#include "core/logger.hpp"
+
 namespace blood
 {
 renderer::renderer(const render_settings &p_render_settings) : m_settings(p_render_settings)
@@ -41,11 +43,20 @@ renderer::~renderer()
 {
     SDL_GL_DeleteContext(m_context);
     SDL_DestroyWindow(m_window);
+    SDL_Quit();
 }
 
 void renderer::create_window()
 {
     m_window = nullptr;
+
+    BLOODENGINE_ASSERT(SDL_Init(SDL_INIT_VIDEO) == 0, "COULD NOT INIT SDL");
+
+    LOG_IF("Creating window with resolution {}x{} maximized on monitor {}, with vsync = {}",
+           m_settings.width,
+           m_settings.height,
+           m_settings.monitor,
+           m_settings.vsync);
 
     m_window = SDL_CreateWindow("Blood",
                                 SDL_WINDOWPOS_CENTERED_DISPLAY(m_settings.monitor),
@@ -58,17 +69,19 @@ void renderer::create_window()
     {
         SDL_ShowSimpleMessageBox(
             SDL_MESSAGEBOX_ERROR, "COULD NOT INIT SDL", "ERROR CREATING WINDOW", m_window);
-        exit(1);
+        LOG_RUNTIME_ERROR("COULD NOT INIT SDL");
     }
 }
 
 void renderer::create_gl_context()
 {
+    LOG_I("Creating OpenGL context.");
+
     m_context = SDL_GL_CreateContext(m_window);
     if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "COULD NOT LOAD OPENGL", "ERROR", m_window);
-        exit(1);
+        LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL");
     }
     SDL_GL_SetSwapInterval(m_settings.vsync);
 }

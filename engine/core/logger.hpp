@@ -27,17 +27,19 @@
 // Reset
 #define COLRS "\e[0m"
 
-#define LOG_D(msg) Logger(0, __FILE__, __LINE__, msg);
-#define LOG_I(msg) Logger(1, __FILE__, __LINE__, msg);
-#define LOG_W(msg) Logger(2, __FILE__, __LINE__, msg);
-#define LOG_E(msg) Logger(3, __FILE__, __LINE__, msg);
-#define LOG_F(msg) Logger(4, __FILE__, __LINE__, msg);
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-#define LOG_DF(msg, ...) Logger(0, __FILE__, __LINE__, fmt::format(msg, __VA_ARGS__));
-#define LOG_IF(msg, ...) Logger(1, __FILE__, __LINE__, fmt::format(msg, __VA_ARGS__));
-#define LOG_WF(msg, ...) Logger(2, __FILE__, __LINE__, fmt::format(msg, __VA_ARGS__));
-#define LOG_EF(msg, ...) Logger(3, __FILE__, __LINE__, fmt::format(msg, __VA_ARGS__));
-#define LOG_FF(msg, ...) Logger(4, __FILE__, __LINE__, fmt::format(msg, __VA_ARGS__));
+#define LOG_D(msg) Logger(0, __FILENAME__, __LINE__, msg);
+#define LOG_I(msg) Logger(1, __FILENAME__, __LINE__, msg);
+#define LOG_W(msg) Logger(2, __FILENAME__, __LINE__, msg);
+#define LOG_E(msg) Logger(3, __FILENAME__, __LINE__, msg);
+#define LOG_F(msg) Logger(4, __FILENAME__, __LINE__, msg);
+
+#define LOG_DF(msg, ...) Logger(0, __FILENAME__, __LINE__, fmt::format(msg, __VA_ARGS__));
+#define LOG_IF(msg, ...) Logger(1, __FILENAME__, __LINE__, fmt::format(msg, __VA_ARGS__));
+#define LOG_WF(msg, ...) Logger(2, __FILENAME__, __LINE__, fmt::format(msg, __VA_ARGS__));
+#define LOG_EF(msg, ...) Logger(3, __FILENAME__, __LINE__, fmt::format(msg, __VA_ARGS__));
+#define LOG_FF(msg, ...) Logger(4, __FILENAME__, __LINE__, fmt::format(msg, __VA_ARGS__));
 
 #define LOG_RUNTIME_ERROR(msg)                                                                     \
     {                                                                                              \
@@ -51,10 +53,13 @@
         throw std::runtime_error(msg);                                                             \
     }
 
-#define FIREWORK_TIMER_MS                                                                          \
-    std::chrono::duration_cast<std::chrono::milliseconds>(                                         \
-        std::chrono::high_resolution_clock::now().time_since_epoch())                              \
-        .count();
+#define BLOODENGINE_ASSERT(c, s)                                                                   \
+    if (!(c))                                                                                      \
+        LOG_RUNTIME_ERROR(s);
+
+#define BLOODENGINE_ASSERTF(c, s, ...)                                                             \
+    if (!(c))                                                                                      \
+        LOG_RUNTIME_ERRORF(s, __VA_ARGS__);
 
 class Logger
 {
