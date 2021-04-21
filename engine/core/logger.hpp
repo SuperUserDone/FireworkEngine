@@ -68,7 +68,9 @@ public:
     {
         m_level = level;
         if (file_location != "")
-            m_file.open(file_location);
+            m_file.open(file_location, std::fstream::out | std::fstream::trunc);
+
+        LOG_IF("Opening logger at level {} and file {}.", level, file_location);
     }
 
     std::string get_level_col(int level)
@@ -138,16 +140,18 @@ public:
             m_file << fmt::format(
                 "{} [{}:{}] {}\n", get_level(level), file, std::to_string(line), message);
 
-            if (level > 1)
+            if (level >= 2)
                 m_file.flush();
         }
 
-        if (m_level > level)
+        if (m_level >= level)
             return;
 
         fmt::print(
             "{} [{}:{}]\e[0m {}\n", get_level_col(level), file, std::to_string(line), message);
     }
+
+    static void close_file() { m_file.close(); }
 
 private:
     static inline std::ofstream m_file;

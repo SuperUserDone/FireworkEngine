@@ -31,7 +31,7 @@ void renderer::process_events()
     }
 }
 
-void renderer::render()
+void renderer::render(double frametime)
 {
     glClearColor(0.2, 0.3, 0.5, 1);
     glClear(GL_COLOR_BUFFER_BIT);

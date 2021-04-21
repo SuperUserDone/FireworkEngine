@@ -32,11 +32,11 @@ public:
 
     virtual void single_step();
 
-    void set_tps_limit(uint16_t limit) { m_tps = limit; }
-    void set_fps_limit(uint16_t limit) { m_fps = limit; }
+    void set_tps_limit(uint16_t limit) { m_tps_target = limit; }
+    void set_fps_limit(uint16_t limit) { m_fps_target = limit; }
 
-    uint16_t get_fps_limit() { return m_fps; }
-    uint16_t get_tps_limit() { return m_tps; }
+    uint16_t get_fps_limit() { return m_fps_target; }
+    uint16_t get_tps_limit() { return m_tps_target; }
 
 private:
     void update_thread();
@@ -53,8 +53,8 @@ private:
     std::atomic_bool m_stop{false};
 
 protected:
-    uint16_t m_fps = 60;
-    uint16_t m_tps = 60;
+    uint16_t m_fps_target = 60;
+    uint16_t m_tps_target = 60;
 
     std::shared_ptr<renderer> m_renderer = nullptr;
 };

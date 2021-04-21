@@ -14,7 +14,7 @@ public:
 
     bool check_close() { return m_should_close; }
     void process_events();
-    void render();
+    void render(double frametime);
 
     ~renderer();
 
