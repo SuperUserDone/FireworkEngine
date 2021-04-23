@@ -11,6 +11,7 @@ class scene
 {
 public:
     scene();
+    scene(const std::string &filename);
     ~scene();
 
     void start_load();
