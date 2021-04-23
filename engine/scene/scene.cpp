@@ -2,9 +2,31 @@
 
 namespace blood
 {
-scene::scene() {}
+scene::scene()
+{
+    // TODO
+}
 
-scene::~scene() {}
+scene::~scene()
+{
+    // TODO
+}
 
-entity scene::create(const std::string &name) { return entity(m_entt, name); }
+void scene::start_load()
+{
+    // TODO
+}
+
+bool scene::loading_done()
+{
+    // TODO
+    return true;
+}
+
+void scene::unload()
+{
+    // TODO
+}
+
+entity scene::create_entity(const std::string &name) { return entity(m_entt, name); }
 } // namespace blood

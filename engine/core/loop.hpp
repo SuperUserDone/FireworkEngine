@@ -8,6 +8,7 @@
 #include <thread>
 
 #include "render/renderer.hpp"
+#include "scene/scene_manager.hpp"
 
 namespace blood
 {
@@ -15,10 +16,11 @@ class loop
 {
 public:
     loop();
+
     virtual ~loop();
 
     std::weak_ptr<renderer> get_renderer() { return m_renderer; }
-    // std::weak_ptr<void> get_scenemanager() { return std::make_shared<void>(nullptr); }
+    std::weak_ptr<scene_manager> get_scenemanager() { return m_scene_manager; }
     // std::weak_ptr<void> get_physicsmanager() { return std::make_shared<void>(nullptr); }
 
     virtual void block()
@@ -57,6 +59,13 @@ protected:
     uint16_t m_tps_target = 60;
 
     std::shared_ptr<renderer> m_renderer = nullptr;
+    std::shared_ptr<scene_manager> m_scene_manager = nullptr;
+
+private:
+    loop(const loop &other) = delete;
+    loop(loop &&other) = delete;
+    loop &operator=(loop &&other) = delete;
+    loop &operator=(loop other) = delete;
 };
 
 } // namespace blood

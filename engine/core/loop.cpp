@@ -11,6 +11,8 @@ loop::loop()
     Logger::init_logger(0, "bloodlog.txt");
     LOG_I("Starting BloodEngine")
 
+    m_scene_manager = std::make_shared<scene_manager>();
+
     m_update_thread = std::thread(&loop::update_thread, this);
     m_render_thread = std::thread(&loop::render_thread, this);
 }
@@ -98,7 +100,7 @@ void loop::render_thread()
             time_target = 1000000 / m_tps_target;
         uint64_t time_begin = get_precise_time_us();
 
-        m_renderer->render(frametime);
+        m_renderer->render(frametime, m_scene_manager->get_active_scene());
         m_renderer->process_events();
 
         if (m_renderer->check_close())
@@ -110,6 +112,7 @@ void loop::render_thread()
 
         uint64_t time_end = get_precise_time_us();
         int time_ellapsed = time_end - time_begin;
+
         if (m_fps_target != 0)
             sleep_precise(time_target - time_ellapsed);
 

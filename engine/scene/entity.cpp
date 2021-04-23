@@ -10,7 +10,10 @@ entity::entity(entt::registry &reg, const std::string &name) : m_reg(reg)
 {
     m_id = m_reg.create();
 
-    m_reg.emplace<component_tag>(m_id, component_tag{name, 0});
+    m_reg.emplace<component_tag>(m_id, component_tag{name});
+}
+entity::~entity()
+{ // TODO
 }
 
 template <typename T, typename... Args>
@@ -29,5 +32,10 @@ T &entity::get_component()
     return m_reg.get<T>(m_id);
 }
 
-entity::~entity() {}
+template <typename T>
+bool &entity::has_component() const
+{
+    return m_reg.all_of<T>(m_id);
+}
+
 } // namespace blood

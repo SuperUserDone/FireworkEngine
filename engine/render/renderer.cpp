@@ -4,6 +4,8 @@
 
 #include <glad/gl.h>
 
+#include "scene/scene.hpp"
+
 #include "core/logger.hpp"
 
 namespace blood
@@ -31,9 +33,15 @@ void renderer::process_events()
     }
 }
 
-void renderer::render(double frametime)
+void renderer::render(double frametime, std::weak_ptr<scene> scene)
 {
-    glClearColor(0.2, 0.3, 0.5, 1);
+    auto scene_ptr = scene.lock();
+
+    glm::vec3 color = scene_ptr->m_back_color;
+
+    
+
+    glClearColor(color.r, color.g, color.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     SDL_GL_SwapWindow(m_window);
