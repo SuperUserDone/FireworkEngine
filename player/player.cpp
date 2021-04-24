@@ -32,18 +32,21 @@ int main(int argc, char const *argv[])
                               "in vec4 vertexColor;\n"
                               "void main() { FragColor = vertexColor; }\n";
 
-    mat->shader.vert_source = "#version 450 core\n"
-                              "layout(location = 0) in vec3 aPos;\n"
-                              "layout(std140, binding = 0) uniform Matrices{\n"
-                              "mat4 projection;\n"
-                              "mat4 view;\n"
-                              "};\n"
-                              "uniform mat4 model;\n"
-                              "out vec4 vertexColor;\n"
-                              "void main() { gl_Position = projection * view  * vec4(aPos, 1.0); "
-                              "vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }\n";
+    mat->shader.vert_source =
+        "#version 450 core\n"
+        "layout(location = 0) in vec3 aPos;\n"
+        "layout(std140, binding = 0) uniform Matrices{\n"
+        "mat4 projection;\n"
+        "mat4 view;\n"
+        "};\n"
+        "layout(location = 0) uniform mat4 model;\n"
+        "out vec4 vertexColor;\n"
+        "void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); "
+        "vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }\n";
 
     mesh.m_mat = mat;
+
+    transform.pos = {0, 0, 2};
 
     loop.start();
     loop.block();

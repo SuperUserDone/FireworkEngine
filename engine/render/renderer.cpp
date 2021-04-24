@@ -153,6 +153,8 @@ void renderer::render_mesh(component_mesh &mesh,
 
     glUseProgram(mesh.m_mat->shader.render_data.shader_program);
 
+    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr((glm::mat4)trans));
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.render_data.index_buffer);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 }

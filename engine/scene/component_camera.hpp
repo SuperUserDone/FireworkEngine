@@ -10,7 +10,7 @@
 
 struct component_camera
 {
-    glm::vec3 pos = {0, 0, -3};
+    glm::vec3 pos = {0, 0, 3};
     glm::quat rot = glm::quat({0, 0, 0});
 
     float fov = 90.f;
@@ -30,6 +30,6 @@ struct component_camera
         mat *= glm::toMat4(rot);
         mat = glm::translate(mat, pos);
 
-        return mat;
+        return glm::inverse(mat);
     }
 };
