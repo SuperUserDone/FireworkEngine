@@ -2,8 +2,10 @@
 
 #include <entt/entt.hpp>
 #include <mutex>
+#include <vector>
 
 #include "entity.hpp"
+#include "render/deletion_helpers.hpp"
 
 namespace blood
 {
@@ -20,13 +22,12 @@ public:
 
     void set_background_color(glm::vec3 color) { m_back_color = color; }
 
-    void unload();
-
     entity create_entity(const std::string &name);
+
+    std::mutex m_scene_mutex;
 
 private:
     entt::registry m_entt;
-    std::mutex m_reg_mutex;
 
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 

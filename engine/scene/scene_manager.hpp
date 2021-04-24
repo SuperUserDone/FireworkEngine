@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <string>
 
@@ -19,10 +20,16 @@ public:
 
     bool staging_ready();
 
-    void swap_on_ready();
+    void set_swap_on_ready();
     void swap();
 
-    std::weak_ptr<scene> get_active_scene() { return m_active; }
+    std::weak_ptr<scene> get_active_scene()
+    {
+        if (m_swap_on_ready && staging_ready())
+            swap();
+
+        return m_active;
+    }
     std::weak_ptr<scene> get_staging_scene() { return m_staging; }
 
     ~scene_manager();
@@ -30,6 +37,8 @@ public:
 private:
     std::shared_ptr<scene> m_active;
     std::shared_ptr<scene> m_staging;
+
+    std::atomic_bool m_swap_on_ready{false};
 
 private:
     scene_manager(const scene_manager &other) = delete;

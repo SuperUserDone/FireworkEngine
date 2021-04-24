@@ -1,5 +1,6 @@
 #include "SDL_video.h"
 #include "glm/fwd.hpp"
+#include "render/deletion_helpers.hpp"
 #include "renderer.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
@@ -44,23 +45,24 @@ void renderer::render(double frametime, std::weak_ptr<scene> scene, component_ca
 {
     // TODO FRAMEBUFFERS
 
+    // Camera stuff
     int x, y;
     SDL_GetWindowSize(m_window, &x, &y);
-
     glViewport(0, 0, x, y);
-
     setup_camera(cam, x, y);
 
     auto scene_ptr = scene.lock();
 
+    // Clear background
     glm::vec3 color = scene_ptr->m_back_color;
     glClearColor(color.r, color.g, color.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Fetch all meshes
     entt::registry &reg = scene_ptr->m_entt;
-
     auto view = reg.view<component_mesh, component_transform>();
 
+    // Draw all meshes
     for (auto entity : view)
     {
         auto [mesh_comp, trans_comp] = view.get(entity);
@@ -68,11 +70,15 @@ void renderer::render(double frametime, std::weak_ptr<scene> scene, component_ca
         render_mesh(mesh_comp, trans_comp, cam);
     }
 
+    // Swap buffers
     SDL_GL_SwapWindow(m_window);
 }
 
 renderer::~renderer()
 {
+    clean();
+
+    // Destroy window and context
     SDL_GL_DeleteContext(m_context);
     SDL_DestroyWindow(m_window);
     SDL_Quit();
@@ -80,7 +86,10 @@ renderer::~renderer()
 
 void renderer::init_cameras()
 {
+    // Generate buffer
     glGenBuffers(1, &m_camera_buffer);
+
+    // Alocate buffer
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
     glBufferData(GL_UNIFORM_BUFFER, 128, nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -89,11 +98,14 @@ void renderer::init_cameras()
 void renderer::setup_camera(component_camera &cam, int x, int y)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
+
+    // Set data
     glBufferSubData(
         GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(cam.get_projection(x, y)));
     glBufferSubData(
         GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr((glm::mat4)cam));
 
+    // Bind
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_camera_buffer, 0, sizeof(glm::mat4) * 2);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -110,7 +122,8 @@ void renderer::create_window()
            m_settings.monitor,
            m_settings.vsync);
 
-    m_window = SDL_CreateWindow("Blood",
+    // Create window
+    m_window = SDL_CreateWindow(m_settings.name.c_str(),
                                 SDL_WINDOWPOS_CENTERED_DISPLAY(m_settings.monitor),
                                 SDL_WINDOWPOS_CENTERED_DISPLAY(m_settings.monitor),
                                 m_settings.width,
@@ -129,15 +142,19 @@ void renderer::create_gl_context()
 {
     LOG_I("Creating OpenGL context.");
 
+    // Set attributes
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
 
+    // Load data
     m_context = SDL_GL_CreateContext(m_window);
     if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "COULD NOT LOAD OPENGL", "ERROR", m_window);
         LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL");
     }
+
     SDL_GL_SetSwapInterval(m_settings.vsync);
 }
 
@@ -151,12 +168,15 @@ void renderer::render_mesh(component_mesh &mesh,
     if (mesh.m_mat->shader.render_data.shader_program == -1)
         load_material(mesh.m_mat);
 
+    // Use shader
     glUseProgram(mesh.m_mat->shader.render_data.shader_program);
 
+    // Set transform
     glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr((glm::mat4)trans));
 
+    // Set buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.render_data.index_buffer);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, mesh.indicies.size(), GL_UNSIGNED_INT, 0);
 }
 
 void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
@@ -165,9 +185,11 @@ void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
     uint vbo;
     uint ebo;
 
+    // Create VAO
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
+    // Create VBO
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
@@ -183,6 +205,7 @@ void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
                  mesh.indicies.data(),
                  GL_STATIC_DRAW);
 
+    // VAO data info
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, sizeof(vertex), (void *)offsetof(vertex, pos));
     glEnableVertexAttribArray(0);
 
@@ -236,7 +259,31 @@ void renderer::load_material(std::shared_ptr<material> mat) const
         LOG_EF("Could not link shader: {}", infoLog);
     }
 
+    glDeleteShader(frag_shader);
+    glDeleteShader(vert_shader);
+
     mat->shader.render_data.shader_program = shader_program;
+}
+
+void renderer::clean()
+{
+    while (!deletion_queue::get_queue().empty())
+    {
+        auto cmd = deletion_queue::get_queue().pop_queue();
+
+        switch (cmd.type)
+        {
+        case deletion_command::GPU_BUFFER:
+            glDeleteBuffers(1, &cmd.id);
+            break;
+        case deletion_command::GPU_VAO:
+            glDeleteVertexArrays(1, &cmd.id);
+            break;
+        case deletion_command::GPU_SHADER_PROGRAM:
+            glDeleteProgram(cmd.id);
+            break;
+        }
+    }
 }
 
 } // namespace blood

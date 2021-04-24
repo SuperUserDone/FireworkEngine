@@ -1,5 +1,6 @@
 #pragma once
 
+#include "render/deletion_helpers.hpp"
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
@@ -24,6 +25,16 @@ struct material
             int shader_program = -1;
         } render_data;
     } shader;
+
+    ~material()
+    {
+        deletion_command cmd;
+
+        cmd.type = deletion_command::GPU_SHADER_PROGRAM;
+        cmd.id = shader.render_data.shader_program;
+        deletion_queue::get_queue().push_queue(cmd);
+        shader.render_data.shader_program = -1;
+    }
 };
 
 struct component_mesh
@@ -41,4 +52,24 @@ struct component_mesh
         int index_buffer = -1;
         int vao = -1;
     } render_data;
+
+    void queue_delete()
+    {
+        deletion_command cmd;
+
+        cmd.type = deletion_command::GPU_BUFFER;
+        cmd.id = render_data.index_buffer;
+        deletion_queue::get_queue().push_queue(cmd);
+        render_data.index_buffer = -1;
+
+        cmd.type = deletion_command::GPU_BUFFER;
+        cmd.id = render_data.vertex_buffer;
+        deletion_queue::get_queue().push_queue(cmd);
+        render_data.vertex_buffer = -1;
+
+        cmd.type = deletion_command::GPU_VAO;
+        cmd.id = render_data.vao;
+        deletion_queue::get_queue().push_queue(cmd);
+        render_data.vao = -1;
+    }
 };

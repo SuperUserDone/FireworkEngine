@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string>
 
 namespace blood
 {
@@ -26,6 +27,12 @@ struct render_settings
         uint32_t width = 800;
         uint32_t height = 600;
     };
+
+    /**
+     * \brief
+     *
+     */
+    std::string name = "Blood";
 
     /**
      * \brief Enable vsync

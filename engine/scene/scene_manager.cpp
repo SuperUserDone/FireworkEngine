@@ -31,11 +31,7 @@ bool scene_manager::staging_ready()
     }
 }
 
-void scene_manager::swap_on_ready()
-{
-    if (staging_ready())
-        swap();
-}
+void scene_manager::set_swap_on_ready() { m_swap_on_ready = true; }
 
 void scene_manager::swap()
 {
