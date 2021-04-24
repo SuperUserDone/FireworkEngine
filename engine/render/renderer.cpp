@@ -162,8 +162,11 @@ void renderer::render_mesh(component_mesh &mesh,
                            component_transform &trans,
                            component_camera &cam) const
 {
-    if (mesh.render_data.vao == -1 || mesh.changed)
+    if (mesh.render_data.vao == -1)
         load_mesh(mesh, trans);
+
+    if (mesh.changed)
+        upadte_mesh(mesh, trans);
 
     if (mesh.m_mat->shader.render_data.shader_program == -1)
         load_material(mesh.m_mat);
@@ -199,6 +202,39 @@ void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
                  GL_STATIC_DRAW);
 
     glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 sizeof(uint32_t) * mesh.indicies.size(),
+                 mesh.indicies.data(),
+                 GL_STATIC_DRAW);
+
+    // VAO data info
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, sizeof(vertex), (void *)offsetof(vertex, pos));
+    glEnableVertexAttribArray(0);
+
+    mesh.changed = false;
+    mesh.render_data.index_buffer = ebo;
+    mesh.render_data.vertex_buffer = vbo;
+    mesh.render_data.vao = vao;
+}
+
+void renderer::upadte_mesh(component_mesh &mesh, component_transform &trans) const
+{
+    uint vao = mesh.render_data.vao;
+    uint vbo = mesh.render_data.vertex_buffer;
+    uint ebo = mesh.render_data.index_buffer;
+
+    // Re-fill VAO
+    glBindVertexArray(vao);
+
+    // Re-fill VBO
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glBufferData(GL_ARRAY_BUFFER,
+                 mesh.verticies.size() * sizeof(vertex),
+                 mesh.verticies.data(),
+                 GL_STATIC_DRAW);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(uint32_t) * mesh.indicies.size(),

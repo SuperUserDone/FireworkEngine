@@ -44,6 +44,7 @@ private:
 
     void render_mesh(component_mesh &mesh, component_transform &trans, component_camera &cam) const;
     void load_mesh(component_mesh &mesh, component_transform &trans) const;
+    void upadte_mesh(component_mesh &mesh, component_transform &trans) const;
 
     void load_material(std::shared_ptr<material> mat) const;
 
