@@ -57,19 +57,28 @@ struct component_mesh
     {
         deletion_command cmd;
 
-        cmd.type = deletion_command::GPU_BUFFER;
-        cmd.id = render_data.index_buffer;
-        deletion_queue::get_queue().push_queue(cmd);
-        render_data.index_buffer = -1;
-
-        cmd.type = deletion_command::GPU_BUFFER;
-        cmd.id = render_data.vertex_buffer;
-        deletion_queue::get_queue().push_queue(cmd);
-        render_data.vertex_buffer = -1;
-
-        cmd.type = deletion_command::GPU_VAO;
-        cmd.id = render_data.vao;
-        deletion_queue::get_queue().push_queue(cmd);
-        render_data.vao = -1;
+        if (render_data.index_buffer != -1)
+        {
+            cmd.type = deletion_command::GPU_BUFFER;
+            cmd.id = render_data.index_buffer;
+            deletion_queue::get_queue().push_queue(cmd);
+            render_data.index_buffer = -1;
+        }
+        if (render_data.vertex_buffer != -1)
+        {
+            cmd.type = deletion_command::GPU_BUFFER;
+            cmd.id = render_data.vertex_buffer;
+            deletion_queue::get_queue().push_queue(cmd);
+            render_data.vertex_buffer = -1;
+        }
+        if (render_data.vao != -1)
+        {
+            cmd.type = deletion_command::GPU_VAO;
+            cmd.id = render_data.vao;
+            deletion_queue::get_queue().push_queue(cmd);
+            render_data.vao = -1;
+        }
     }
+
+    ~component_mesh() { queue_delete(); }
 };
