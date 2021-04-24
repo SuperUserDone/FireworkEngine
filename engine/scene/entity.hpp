@@ -1,9 +1,10 @@
 #pragma once
 
-#include "entity/entity.hpp"
 #include <entt/entt.hpp>
-
 #include <glm/glm.hpp>
+
+#include "core/logger.hpp"
+#include "entity/entity.hpp"
 
 namespace blood
 {
@@ -15,13 +16,26 @@ public:
     ~entity();
 
     template <typename T, typename... Args>
-    T &add_component(Args &&...args);
+    T &add_component(Args &&...args)
+    {
+        BLOODENGINE_ASSERT(!has_component<T>(), "Entity already has component.");
+
+        return m_reg.emplace<T>(m_id, std::forward<Args>(args)...);
+    }
 
     template <typename T>
-    T &get_component();
+    T &get_component()
+    {
+        BLOODENGINE_ASSERT(has_component<T>(), "Entity does have component.");
+
+        return m_reg.get<T>(m_id);
+    }
 
     template <typename T>
-    bool &has_component() const;
+    bool has_component() const
+    {
+        return m_reg.all_of<T>(m_id);
+    }
 
 private:
     entt::registry &m_reg;

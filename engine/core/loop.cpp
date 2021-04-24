@@ -2,6 +2,7 @@
 
 #include "logger.hpp"
 
+#include "scene/component_camera.hpp"
 #include "util.hpp"
 
 namespace blood
@@ -100,7 +101,15 @@ void loop::render_thread()
             time_target = 1000000 / m_tps_target;
         uint64_t time_begin = get_precise_time_us();
 
-        m_renderer->render(frametime, m_scene_manager->get_active_scene());
+        auto view = m_scene_manager->get_active_scene().lock()->m_entt.view<component_camera>();
+
+        for (auto entity : view)
+        {
+            component_camera camera = view.get<component_camera>(entity);
+
+            m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
+        }
+
         m_renderer->process_events();
 
         if (m_renderer->check_close())

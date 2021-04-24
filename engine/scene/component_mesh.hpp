@@ -16,8 +16,8 @@ struct material
 {
     struct
     {
-        char *vert_source = nullptr;
-        char *frag_source = nullptr;
+        const char *vert_source = nullptr;
+        const char *frag_source = nullptr;
 
         struct
         {
@@ -32,6 +32,8 @@ struct component_mesh
     std::vector<uint32_t> indicies;
 
     std::shared_ptr<material> m_mat;
+
+    bool changed = true;
 
     struct
     {

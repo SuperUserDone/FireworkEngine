@@ -1,9 +1,13 @@
 #pragma once
 
 #include "core/settings.hpp"
+#include "scene/component_camera.hpp"
+#include "scene/component_mesh.hpp"
+#include "scene/component_transform.hpp"
 #include "scene/scene.hpp"
 
 #include <SDL2/SDL.h>
+#include <memory>
 
 namespace blood
 {
@@ -15,7 +19,7 @@ public:
 
     bool check_close() { return m_should_close; }
     void process_events();
-    void render(double frametime, std::weak_ptr<scene> scene);
+    void render(double frametime, std::weak_ptr<scene> scene, component_camera &cam);
 
     ~renderer();
 
@@ -27,8 +31,18 @@ private:
     SDL_Window *m_window;
     SDL_GLContext m_context;
 
+    uint m_camera_buffer = 0;
+
+    void init_cameras();
+    void setup_camera(component_camera &cam, int x, int y);
+
     void create_window();
     void create_gl_context();
+
+    void render_mesh(component_mesh &mesh, component_transform &trans, component_camera &cam) const;
+    void load_mesh(component_mesh &mesh, component_transform &trans) const;
+
+    void load_material(std::shared_ptr<material> mat) const;
 
 private:
     renderer() = delete;
