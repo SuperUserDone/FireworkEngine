@@ -5,6 +5,9 @@
 #include <memory>
 #include <vector>
 
+namespace blood
+{
+
 struct vertex
 {
     glm::vec3 pos;
@@ -48,7 +51,7 @@ struct component_mesh
 
     std::shared_ptr<material> m_mat;
 
-    bool changed = true;
+    bool changed = false;
 
     struct
     {
@@ -86,3 +89,5 @@ struct component_mesh
 
     ~component_mesh() { queue_delete(); }
 };
+
+} // namespace blood

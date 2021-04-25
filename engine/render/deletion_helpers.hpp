@@ -4,6 +4,9 @@
 #include <queue>
 #include <stdint.h>
 
+namespace blood
+{
+
 struct deletion_command
 {
     enum
@@ -56,3 +59,5 @@ private:
     std::queue<deletion_command> m_queue;
     std::mutex m_queue_lock;
 };
+
+} // namespace blood

@@ -8,6 +8,9 @@
 #include "glm/matrix.hpp"
 #include <glm/ext/matrix_transform.hpp>
 
+namespace blood
+{
+
 struct component_camera
 {
     glm::vec3 pos = {0, 0, 3};
@@ -33,3 +36,5 @@ struct component_camera
         return glm::inverse(mat);
     }
 };
+
+} // namespace blood

@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+namespace blood
+{
+
 struct component_transform
 {
     glm::vec3 pos = {0, 0, 0};
@@ -21,3 +24,5 @@ struct component_transform
         return mat;
     }
 };
+
+} // namespace blood

@@ -16,6 +16,9 @@
 
 #endif
 
+namespace blood
+{
+
 inline void sleep_precise(uint64_t time_us)
 {
     timespec t;
@@ -34,3 +37,4 @@ inline uint64_t get_precise_time_us()
 
     return (t.tv_nsec / 1000) + (t.tv_sec * 1000000);
 }
+} // namespace blood

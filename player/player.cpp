@@ -17,15 +17,15 @@ int main(int argc, char const *argv[])
     auto entity = scene->create_entity("Test");
     auto cam = scene->create_entity("Cam");
 
-    component_camera &camera = cam.add_component<component_camera>();
+    blood::component_camera &camera = cam.add_component<blood::component_camera>();
 
-    component_transform &transform = entity.add_component<component_transform>();
-    component_mesh &mesh = entity.add_component<component_mesh>();
+    blood::component_transform &transform = entity.add_component<blood::component_transform>();
+    blood::component_mesh &mesh = entity.add_component<blood::component_mesh>();
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
     mesh.indicies = {0, 1, 2};
 
-    std::shared_ptr<material> mat = std::make_shared<material>();
+    std::shared_ptr<blood::material> mat = std::make_shared<blood::material>();
 
     mat->shader.frag_source = R"(
 #version 450 core
