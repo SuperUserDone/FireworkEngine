@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "component_mesh.hpp"
@@ -23,10 +24,11 @@ public:
     void set_swap_on_ready();
     void swap();
 
+    void swap_on_ready();
+
     scene &get_active_scene()
     {
-        if (m_swap_on_ready && staging_ready())
-            swap();
+        std::lock_guard<std::mutex> lck(m_acess_mutex);
 
         return m_active;
     }
@@ -35,6 +37,8 @@ public:
     ~scene_manager();
 
 private:
+    std::mutex m_acess_mutex;
+
     scene m_active;
     scene m_staging;
 

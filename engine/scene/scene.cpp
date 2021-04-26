@@ -45,5 +45,5 @@ bool scene::loading_done()
     return true;
 }
 
-entity scene::create_entity(const std::string &name) { return entity(m_entt, name); }
+entity scene::create_entity(const std::string &name) { return entity(&m_entt, name); }
 } // namespace blood

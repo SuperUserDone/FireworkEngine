@@ -1,6 +1,7 @@
 #include "scene_manager.hpp"
 
 #include "core/logger.hpp"
+#include <mutex>
 
 namespace blood
 {
@@ -25,8 +26,19 @@ void scene_manager::set_swap_on_ready() { m_swap_on_ready = true; }
 
 void scene_manager::swap()
 {
+    std::lock_guard<std::mutex> lck(m_acess_mutex);
+
     m_active = std::move(m_staging);
     m_staging = scene();
+}
+
+void scene_manager::swap_on_ready()
+{
+    if (m_swap_on_ready && staging_ready())
+    {
+        swap();
+        m_swap_on_ready = false;
+    }
 }
 
 scene_manager::~scene_manager()

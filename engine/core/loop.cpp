@@ -1,8 +1,11 @@
 #include "loop.hpp"
 
+#include "core/native_script.hpp"
 #include "logger.hpp"
 
 #include "scene/component_camera.hpp"
+#include "scene/component_nativescript.hpp"
+#include "scene/entity.hpp"
 #include "util.hpp"
 #include <bits/stdint-uintn.h>
 #include <mutex>
@@ -58,8 +61,6 @@ void loop::single_step()
 
 void loop::update_thread()
 {
-    // TODO init code
-
     while (!m_stop)
     {
         static double frametime = 0;
@@ -88,7 +89,27 @@ void loop::update_thread()
         {
             std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
 
-            // TODO
+            // Check for swap
+            m_scene_manager->swap_on_ready();
+
+            // Update scripts
+            auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+
+            for (auto ent : view)
+            {
+                auto &script = view.get<component_nativescript>(ent);
+
+                if (!script.script)
+                {
+                    script.script = script.create_instance();
+                    script.script->m_entity =
+                        entity(&m_scene_manager->get_active_scene().m_entt, ent);
+
+                    script.script->on_start();
+                }
+
+                script.script->on_tick_update(frametime);
+            }
         }
 
         // Calclulate frametime
@@ -103,6 +124,20 @@ void loop::update_thread()
         time_end = get_precise_time_us();
         time_ellapsed = time_end - time_begin;
         frametime = time_ellapsed / 1000.f;
+    }
+
+    // Delete scripts
+    auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+
+    for (auto ent : view)
+    {
+        auto &script = view.get<component_nativescript>(ent);
+
+        if (script.script)
+        {
+            script.script->on_destroy();
+            script.destroy_script(&script);
+        }
     }
 }
 
@@ -132,17 +167,34 @@ void loop::render_thread()
 
         // Draw frame
         {
-            std::lock_guard<std::mutex> lock(
-                m_scene_manager->get_active_scene().m_scene_mutex);
-
-            auto view = m_scene_manager->get_active_scene().m_entt.view<component_camera>();
+            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
 
             // Draw scene for every camera
-            for (auto entity : view)
             {
-                component_camera camera = view.get<component_camera>(entity);
+                auto view = m_scene_manager->get_active_scene().m_entt.view<component_camera>();
 
-                m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
+                for (auto entity : view)
+                {
+                    component_camera camera = view.get<component_camera>(entity);
+
+                    m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
+                }
+            }
+
+            // Update scripts
+            {
+                auto view =
+                    m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+
+                for (auto ent : view)
+                {
+                    auto &script = view.get<component_nativescript>(ent);
+
+                    if (script.script)
+                    {
+                        script.script->on_render_update(frametime);
+                    }
+                }
             }
         }
 

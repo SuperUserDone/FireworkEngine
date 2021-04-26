@@ -57,7 +57,7 @@ void renderer::render(double frametime, scene &scene, component_camera &cam)
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Fetch all meshes
-    auto &&view = scene.m_entt.view<component_mesh, component_transform>();
+    auto view = scene.m_entt.view<component_mesh, component_transform>();
 
     // Draw all meshes
     for (auto entity : view)

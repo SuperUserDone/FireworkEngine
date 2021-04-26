@@ -144,7 +144,7 @@ public:
                 m_file.flush();
         }
 
-        if (m_level >= level)
+        if (m_level > level)
             return;
 
         fmt::print(
