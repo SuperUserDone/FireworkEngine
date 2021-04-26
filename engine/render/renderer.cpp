@@ -41,7 +41,7 @@ void renderer::process_events()
     }
 }
 
-void renderer::render(double frametime, std::weak_ptr<scene> scene, component_camera &cam)
+void renderer::render(double frametime, scene &scene, component_camera &cam)
 {
     // TODO FRAMEBUFFERS
 
@@ -51,16 +51,13 @@ void renderer::render(double frametime, std::weak_ptr<scene> scene, component_ca
     glViewport(0, 0, x, y);
     setup_camera(cam, x, y);
 
-    auto scene_ptr = scene.lock();
-
     // Clear background
-    glm::vec3 color = scene_ptr->m_back_color;
+    glm::vec3 color = scene.m_back_color;
     glClearColor(color.r, color.g, color.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Fetch all meshes
-    entt::registry &reg = scene_ptr->m_entt;
-    auto view = reg.view<component_mesh, component_transform>();
+    auto &&view = scene.m_entt.view<component_mesh, component_transform>();
 
     // Draw all meshes
     for (auto entity : view)

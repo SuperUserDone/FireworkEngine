@@ -20,7 +20,7 @@ public:
 
     bool check_close() { return m_should_close; }
     void process_events();
-    void render(double frametime, std::weak_ptr<scene> scene, component_camera &cam);
+    void render(double frametime, scene &scene, component_camera &cam);
 
     void clean();
 

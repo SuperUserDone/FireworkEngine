@@ -14,6 +14,8 @@ class scene
 {
 public:
     scene();
+    scene(scene &&other);
+    scene &operator=(scene &&other);
     scene(const std::string &filename);
     ~scene();
 
@@ -36,9 +38,7 @@ private:
 
 private:
     scene(const scene &other) = delete;
-    scene(scene &&other) = delete;
-    scene &operator=(scene other) = delete;
-    scene &operator=(scene &&other) = delete;
+    scene &operator=(const scene &other) = delete;
 };
 
 } // namespace blood

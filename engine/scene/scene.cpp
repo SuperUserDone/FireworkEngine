@@ -9,6 +9,19 @@ scene::scene()
     // TODO
 }
 
+scene::scene(scene &&other) : m_back_color(other.m_back_color), m_entt(std::move(other.m_entt)) {}
+
+scene &scene::operator=(scene &&other)
+{
+    if (this != &other)
+    {
+        m_entt = std::move(other.m_entt);
+        m_back_color = other.m_back_color;
+    }
+
+    return *this;
+}
+
 scene::~scene()
 {
     auto view = m_entt.view<component_mesh>();

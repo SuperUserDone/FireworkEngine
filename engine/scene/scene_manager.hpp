@@ -16,27 +16,27 @@ public:
     scene_manager();
 
     void stage_scene_file(const std::string &scene_file);
-    void stage_scene(std::shared_ptr<scene> scene);
+    void stage_scene(scene &p_scene);
 
     bool staging_ready();
 
     void set_swap_on_ready();
     void swap();
 
-    std::weak_ptr<scene> get_active_scene()
+    scene &get_active_scene()
     {
         if (m_swap_on_ready && staging_ready())
             swap();
 
         return m_active;
     }
-    std::weak_ptr<scene> get_staging_scene() { return m_staging; }
+    scene &get_staging_scene() { return m_staging; }
 
     ~scene_manager();
 
 private:
-    std::shared_ptr<scene> m_active;
-    std::shared_ptr<scene> m_staging;
+    scene m_active;
+    scene m_staging;
 
     std::atomic_bool m_swap_on_ready{false};
 
