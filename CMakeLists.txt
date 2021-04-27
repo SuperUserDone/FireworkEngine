@@ -6,9 +6,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 
 include_directories("engine" "extern/include" "extern/include/entt"
-                    "extern/fmt/include")
+                    "extern/fmt/include" "extern/sdl/include")
 
 add_subdirectory(extern/fmt)
+
 add_subdirectory(extern/sdl)
 
 add_subdirectory(engine)
