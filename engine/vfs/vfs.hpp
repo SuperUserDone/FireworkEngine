@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/logger.hpp"
-#include <bits/types/FILE.h>
 #include <cstdio>
 #include <filesystem>
 #include <string>

@@ -7,7 +7,6 @@
 #include "scene/component_camera.hpp"
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
-#include <bits/stdint-uintn.h>
 #include <mutex>
 
 engine::engine() : loop("marrowlog.txt", "starting Marrow Editor")

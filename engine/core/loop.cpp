@@ -7,7 +7,6 @@
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
 #include "util.hpp"
-#include <bits/stdint-uintn.h>
 #include <mutex>
 #include <string>
 

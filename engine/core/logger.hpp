@@ -4,6 +4,7 @@
 #include <fstream>
 #include <mutex>
 
+#ifdef __linux__
 // Regular text
 #define BLK "\e[0;30m"
 #define RED "\e[0;31m"
@@ -24,6 +25,28 @@
 #define BCYN "\e[1;36m"
 #define BWHT "\e[1;37m"
 
+#else
+
+#define BLK ""
+#define RED ""
+#define GRN ""
+#define YEL ""
+#define BLU ""
+#define MAG ""
+#define CYN ""
+#define WHT ""
+
+// Regular bold text
+#define BBLK ""
+#define BRED ""
+#define BGRN ""
+#define BYEL ""
+#define BBLU ""
+#define BMAG ""
+#define BCYN ""
+#define BWHT ""
+
+#endif
 // Reset
 #define COLRS "\e[0m"
 
