@@ -163,7 +163,7 @@ void renderer::render_mesh(component_mesh &mesh,
         load_mesh(mesh, trans);
 
     if (mesh.changed)
-        upadte_mesh(mesh, trans);
+        update_mesh(mesh, trans);
 
     if (mesh.m_mat->shader.render_data.shader_program == -1)
         load_material(mesh.m_mat);
@@ -215,7 +215,7 @@ void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
     mesh.render_data.vao = vao;
 }
 
-void renderer::upadte_mesh(component_mesh &mesh, component_transform &trans) const
+void renderer::update_mesh(component_mesh &mesh, component_transform &trans) const
 {
     uint vao = mesh.render_data.vao;
     uint vbo = mesh.render_data.vertex_buffer;
