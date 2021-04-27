@@ -10,6 +10,10 @@
 #include <SDL.h>
 #include <memory>
 
+#ifdef WIN32
+typedef uint unsigned int;
+#endif
+
 namespace blood
 {
 
