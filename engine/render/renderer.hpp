@@ -7,7 +7,7 @@
 #include "scene/component_transform.hpp"
 #include "scene/scene.hpp"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <memory>
 
 namespace blood
