@@ -15,22 +15,6 @@
 
 #include <windows.h> /* WinAPI */
 
-struct timespec
-{
-    __time_t tv_sec;           /* Seconds.  */
-#if __WORDSIZE == 64 || (defined __SYSCALL_WORDSIZE && __SYSCALL_WORDSIZE == 64) || __TIMESIZE == 32
-    __syscall_slong_t tv_nsec; /* Nanoseconds.  */
-#else
-#if __BYTE_ORDER == __BIG_ENDIAN
-    int : 32;         /* Padding.  */
-    long int tv_nsec; /* Nanoseconds.  */
-#else
-    long int tv_nsec; /* Nanoseconds.  */
-    int : 32;         /* Padding.  */
-#endif
-#endif
-};
-
 /* Windows sleep in 100ns units */
 void nanosleep(const struct timespec *time, struct timespec *);
 {
