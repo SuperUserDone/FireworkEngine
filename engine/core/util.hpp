@@ -1,6 +1,10 @@
 #pragma once
 
+#include <bits/stdint-uintn.h>
+#include <cstdint>
 #include <stdint.h>
+
+#include <random>
 
 #include "logger.hpp"
 
@@ -37,4 +41,21 @@ inline uint64_t get_precise_time_us()
 
     return (t.tv_nsec / 1000) + (t.tv_sec * 1000000);
 }
+
+inline uint64_t get_uuid()
+{
+
+    std::random_device rd;
+
+    std::mt19937_64 e2(rd());
+
+    std::uniform_int_distribution<uint32_t> dist(0, UINT32_MAX);
+
+    uint64_t timestamp = (get_precise_time_us() >> 4) & 0xffffff;
+    uint64_t random_value = dist(e2);
+    uint64_t out = (timestamp << 32) | random_value;
+
+    return out;
+}
+
 } // namespace blood
