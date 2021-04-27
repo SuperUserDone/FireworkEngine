@@ -64,8 +64,8 @@ jobs:
         steps:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
-                with:
-                    submodules: recursive
+              with:
+                  submodules: recursive
 
             - name: Print env
               run: |
@@ -77,7 +77,6 @@ jobs:
                   choco install ninja cmake pkgconfiglite
                   ninja --version
                   cmake --version
-                  
 
             - name: Install dependencies on ubuntu
               if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
@@ -109,9 +108,9 @@ jobs:
               shell: bash
               run: cmake --build . --config ${{ matrix.config.build_type }}
 
-           # - name: Install Strip
-           #   shell: bash
-           #   run: cmake --install . --strip
+            # - name: Install Strip
+            #   shell: bash
+            #   run: cmake --install . --strip
 
             #- name: Pack
             #  shell: bash
