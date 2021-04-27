@@ -19,3 +19,9 @@ include_directories(${SDL_INCLUDE_DIRS})
 add_subdirectory(engine)
 add_subdirectory(player)
 add_subdirectory(editor)
+
+install(
+  DIRECTORY engine/
+  DESTINATION include/blood_engine
+  FILES_MATCHING
+  PATTERN "*.hpp")
