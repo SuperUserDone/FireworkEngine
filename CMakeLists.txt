@@ -18,3 +18,4 @@ include_directories(${SDL_INCLUDE_DIRS})
 
 add_subdirectory(engine)
 add_subdirectory(player)
+add_subdirectory(editor)

@@ -7,6 +7,8 @@
 #include "entity.hpp"
 #include "render/deletion_helpers.hpp"
 
+class engine;
+
 namespace blood
 {
 
@@ -35,6 +37,7 @@ private:
 
     friend class renderer;
     friend class loop;
+    friend class ::engine;
 
 private:
     scene(const scene &other) = delete;

@@ -2,6 +2,8 @@
 
 #include "scene/entity.hpp"
 
+class engine;
+
 namespace blood
 {
 
@@ -19,6 +21,7 @@ public:
 protected:
     entity m_entity;
     friend class loop;
+    friend class ::engine;
 };
 
 } // namespace blood

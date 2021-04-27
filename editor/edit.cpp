@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <memory>
 
-#include <core/loop.hpp>
+#include "runtime/engine.hpp"
 #include <scene/component_camera.hpp>
 #include <scene/component_mesh.hpp>
 #include <scene/component_transform.hpp>
@@ -18,23 +18,24 @@ public:
     virtual void on_start() override { LOG_D("Start"); }
     virtual void on_tick_update(double deltatime) override
     {
-        if (frames % 300 == 59)
+        if (u_frames++ % 30 == 0)
             LOG_DF("Update {}", 1000 / deltatime);
     }
     virtual void on_render_update(double deltatime) override
     {
-        if (frames++ % 300 == 0)
+        if (r_frames++ % 60 == 0)
             LOG_DF("Render {}", 1000 / deltatime);
     }
     virtual void on_destroy() override { LOG_D("Destroy"); }
 
 private:
-    uint frames = 0;
+    uint r_frames = 0;
+    uint u_frames = 0;
 };
 
 int main(int argc, char const *argv[])
 {
-    blood::loop loop;
+    engine loop;
 
     auto smr = loop.get_scenemanager().lock();
 

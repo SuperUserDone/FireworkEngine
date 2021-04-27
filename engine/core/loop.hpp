@@ -24,6 +24,7 @@ public:
      *
      */
     loop();
+    loop(const std::string &logname, const std::string &name);
 
     /**
      * \brief Destroy the loop
@@ -105,9 +106,6 @@ public:
     uint16_t get_tps_limit() { return m_tps_target; }
 
 private:
-    void update_thread();
-    void render_thread();
-
     std::thread m_update_thread;
     std::thread m_render_thread;
 
@@ -119,8 +117,11 @@ private:
     std::atomic_bool m_stop{false};
 
 protected:
+    virtual void update_thread();
+    virtual void render_thread();
+
     uint16_t m_fps_target = 60;
-    uint16_t m_tps_target = 60;
+    uint16_t m_tps_target = 30;
     float m_tps_strech = 1.0f;
 
     std::shared_ptr<renderer> m_renderer = nullptr;

@@ -1,46 +1,27 @@
-#include "loop.hpp"
+#include "engine.hpp"
 
+#include "core/logger.hpp"
 #include "core/native_script.hpp"
-#include "logger.hpp"
 
+#include "core/util.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
-#include "util.hpp"
 #include <bits/stdint-uintn.h>
 #include <mutex>
-#include <string>
 
-namespace blood
+engine::engine() : loop("marrowlog.txt", "starting Marrow Editor")
 {
-loop::loop()
-{
-    // Init Logger
-    Logger::init_logger(0, "bloodlog.txt");
-    LOG_I("Starting BloodEngine")
-
-    m_scene_manager = std::make_shared<scene_manager>();
 
     // Start threads
-    m_update_thread = std::thread(&loop::update_thread, this);
-    m_render_thread = std::thread(&loop::render_thread, this);
+    m_render_thread = std::thread(&engine::render_thread, this);
 }
 
-loop::loop(const std::string &logname, const std::string &name)
-{
-    // Init Logger
-    Logger::init_logger(0, logname);
-    LOG_I(name)
-
-    m_scene_manager = std::make_shared<scene_manager>();
-}
-
-loop::~loop()
+engine::~engine()
 {
     // Set stop condiditons
-    m_stop = true;
-    m_pause_pred = false;
-    m_pause.notify_all();
+    m_stop_render = true;
+    m_stop_update = true;
 
     // Waith for threads to conclude
     if (m_update_thread.joinable())
@@ -52,26 +33,31 @@ loop::~loop()
     Logger::close_file();
 }
 
-void loop::start()
+void engine::start()
 {
-    m_pause_pred = false;
-    m_pause.notify_all();
+    if (m_update_thread.joinable())
+        m_update_thread.join();
+    m_stop_update = false;
+    m_update_thread = std::thread(&engine::update_thread, this);
 }
 
-void loop::stop() { m_pause_pred = true; }
-
-void loop::single_step()
+void engine::stop()
 {
-    m_single_stepping = true;
-    start();
+    m_stop_update = true;
 
-    while (m_single_stepping)
-        std::this_thread::yield();
+    if (m_update_thread.joinable())
+        m_update_thread.join();
 }
 
-void loop::update_thread()
+void engine::single_step()
 {
-    while (!m_stop)
+    // TODO
+    BLOODENGINE_ASSERT(false, "Unimplemented")
+}
+
+void engine::update_thread()
+{
+    while (!m_stop_update)
     {
         static double frametime = 0;
         int time_target = 0;
@@ -81,21 +67,9 @@ void loop::update_thread()
             time_target = 1000000 / trunc(m_tps_target * m_tps_strech);
 
         // Start clock
-        uint64_t time_begin = get_precise_time_us();
-
-        // Wait if singlestepping/paused
-        std::unique_lock<std::mutex> lck(m_stop_lck);
-        m_pause.wait(lck, [this]() { return !this->m_pause_pred; });
-
-        // Singlestepping flags
-        if (m_single_stepping)
-        {
-            m_pause_pred = true;
-            m_single_stepping = false;
-        }
+        uint64_t time_begin = blood::get_precise_time_us();
 
         // Run update
-        if (!m_stop)
         {
             std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
 
@@ -103,17 +77,18 @@ void loop::update_thread()
             m_scene_manager->swap_on_ready();
 
             // Update scripts
-            auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+            auto view =
+                m_scene_manager->get_active_scene().m_entt.view<blood::component_nativescript>();
 
             for (auto ent : view)
             {
-                auto &script = view.get<component_nativescript>(ent);
+                auto &script = view.get<blood::component_nativescript>(ent);
 
                 if (!script.script)
                 {
                     script.script = script.create_instance();
                     script.script->m_entity =
-                        entity(&m_scene_manager->get_active_scene().m_entt, ent);
+                        blood::entity(&m_scene_manager->get_active_scene().m_entt, ent);
 
                     script.script->on_start();
                 }
@@ -123,25 +98,25 @@ void loop::update_thread()
         }
 
         // Calclulate frametime
-        uint64_t time_end = get_precise_time_us();
+        uint64_t time_end = blood::get_precise_time_us();
         int time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
         if (!(time_ellapsed <= 0) || m_tps_target != 0)
-            sleep_precise(time_target - time_ellapsed);
+            blood::sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime
-        time_end = get_precise_time_us();
+        time_end = blood::get_precise_time_us();
         time_ellapsed = time_end - time_begin;
         frametime = time_ellapsed / 1000.f;
     }
 
     // Delete scripts
-    auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+    auto view = m_scene_manager->get_active_scene().m_entt.view<blood::component_nativescript>();
 
     for (auto ent : view)
     {
-        auto &script = view.get<component_nativescript>(ent);
+        auto &script = view.get<blood::component_nativescript>(ent);
 
         if (script.script)
         {
@@ -151,14 +126,14 @@ void loop::update_thread()
     }
 }
 
-void loop::render_thread()
+void engine::render_thread()
 {
-    m_renderer = std::make_shared<renderer>(render_settings());
+    m_renderer = std::make_shared<blood::renderer>(blood::render_settings());
 
-    while (!m_stop)
+    while (!m_stop_render)
     {
         static double frametime = 0;
-        static uint64_t last_clean = get_precise_time_us();
+        static uint64_t last_clean = blood::get_precise_time_us();
         int time_target = 0;
 
         // Detrimine target us for tick
@@ -166,13 +141,13 @@ void loop::render_thread()
             time_target = 1000000 / m_fps_target;
 
         // Start clock
-        uint64_t time_begin = get_precise_time_us();
+        uint64_t time_begin = blood::get_precise_time_us();
 
         // Clean unused GPU data
         if (time_begin - last_clean > 500000)
         {
             m_renderer->clean();
-            last_clean = get_precise_time_us();
+            last_clean = blood::get_precise_time_us();
         }
 
         // Draw frame
@@ -181,11 +156,12 @@ void loop::render_thread()
 
             // Draw scene for every camera
             {
-                auto view = m_scene_manager->get_active_scene().m_entt.view<component_camera>();
+                auto view =
+                    m_scene_manager->get_active_scene().m_entt.view<blood::component_camera>();
 
                 for (auto entity : view)
                 {
-                    auto &camera = view.get<component_camera>(entity);
+                    blood::component_camera &camera = view.get<blood::component_camera>(entity);
 
                     m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
                 }
@@ -193,12 +169,12 @@ void loop::render_thread()
 
             // Update scripts
             {
-                auto view =
-                    m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+                auto view = m_scene_manager->get_active_scene()
+                                .m_entt.view<blood::component_nativescript>();
 
                 for (auto ent : view)
                 {
-                    auto &script = view.get<component_nativescript>(ent);
+                    auto &script = view.get<blood::component_nativescript>(ent);
 
                     if (script.script)
                     {
@@ -214,24 +190,21 @@ void loop::render_thread()
         // Check if should close and set appriate flags
         if (m_renderer->check_close())
         {
-            m_stop = true;
-            m_pause_pred = false;
-            m_pause.notify_all();
+            m_stop_render = true;
+            m_stop_update = true;
         }
 
         // Calclulate frametime
-        uint64_t time_end = get_precise_time_us();
+        uint64_t time_end = blood::get_precise_time_us();
         int time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
         if (m_fps_target != 0)
-            sleep_precise(time_target - time_ellapsed);
+            blood::sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime
-        time_end = get_precise_time_us();
+        time_end = blood::get_precise_time_us();
         time_ellapsed = time_end - time_begin;
         frametime = time_ellapsed / 1000.f;
     }
 }
-
-} // namespace blood
