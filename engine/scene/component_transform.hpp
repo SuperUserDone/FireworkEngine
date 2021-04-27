@@ -17,9 +17,9 @@ struct component_transform
     {
         glm::mat4 mat(1.f);
 
+        mat = glm::translate(mat, pos);
         mat = glm::scale(mat, scale);
         mat *= glm::toMat4(rot);
-        mat = glm::translate(mat, pos);
 
         return mat;
     }

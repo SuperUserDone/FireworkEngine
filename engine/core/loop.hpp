@@ -121,7 +121,7 @@ protected:
     virtual void render_thread();
 
     uint16_t m_fps_target = 60;
-    uint16_t m_tps_target = 30;
+    uint16_t m_tps_target = 60;
     float m_tps_strech = 1.0f;
 
     std::shared_ptr<renderer> m_renderer = nullptr;

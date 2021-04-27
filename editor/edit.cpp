@@ -1,7 +1,11 @@
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
+#include "glm/ext/quaternion_transform.hpp"
+#include "glm/fwd.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "scene/component_nativescript.hpp"
 #include <cstdio>
+#include <math.h>
 #include <memory>
 
 #include "runtime/engine.hpp"
@@ -18,6 +22,17 @@ public:
     virtual void on_start() override { LOG_D("Start"); }
     virtual void on_tick_update(double deltatime) override
     {
+        float s_dt = deltatime / 1000;
+
+        auto &transform = m_entity.get_component<blood::component_transform>();
+
+        static float sin_time = 0;
+        sin_time += s_dt;
+
+        transform.rot *= glm::quat({1.0 * s_dt, 0, 0});
+        // transform.scale = glm::vec3((sin(sin_time) + 1) / 2);
+        transform.pos = glm::vec3(cos(sin_time), 0, 0);
+
         if (u_frames++ % 30 == 0)
             LOG_DF("Update {}", 1000 / deltatime);
     }
