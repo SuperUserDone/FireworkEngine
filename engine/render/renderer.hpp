@@ -11,7 +11,7 @@
 #include <memory>
 
 #ifdef WIN32
-typedef uint unsigned int;
+typedef unsigned int uint;
 #endif
 
 namespace blood

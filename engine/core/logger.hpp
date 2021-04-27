@@ -147,7 +147,7 @@ public:
         if (m_level > level)
             return;
 
-#ifdef __linux__
+#ifndef WIN32
         fmt::print(
             "{} [{}:{}]\e[0m {}\n", get_level_col(level), file, std::to_string(line), message);
 #else
