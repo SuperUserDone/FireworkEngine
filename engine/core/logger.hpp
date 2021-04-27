@@ -147,8 +147,12 @@ public:
         if (m_level > level)
             return;
 
+#ifdef __linux__
         fmt::print(
             "{} [{}:{}]\e[0m {}\n", get_level_col(level), file, std::to_string(line), message);
+#else
+        fmt::print("{} [{}:{}] {}\n", get_level_col(level), file, std::to_string(line), message);
+#endif
     }
 
     static void close_file() { m_file.close(); }

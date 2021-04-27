@@ -1,9 +1,9 @@
-#include "SDL_video.h"
 #include "glm/fwd.hpp"
 #include "render/deletion_helpers.hpp"
 #include "renderer.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
+#include <SDL2/SDL.h>
 
 #define GLAD_GL_IMPLEMENTATION
 

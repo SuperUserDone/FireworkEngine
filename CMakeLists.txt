@@ -8,13 +8,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED 1)
 include_directories("engine" "extern/include" "extern/include/entt"
                     "extern/fmt/include")
 
-include(FindPkgConfig)
+include(ExternalProject)
+ExternalProject_Add(
+  SDL
+  URL https://www.libsdl.org/release/SDL2-2.0.14.zip
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/SDL
+  INSTALL_DIR SDL_install
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>)
 
-pkg_check_modules(SDL sdl2)
+ExternalProject_Get_Property(SDL INSTALL_DIR)
+include_directories(${INSTALL_DIR}/include)
 
 add_subdirectory(extern/fmt)
-
-include_directories(${SDL_INCLUDE_DIRS})
 
 add_subdirectory(engine)
 add_subdirectory(player)
