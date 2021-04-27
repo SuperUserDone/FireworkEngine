@@ -34,11 +34,6 @@ scene::~scene()
     }
 }
 
-void scene::start_load()
-{
-    // TODO
-}
-
 bool scene::loading_done()
 {
     // TODO

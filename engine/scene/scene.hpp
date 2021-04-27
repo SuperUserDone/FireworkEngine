@@ -18,10 +18,8 @@ public:
     scene();
     scene(scene &&other);
     scene &operator=(scene &&other);
-    scene(const std::string &filename);
     ~scene();
 
-    void start_load();
     bool loading_done();
 
     void set_background_color(glm::vec3 color) { m_back_color = color; }

@@ -6,44 +6,33 @@
 namespace blood
 {
 
-scene_manager::scene_manager() : m_active() {}
+scene_manager::scene_manager() : m_active(new scene()) {}
 
-void scene_manager::stage_scene_file(const std::string &scene_file)
-{
-    // TODO
-}
-
-void scene_manager::stage_scene(scene &p_scene)
-{
-    m_staging = std::move(p_scene);
-
-    m_staging.start_load();
-}
-
-bool scene_manager::staging_ready() { return m_staging.loading_done(); }
-
-void scene_manager::set_swap_on_ready() { m_swap_on_ready = true; }
+void scene_manager::stage_scene(scene *p_scene) { m_staging = p_scene; }
 
 void scene_manager::swap()
 {
     std::lock_guard<std::mutex> lck(m_acess_mutex);
 
-    m_active = std::move(m_staging);
-    m_staging = scene();
-}
-
-void scene_manager::swap_on_ready()
-{
-    if (m_swap_on_ready && staging_ready())
+    if (m_staging != nullptr)
     {
-        swap();
-        m_swap_on_ready = false;
+        delete m_active;
+        m_active = m_staging;
+        m_staging = nullptr;
+    }
+    else
+    {
+        LOG_W("Trying to swap scene without initialising staging");
     }
 }
 
 scene_manager::~scene_manager()
 {
-    // TODO
+    if (m_staging)
+        delete m_staging;
+
+    if (m_active)
+        delete m_active;
 }
 
 } // namespace blood

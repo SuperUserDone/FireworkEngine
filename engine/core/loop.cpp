@@ -97,13 +97,10 @@ void loop::update_thread()
         // Run update
         if (!m_stop)
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
-
-            // Check for swap
-            m_scene_manager->swap_on_ready();
+            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
 
             // Update scripts
-            auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+            auto view = m_scene_manager->get_active_scene()->m_entt.view<component_nativescript>();
 
             for (auto ent : view)
             {
@@ -113,7 +110,7 @@ void loop::update_thread()
                 {
                     script.script = script.create_instance();
                     script.script->m_entity =
-                        entity(&m_scene_manager->get_active_scene().m_entt, ent);
+                        entity(&m_scene_manager->get_active_scene()->m_entt, ent);
 
                     script.script->on_start();
                 }
@@ -137,7 +134,7 @@ void loop::update_thread()
     }
 
     // Delete scripts
-    auto view = m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+    auto view = m_scene_manager->get_active_scene()->m_entt.view<component_nativescript>();
 
     for (auto ent : view)
     {
@@ -177,11 +174,11 @@ void loop::render_thread()
 
         // Draw frame
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
+            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
 
             // Draw scene for every camera
             {
-                auto view = m_scene_manager->get_active_scene().m_entt.view<component_camera>();
+                auto view = m_scene_manager->get_active_scene()->m_entt.view<component_camera>();
 
                 for (auto entity : view)
                 {
@@ -194,7 +191,7 @@ void loop::render_thread()
             // Update scripts
             {
                 auto view =
-                    m_scene_manager->get_active_scene().m_entt.view<component_nativescript>();
+                    m_scene_manager->get_active_scene()->m_entt.view<component_nativescript>();
 
                 for (auto ent : view)
                 {

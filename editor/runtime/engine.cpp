@@ -71,14 +71,11 @@ void engine::update_thread()
 
         // Run update
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
-
-            // Check for swap
-            m_scene_manager->swap_on_ready();
+            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
 
             // Update scripts
             auto view =
-                m_scene_manager->get_active_scene().m_entt.view<blood::component_nativescript>();
+                m_scene_manager->get_active_scene()->m_entt.view<blood::component_nativescript>();
 
             for (auto ent : view)
             {
@@ -88,7 +85,7 @@ void engine::update_thread()
                 {
                     script.script = script.create_instance();
                     script.script->m_entity =
-                        blood::entity(&m_scene_manager->get_active_scene().m_entt, ent);
+                        blood::entity(&m_scene_manager->get_active_scene()->m_entt, ent);
 
                     script.script->on_start();
                 }
@@ -112,7 +109,7 @@ void engine::update_thread()
     }
 
     // Delete scripts
-    auto view = m_scene_manager->get_active_scene().m_entt.view<blood::component_nativescript>();
+    auto view = m_scene_manager->get_active_scene()->m_entt.view<blood::component_nativescript>();
 
     for (auto ent : view)
     {
@@ -152,12 +149,12 @@ void engine::render_thread()
 
         // Draw frame
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene().m_scene_mutex);
+            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
 
             // Draw scene for every camera
             {
                 auto view =
-                    m_scene_manager->get_active_scene().m_entt.view<blood::component_camera>();
+                    m_scene_manager->get_active_scene()->m_entt.view<blood::component_camera>();
 
                 for (auto entity : view)
                 {
@@ -170,7 +167,7 @@ void engine::render_thread()
             // Update scripts
             {
                 auto view = m_scene_manager->get_active_scene()
-                                .m_entt.view<blood::component_nativescript>();
+                                ->m_entt.view<blood::component_nativescript>();
 
                 for (auto ent : view)
                 {

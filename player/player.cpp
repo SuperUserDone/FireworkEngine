@@ -40,8 +40,8 @@ int main(int argc, char const *argv[])
 
     auto &&scene = smr->get_active_scene();
 
-    auto entity = scene.create_entity("Test");
-    auto cam = scene.create_entity("Cam");
+    auto entity = scene->create_entity("Test");
+    auto cam = scene->create_entity("Cam");
 
     blood::component_camera &camera = cam.add_component<blood::component_camera>();
 
