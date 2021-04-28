@@ -1,7 +1,8 @@
 #pragma once
 
-#include "core/native_script.hpp"
 #include <memory>
+
+#include "core/native_script.hpp"
 
 namespace blood
 {

@@ -1,12 +1,7 @@
 #pragma once
 
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/quaternion_common.hpp"
-#include "glm/fwd.hpp"
-#include "glm/glm.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include "glm/matrix.hpp"
-#include <glm/ext/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace blood
 {

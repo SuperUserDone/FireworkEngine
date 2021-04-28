@@ -1,17 +1,14 @@
-#include "glm/fwd.hpp"
-#include "render/deletion_helpers.hpp"
-#include "renderer.hpp"
-#include "scene/component_camera.hpp"
-#include "scene/component_mesh.hpp"
-
 #define GLAD_GL_IMPLEMENTATION
 
 #include <glad/gl.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "core/logger.hpp"
+#include "render/deletion_helpers.hpp"
+#include "renderer.hpp"
+#include "scene/component_camera.hpp"
+#include "scene/component_mesh.hpp"
 #include "scene/scene.hpp"
 
 namespace blood

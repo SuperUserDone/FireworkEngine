@@ -5,10 +5,17 @@
 #include <memory>
 #include <mutex>
 #include <stdint.h>
+#include <string>
 #include <thread>
 
+#include "core/native_script.hpp"
+#include "logger.hpp"
 #include "render/renderer.hpp"
+#include "scene/component_camera.hpp"
+#include "scene/component_nativescript.hpp"
+#include "scene/entity.hpp"
 #include "scene/scene_manager.hpp"
+#include "util.hpp"
 
 namespace blood
 {

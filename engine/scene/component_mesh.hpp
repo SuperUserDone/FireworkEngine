@@ -1,9 +1,10 @@
 #pragma once
 
-#include "render/deletion_helpers.hpp"
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
+
+#include "render/deletion_helpers.hpp"
 
 namespace blood
 {

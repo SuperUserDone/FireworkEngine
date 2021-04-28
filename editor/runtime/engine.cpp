@@ -1,13 +1,13 @@
 #include "engine.hpp"
 
+#include <mutex>
+
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
-
 #include "core/util.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
-#include <mutex>
 
 engine::engine() : loop("marrowlog.txt", "starting Marrow Editor")
 {

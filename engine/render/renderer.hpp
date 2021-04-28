@@ -1,14 +1,14 @@
 #pragma once
 
+#include <SDL.h>
+#include <memory>
+
 #include "core/settings.hpp"
 #include "deletion_helpers.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
 #include "scene/component_transform.hpp"
 #include "scene/scene.hpp"
-
-#include <SDL.h>
-#include <memory>
 
 #ifdef WIN32
 typedef unsigned int uint;

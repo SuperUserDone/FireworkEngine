@@ -1,17 +1,4 @@
 #include "loop.hpp"
-
-#include "core/native_script.hpp"
-#include "logger.hpp"
-
-#include "scene/component_camera.hpp"
-#include "scene/component_nativescript.hpp"
-#include "scene/entity.hpp"
-#include "util.hpp"
-#include <bits/stdint-intn.h>
-#include <bits/stdint-uintn.h>
-#include <mutex>
-#include <string>
-
 namespace blood
 {
 loop::loop()

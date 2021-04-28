@@ -1,7 +1,8 @@
 #include "scene_manager.hpp"
 
-#include "core/logger.hpp"
 #include <mutex>
+
+#include "core/logger.hpp"
 
 namespace blood
 {
