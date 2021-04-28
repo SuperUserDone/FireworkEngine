@@ -7,14 +7,16 @@
 
 #include "logger.hpp"
 
-
+#ifdef __linux__
+#include <time.h>
+#else
+#include <windows.h>
+#endif
 
 namespace blood
 {
 
 #ifdef __linux__
-
-#include <time.h>
 
 inline void sleep_precise(uint64_t time_us)
 {
@@ -36,8 +38,6 @@ inline uint64_t get_precise_time_us()
 }
 
 #else
-
-#include <windows.h>
 
 inline void sleep_precise(uint64_t time_us)
 {
@@ -75,7 +75,6 @@ inline uint64_t get_precise_time_us()
 }
 
 #endif
-
 
 inline uint64_t get_uuid()
 {

@@ -7,8 +7,10 @@ add_library(blood-engine ${ENGINE_SRC})
 
 if(MSVC)
   set(ENGINE_LINK "")
-else()
+elseif(UNIX)
   set(ENGINE_LINK "pthread" "dl")
+else()
+  set(ENGINE_LINK "pthread")
 endif(MSVC)
 
 target_link_libraries(blood-engine SDL2 ${ENGINE_LINK} fmt::fmt)
