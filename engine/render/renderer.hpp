@@ -26,7 +26,10 @@ public:
     void process_events();
 
     void render_imgui(void *state, std::function<void()> callback);
-    void render(double frametime, scene *scene, component_camera &cam);
+    void render(double frametime,
+                scene *scene,
+                component_camera &cam,
+                const glm::mat4 &camera_transform);
 
     void finish_render();
 
@@ -45,7 +48,7 @@ private:
     uint m_camera_buffer = 0;
 
     void init_cameras();
-    void setup_camera(component_camera &cam, int x, int y);
+    void setup_camera(component_camera &cam, const glm::mat4 &camera_transform, int x, int y);
 
     void create_window();
     void create_gl_context();

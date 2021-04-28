@@ -95,10 +95,10 @@ void engine::update_thread()
 
         // Calclulate frametime
         uint64_t time_end = blood::get_precise_time_us();
-        int time_ellapsed = time_end - time_begin;
+        uint64_t time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
-        if (!(time_ellapsed <= 0) || m_tps_target != 0)
+        if (time_target > time_ellapsed && m_tps_target != 0)
             blood::sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime
@@ -151,16 +151,28 @@ void engine::render_thread()
             std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
 
             // Draw scene for every camera
+            if (!m_stop_update)
             {
                 auto view =
-                    m_scene_manager->get_active_scene()->m_entt.view<blood::component_camera>();
+                    m_scene_manager->get_active_scene()
+                        ->m_entt.view<blood::component_camera, blood::component_transform>();
 
                 for (auto entity : view)
                 {
-                    blood::component_camera &camera = view.get<blood::component_camera>(entity);
+                    auto [camera, trans] =
+                        view.get<blood::component_camera, blood::component_transform>(entity);
 
-                    m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
+                    m_renderer->render(
+                        frametime, m_scene_manager->get_active_scene(), camera, trans);
                 }
+
+                m_renderer->finish_render();
+            }
+            else
+            {
+                m_renderer->render(
+                    frametime, m_scene_manager->get_active_scene(), m_edit_cam.cam, m_edit_cam);
+                m_renderer->finish_render();
             }
 
             // Update scripts
@@ -192,10 +204,10 @@ void engine::render_thread()
 
         // Calclulate frametime
         uint64_t time_end = blood::get_precise_time_us();
-        int time_ellapsed = time_end - time_begin;
+        uint64_t time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
-        if (m_fps_target != 0)
+        if (time_target > time_ellapsed && m_tps_target != 0)
             blood::sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime

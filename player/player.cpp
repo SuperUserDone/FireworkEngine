@@ -80,6 +80,9 @@ int main(int argc, char const *argv[])
     auto cam = scene->create_entity("Cam");
 
     blood::component_camera &camera = cam.add_component<blood::component_camera>();
+    blood::component_transform &camera_transform = cam.add_component<blood::component_transform>();
+
+    camera_transform.pos = {0, 0, 3};
 
     blood::component_transform &transform = entity.add_component<blood::component_transform>();
     blood::component_mesh &mesh = entity.add_component<blood::component_mesh>();

@@ -8,6 +8,7 @@
 #include <thread>
 
 #include "core/loop.hpp"
+#include "editor_camera.hpp"
 #include "render/renderer.hpp"
 #include "scene/scene_manager.hpp"
 
@@ -38,6 +39,8 @@ private:
 
     std::atomic_bool m_stop_update{false};
     std::atomic_bool m_stop_render{false};
+
+    editor_camera m_edit_cam;
 
 private:
     engine(const engine &other) = delete;

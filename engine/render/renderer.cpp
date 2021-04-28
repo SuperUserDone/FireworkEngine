@@ -56,7 +56,10 @@ void renderer::render_imgui(void *state, std::function<void()> callback)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void renderer::render(double frametime, scene *scene, component_camera &cam)
+void renderer::render(double frametime,
+                      scene *scene,
+                      component_camera &cam,
+                      const glm::mat4 &camera_transform)
 {
     // TODO FRAMEBUFFERS
 
@@ -64,7 +67,7 @@ void renderer::render(double frametime, scene *scene, component_camera &cam)
     int x, y;
     SDL_GetWindowSize(m_window, &x, &y);
     glViewport(0, 0, x, y);
-    setup_camera(cam, x, y);
+    setup_camera(cam, camera_transform, x, y);
 
     // Clear background
     glm::vec3 color = scene->m_back_color;
@@ -137,15 +140,17 @@ void renderer::init_cameras()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void renderer::setup_camera(component_camera &cam, int x, int y)
+void renderer::setup_camera(component_camera &cam, const glm::mat4 &camera_transform, int x, int y)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
 
     // Set data
     glBufferSubData(
         GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(cam.get_projection(x, y)));
-    glBufferSubData(
-        GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr((glm::mat4)cam));
+    glBufferSubData(GL_UNIFORM_BUFFER,
+                    sizeof(glm::mat4),
+                    sizeof(glm::mat4),
+                    glm::value_ptr(glm::inverse((glm::mat4)camera_transform)));
 
     // Bind
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_camera_buffer, 0, sizeof(glm::mat4) * 2);

@@ -25,7 +25,7 @@ int main(int argc, const char *argv[])
 
     auto &&scene = smr->get_active_scene();
 
-    loop.start();
+    loop.stop();
     loop.block();
 
     return 0;

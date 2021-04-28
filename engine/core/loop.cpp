@@ -167,13 +167,15 @@ void loop::render_thread()
 
             // Draw scene for every camera
             {
-                auto view = m_scene_manager->get_active_scene()->m_entt.view<component_camera>();
+                auto view = m_scene_manager->get_active_scene()
+                                ->m_entt.view<component_camera, component_transform>();
 
                 for (auto entity : view)
                 {
-                    auto &camera = view.get<component_camera>(entity);
+                    auto [camera, trans] = view.get<component_camera, component_transform>(entity);
 
-                    m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
+                    m_renderer->render(
+                        frametime, m_scene_manager->get_active_scene(), camera, trans);
                 }
 
                 m_renderer->finish_render();
