@@ -1,14 +1,18 @@
 #define GLAD_GL_IMPLEMENTATION
 
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_sdl.h>
 #include <glad/gl.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
 
 #include "core/logger.hpp"
 #include "render/deletion_helpers.hpp"
 #include "renderer.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
+#include "scene/component_ui_controller.hpp"
 #include "scene/scene.hpp"
 
 namespace blood
@@ -17,6 +21,7 @@ renderer::renderer(const render_settings &p_render_settings) : m_settings(p_rend
 {
     create_window();
     create_gl_context();
+    init_imgui();
     init_cameras();
 }
 
@@ -25,6 +30,7 @@ void renderer::process_events()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        ImGui_ImplSDL2_ProcessEvent(&event);
         switch (event.type)
         {
         case SDL_QUIT:
@@ -35,6 +41,19 @@ void renderer::process_events()
             break;
         }
     }
+}
+
+void renderer::render_imgui(void *state, std::function<void()> callback)
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(m_window);
+
+    ImGui::NewFrame();
+
+    callback();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void renderer::render(double frametime, scene *scene, component_camera &cam)
@@ -52,17 +71,43 @@ void renderer::render(double frametime, scene *scene, component_camera &cam)
     glClearColor(color.r, color.g, color.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Fetch all meshes
-    auto view = scene->m_entt.view<component_mesh, component_transform>();
-
-    // Draw all meshes
-    for (auto entity : view)
+    // Objects
     {
-        auto [mesh_comp, trans_comp] = view.get(entity);
+        // Fetch all meshes
+        auto view = scene->m_entt.view<component_mesh, component_transform>();
 
-        render_mesh(mesh_comp, trans_comp, cam);
+        // Draw all meshes
+        for (auto entity : view)
+        {
+            auto [mesh_comp, trans_comp] = view.get(entity);
+
+            render_mesh(mesh_comp, trans_comp, cam);
+        }
     }
 
+    // UI
+    {
+        auto view = scene->m_entt.view<component_ui_controller>();
+
+        static bool warned = false;
+        if (view.size() > 1 && warned)
+        {
+            LOG_E("More than one UI controller in scene... Bad things WILL happen and things WILL "
+                  "break!");
+            warned = true;
+        }
+
+        for (auto entity : view)
+        {
+            auto &ui = view.get<component_ui_controller>(entity);
+
+            render_imgui(nullptr, ui.draw);
+        }
+    }
+}
+
+void renderer::finish_render()
+{
     // Swap buffers
     SDL_GL_SwapWindow(m_window);
 }
@@ -70,6 +115,10 @@ void renderer::render(double frametime, scene *scene, component_camera &cam)
 renderer::~renderer()
 {
     clean();
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
 
     // Destroy window and context
     SDL_GL_DeleteContext(m_context);
@@ -115,6 +164,14 @@ void renderer::create_window()
            m_settings.monitor,
            m_settings.vsync);
 
+    // Set attributes
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
     // Create window
     m_window = SDL_CreateWindow(m_settings.name.c_str(),
                                 SDL_WINDOWPOS_CENTERED_DISPLAY(m_settings.monitor),
@@ -135,11 +192,6 @@ void renderer::create_gl_context()
 {
     LOG_I("Creating OpenGL context.");
 
-    // Set attributes
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-
     // Load data
     m_context = SDL_GL_CreateContext(m_window);
     if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
@@ -155,7 +207,35 @@ void renderer::create_gl_context()
         LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL >= 4.2");
     }
 
+    SDL_GL_MakeCurrent(m_window, m_context);
     SDL_GL_SetSwapInterval(m_settings.vsync);
+}
+
+void renderer::init_imgui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
+    // io.ConfigViewportsNoAutoMerge = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
+
+    // Style
+    ImGui::StyleColorsDark();
+
+    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look
+    // identical to regular ones.
+    ImGuiStyle &style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
+    ImGui_ImplOpenGL3_Init("#version 400");
 }
 
 void renderer::render_mesh(component_mesh &mesh,

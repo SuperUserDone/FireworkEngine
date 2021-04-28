@@ -6,8 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 
 include_directories(
-  "engine" "extern/include" "extern/include/entt" "extern/fmt/include"
-  "${CMAKE_BINARY_DIR}/extern/sdl/include" "extern/sdl/include")
+  "engine"
+  "extern/include"
+  "extern/include/entt"
+  "extern/fmt/include"
+  "${CMAKE_BINARY_DIR}/extern/sdl/include"
+  "extern/sdl/include"
+  "extern/imgui-docking/")
 
 add_subdirectory(extern/fmt)
 

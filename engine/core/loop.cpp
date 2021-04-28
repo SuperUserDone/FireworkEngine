@@ -1,3 +1,4 @@
+#include "imgui.h"
 #include "loop.hpp"
 namespace blood
 {
@@ -174,6 +175,8 @@ void loop::render_thread()
 
                     m_renderer->render(frametime, m_scene_manager->get_active_scene(), camera);
                 }
+
+                m_renderer->finish_render();
             }
 
             // Update scripts

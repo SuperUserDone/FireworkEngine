@@ -24,7 +24,11 @@ public:
 
     bool check_close() { return m_should_close; }
     void process_events();
+
+    void render_imgui(void *state, std::function<void()> callback);
     void render(double frametime, scene *scene, component_camera &cam);
+
+    void finish_render();
 
     void clean();
 
@@ -45,6 +49,7 @@ private:
 
     void create_window();
     void create_gl_context();
+    void init_imgui();
 
     void render_mesh(component_mesh &mesh, component_transform &trans, component_camera &cam) const;
     void load_mesh(component_mesh &mesh, component_transform &trans) const;

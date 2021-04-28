@@ -1,6 +1,8 @@
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
+#include "imgui.h"
 #include "scene/component_nativescript.hpp"
+#include "scene/component_ui_controller.hpp"
 #include <cstdio>
 #include <memory>
 
@@ -15,14 +17,38 @@ public:
     test_script() : blood::native_script() {}
     virtual ~test_script() {}
 
-    virtual void on_start() override { LOG_D("Start"); }
+    void draw_ui()
+    {
+        ImGui::Begin("Test");
+
+        ImGui::DragFloat3("Pos", &this->trans->pos.x, 0.01);
+        ImGui::Text("FrameTime %.3fms (%.1f FPS)", render_time, 1000.f / render_time);
+        ImGui::Text("TickTime %.3fms (%.1f TPS)", tick_time, 1000.f / tick_time);
+
+        ImGui::End();
+    }
+
+    virtual void on_start() override
+    {
+        LOG_D("Start");
+
+        trans = &m_entity.get_component<blood::component_transform>();
+
+        auto &ui = m_entity.get_component<blood::component_ui_controller>();
+
+        ui.draw = [this]() { this->draw_ui(); };
+    }
     virtual void on_tick_update(double deltatime) override
     {
+        tick_time = deltatime;
+
         if (u_frames++ % 300 == 2)
             LOG_DF("Update {}", 1000 / deltatime);
     }
     virtual void on_render_update(double deltatime) override
     {
+        render_time = deltatime;
+
         if (r_frames++ % 300 == 1)
             LOG_DF("Render {}", 1000 / deltatime);
     }
@@ -31,6 +57,11 @@ public:
 private:
     uint u_frames = 0;
     uint r_frames = 0;
+
+    double tick_time;
+    double render_time;
+
+    blood::component_transform *trans;
 };
 
 #ifdef main
@@ -53,6 +84,8 @@ int main(int argc, char const *argv[])
     blood::component_transform &transform = entity.add_component<blood::component_transform>();
     blood::component_mesh &mesh = entity.add_component<blood::component_mesh>();
     blood::component_nativescript &script = entity.add_component<blood::component_nativescript>();
+    blood::component_ui_controller &ui = entity.add_component<blood::component_ui_controller>();
+
     script.bind<test_script>();
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
