@@ -18,18 +18,19 @@ public:
     virtual void on_start() override { LOG_D("Start"); }
     virtual void on_tick_update(double deltatime) override
     {
-        if (frames % 300 == 59)
+        if (u_frames++ % 300 == 2)
             LOG_DF("Update {}", 1000 / deltatime);
     }
     virtual void on_render_update(double deltatime) override
     {
-        if (frames++ % 300 == 0)
+        if (r_frames++ % 300 == 1)
             LOG_DF("Render {}", 1000 / deltatime);
     }
     virtual void on_destroy() override { LOG_D("Destroy"); }
 
 private:
-    uint frames = 0;
+    uint u_frames = 0;
+    uint r_frames = 0;
 };
 
 #ifdef main

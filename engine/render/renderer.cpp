@@ -151,6 +151,13 @@ void renderer::create_gl_context()
         LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL");
     }
 
+    if (!GLAD_GL_VERSION_4_2)
+    {
+        SDL_ShowSimpleMessageBox(
+            SDL_MESSAGEBOX_ERROR, "COULD NOT LOAD OPENGL >= 4.2", "ERROR", m_window);
+        LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL >= 4.2");
+    }
+
     SDL_GL_SetSwapInterval(m_settings.vsync);
 }
 

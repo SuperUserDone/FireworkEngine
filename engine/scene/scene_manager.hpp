@@ -21,19 +21,12 @@ public:
 
     void swap();
 
-    scene *get_active_scene()
-    {
-        std::lock_guard<std::mutex> lck(m_acess_mutex);
-
-        return m_active;
-    }
+    scene *get_active_scene() { return m_active; }
     scene *get_staging_scene() { return m_staging; }
 
     ~scene_manager();
 
 private:
-    std::mutex m_acess_mutex;
-
     scene *m_active;
     scene *m_staging = nullptr;
 

@@ -7,6 +7,8 @@
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
 #include "util.hpp"
+#include <bits/stdint-intn.h>
+#include <bits/stdint-uintn.h>
 #include <mutex>
 #include <string>
 
@@ -120,10 +122,10 @@ void loop::update_thread()
 
         // Calclulate frametime
         uint64_t time_end = get_precise_time_us();
-        int time_ellapsed = time_end - time_begin;
+        uint64_t time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
-        if (!(time_ellapsed <= 0) || m_tps_target != 0)
+        if (time_target > time_ellapsed && m_tps_target != 0)
             sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime
@@ -217,10 +219,10 @@ void loop::render_thread()
 
         // Calclulate frametime
         uint64_t time_end = get_precise_time_us();
-        int time_ellapsed = time_end - time_begin;
+        uint64_t time_ellapsed = time_end - time_begin;
 
         // Sleep for rest of the allocated frametime
-        if (m_fps_target != 0)
+        if (time_target > time_ellapsed && m_tps_target != 0)
             sleep_precise(time_target - time_ellapsed);
 
         // Calculate updated frametime

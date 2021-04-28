@@ -12,8 +12,6 @@ void scene_manager::stage_scene(scene *p_scene) { m_staging = p_scene; }
 
 void scene_manager::swap()
 {
-    std::lock_guard<std::mutex> lck(m_acess_mutex);
-
     if (m_staging != nullptr)
     {
         delete m_active;
