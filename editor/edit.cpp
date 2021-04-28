@@ -2,7 +2,7 @@
 #include <math.h>
 #include <memory>
 
-#include "runtime/engine.hpp"
+#include "runtime/editor_loop.hpp"
 #include "runtime/parse_args.hpp"
 
 #ifdef main
@@ -19,7 +19,7 @@ int main(int argc, const char *argv[])
         return 0;
     }
 
-    engine loop;
+    editor_loop loop;
 
     auto smr = loop.get_scenemanager().lock();
 

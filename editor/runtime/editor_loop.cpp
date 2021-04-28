@@ -1,4 +1,4 @@
-#include "engine.hpp"
+#include "editor_loop.hpp"
 
 #include <mutex>
 
@@ -9,14 +9,14 @@
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
 
-engine::engine() : loop("marrowlog.txt", "starting Marrow Editor")
+editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor")
 {
 
     // Start threads
-    m_render_thread = std::thread(&engine::render_thread, this);
+    m_render_thread = std::thread(&editor_loop::render_thread, this);
 }
 
-engine::~engine()
+editor_loop::~editor_loop()
 {
     // Set stop condiditons
     m_stop_render = true;
@@ -32,15 +32,15 @@ engine::~engine()
     Logger::close_file();
 }
 
-void engine::start()
+void editor_loop::start()
 {
     if (m_update_thread.joinable())
         m_update_thread.join();
     m_stop_update = false;
-    m_update_thread = std::thread(&engine::update_thread, this);
+    m_update_thread = std::thread(&editor_loop::update_thread, this);
 }
 
-void engine::stop()
+void editor_loop::stop()
 {
     m_stop_update = true;
 
@@ -48,13 +48,13 @@ void engine::stop()
         m_update_thread.join();
 }
 
-void engine::single_step()
+void editor_loop::single_step()
 {
     // TODO
     BLOODENGINE_ASSERT(false, "Unimplemented")
 }
 
-void engine::update_thread()
+void editor_loop::update_thread()
 {
     while (!m_stop_update)
     {
@@ -122,7 +122,7 @@ void engine::update_thread()
     }
 }
 
-void engine::render_thread()
+void editor_loop::render_thread()
 {
     m_renderer = std::make_shared<blood::renderer>(blood::render_settings());
 

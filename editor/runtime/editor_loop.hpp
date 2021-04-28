@@ -12,12 +12,12 @@
 #include "render/renderer.hpp"
 #include "scene/scene_manager.hpp"
 
-class engine : public blood::loop
+class editor_loop : public blood::loop
 {
 public:
-    engine();
+    editor_loop();
 
-    virtual ~engine() override;
+    virtual ~editor_loop() override;
 
     virtual void block() override
     {
@@ -43,8 +43,8 @@ private:
     editor_camera m_edit_cam;
 
 private:
-    engine(const engine &other) = delete;
-    engine(engine &&other) = delete;
-    engine &operator=(engine &&other) = delete;
-    engine &operator=(engine other) = delete;
+    editor_loop(const editor_loop &other) = delete;
+    editor_loop(editor_loop &&other) = delete;
+    editor_loop &operator=(editor_loop &&other) = delete;
+    editor_loop &operator=(editor_loop other) = delete;
 };
