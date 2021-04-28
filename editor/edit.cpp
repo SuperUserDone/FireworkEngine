@@ -5,6 +5,10 @@
 #include "runtime/engine.hpp"
 #include "runtime/parse_args.hpp"
 
+#ifdef main
+#undef main
+#endif
+
 int main(int argc, const char *argv[])
 {
     auto args = parse_args(argc, argv);

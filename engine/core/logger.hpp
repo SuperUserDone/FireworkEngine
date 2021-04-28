@@ -25,6 +25,8 @@
 #define BCYN "\e[1;36m"
 #define BWHT "\e[1;37m"
 
+#define COLRS "\e[0m"
+
 #else
 
 #define BLK ""
@@ -46,9 +48,9 @@
 #define BCYN ""
 #define BWHT ""
 
-#endif
 // Reset
-#define COLRS "\e[0m"
+#define COLRS ""
+#endif
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 

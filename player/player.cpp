@@ -32,6 +32,10 @@ private:
     uint frames = 0;
 };
 
+#ifdef main
+#undef main
+#endif
+
 int main(int argc, char const *argv[])
 {
     blood::loop loop;

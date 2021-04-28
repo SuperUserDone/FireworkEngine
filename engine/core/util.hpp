@@ -7,43 +7,14 @@
 
 #include "logger.hpp"
 
-#ifdef __linux__
 
-#include <time.h>
-
-#else
-
-#include <windows.h> /* WinAPI */
-
-/* Windows sleep in 100ns units */
-void nanosleep(const struct timespec *time, struct timespec *);
-{
-    uint64_t ns = time.tv_sec * 1000000000 + time.tv_nsec;
-    /* Declarations */
-    HANDLE timer;     /* Timer handle */
-    LARGE_INTEGER li; /* Time defintion */
-    /* Create timer */
-    if (!(timer = CreateWaitableTimer(NULL, TRUE, NULL)))
-        return FALSE;
-    /* Set timer properties */
-    li.QuadPart = -ns;
-    if (!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE))
-    {
-        CloseHandle(timer);
-        return FALSE;
-    }
-    /* Start & wait for timer */
-    WaitForSingleObject(timer, INFINITE);
-    /* Clean resources */
-    CloseHandle(timer);
-    /* Slept without problems */
-    return TRUE;
-}
-
-#endif
 
 namespace blood
 {
+
+#ifdef __linux__
+
+#include <time.h>
 
 inline void sleep_precise(uint64_t time_us)
 {
@@ -63,6 +34,48 @@ inline uint64_t get_precise_time_us()
 
     return (t.tv_nsec / 1000) + (t.tv_sec * 1000000);
 }
+
+#else
+
+#include <windows.h>
+
+inline void sleep_precise(uint64_t time_us)
+{
+    uint64_t ns = time_us * 1000;
+
+    HANDLE timer;
+    LARGE_INTEGER li;
+
+    if (!(timer = CreateWaitableTimer(NULL, TRUE, NULL)))
+        return;
+
+    li.QuadPart = -ns;
+    if (!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE))
+    {
+        CloseHandle(timer);
+        return;
+    }
+
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
+
+inline uint64_t get_precise_time_us()
+{
+    LARGE_INTEGER StartingTime;
+    LARGE_INTEGER Frequency;
+
+    QueryPerformanceFrequency(&Frequency);
+    QueryPerformanceCounter(&StartingTime);
+
+    StartingTime.QuadPart *= 1000000;
+    StartingTime.QuadPart /= Frequency.QuadPart;
+
+    return StartingTime.QuadPart;
+}
+
+#endif
+
 
 inline uint64_t get_uuid()
 {

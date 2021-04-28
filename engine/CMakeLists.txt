@@ -5,4 +5,10 @@ set(ENGINE_SRC "render/renderer.cpp" "core/loop.cpp" "scene/scene.cpp"
 
 add_library(blood-engine ${ENGINE_SRC})
 
-target_link_libraries(blood-engine SDL2 pthread dl fmt::fmt)
+if(MSVC)
+  set(ENGINE_LINK "")
+else()
+  set(ENGINE_LINK "pthread dl")
+endif(MSVC)
+
+target_link_libraries(blood-engine SDL2 ${ENGINE_LINK} fmt::fmt)
