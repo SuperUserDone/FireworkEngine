@@ -175,7 +175,7 @@ void loop::render_thread()
                     auto [camera, trans] = view.get<component_camera, component_transform>(entity);
 
                     m_renderer->render(
-                        frametime, m_scene_manager->get_active_scene(), camera, trans);
+                        frametime, m_scene_manager->get_active_scene(), camera, (glm::mat4)trans);
                 }
 
                 m_renderer->finish_render();

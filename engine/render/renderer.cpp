@@ -42,9 +42,11 @@ void renderer::process_events()
     }
 }
 
-void renderer::clear_fb(uint id)
+void renderer::clear_fb(framebuffer *fb)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, id);
+    if (fb->framebuffer == -1)
+        return;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -52,6 +54,8 @@ void renderer::clear_fb(uint id)
 
 void renderer::render_imgui(void *state, std::function<bool()> callback)
 {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(m_window);
 
@@ -67,15 +71,30 @@ void renderer::render_imgui(void *state, std::function<bool()> callback)
 void renderer::render(double frametime,
                       scene *scene,
                       component_camera &cam,
-                      const glm::mat4 &camera_transform)
+                      const glm::mat4 &camera_transform,
+                      framebuffer *fb)
 {
-    // TODO FRAMEBUFFERS
 
     // Camera stuff
     int x, y;
     SDL_GetWindowSize(m_window, &x, &y);
     glViewport(0, 0, x, y);
     setup_camera(cam, camera_transform, x, y);
+
+    if (fb->framebuffer != 0)
+    {
+        if (fb->framebuffer == -1)
+        {
+            create_framebuffer(fb);
+        }
+        if (fb->size != glm::uvec2{x, y} || fb->texture_handle == -1)
+        {
+            fb->size = glm::uvec2{x, y};
+            update_framebuffer_texture(fb);
+        }
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
 
     // Clear background
     glm::vec3 color = scene->m_back_color;
@@ -95,6 +114,7 @@ void renderer::render(double frametime,
             render_mesh(mesh_comp, trans_comp, cam);
         }
     }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void renderer::finish_render()
@@ -374,6 +394,41 @@ void renderer::load_material(std::shared_ptr<material> mat) const
     glDeleteShader(vert_shader);
 
     mat->shader.render_data.shader_program = shader_program;
+}
+
+void renderer::create_framebuffer(framebuffer *fb)
+{
+    glGenFramebuffers(1, (uint *)&fb->framebuffer);
+}
+
+void renderer::update_framebuffer_texture(framebuffer *fb)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
+
+    if (fb->texture_handle == -1)
+        glGenTextures(1, (uint *)&fb->texture_handle);
+
+    glBindTexture(GL_TEXTURE_2D, fb->texture_handle);
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGB, fb->size.x, fb->size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->texture_handle, 0);
+
+    if (fb->renderbuffer_handle == -1)
+        glGenRenderbuffers(1, (uint *)&fb->renderbuffer_handle);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, fb->renderbuffer_handle);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, fb->size.x, fb->size.y);
+    glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, fb->renderbuffer_handle);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        LOG_F("Framebuffer is not complete!");
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
 }
 
 void renderer::clean()

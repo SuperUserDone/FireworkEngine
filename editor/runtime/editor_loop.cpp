@@ -164,20 +164,29 @@ void editor_loop::render_thread()
                         view.get<blood::component_camera, blood::component_transform>(entity);
 
                     m_renderer->render(
-                        frametime, m_scene_manager->get_active_scene(), camera, trans);
+                        frametime, m_scene_manager->get_active_scene(), camera, (glm::mat4)trans);
                 }
 
                 m_renderer->finish_render();
             }
             else
             {
-                m_renderer->clear_fb(0);
+                m_renderer->clear_fb(&blood::DEFAULT_FRAMEBUFFER);
 
-                // m_renderer->render(
-                //    frametime, m_scene_manager->get_active_scene(), m_edit_cam.cam, m_edit_cam);
+                static blood::framebuffer fb;
 
-                m_renderer->render_imgui(nullptr, [this]() {
-                    return draw_editor_ui(this->m_scene_manager->get_active_scene());
+                m_renderer->clear_fb(&fb);
+
+                m_renderer->render(frametime,
+                                   m_scene_manager->get_active_scene(),
+                                   m_edit_cam.cam,
+                                   m_edit_cam,
+                                   &fb);
+
+                blood::framebuffer fb_cpy = fb;
+
+                m_renderer->render_imgui(nullptr, [this, &fb_cpy]() {
+                    return draw_editor_ui(this->m_scene_manager->get_active_scene(), fb_cpy);
                 });
 
                 m_renderer->finish_render();

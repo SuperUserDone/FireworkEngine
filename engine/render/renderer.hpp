@@ -5,6 +5,7 @@
 
 #include "core/settings.hpp"
 #include "deletion_helpers.hpp"
+#include "framebuffer.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
 #include "scene/component_transform.hpp"
@@ -25,12 +26,14 @@ public:
     bool check_close() { return m_should_close; }
     void process_events();
 
-    void clear_fb(uint id);
+    void clear_fb(framebuffer *fb);
     void render_imgui(void *state, std::function<bool()> callback);
+
     void render(double frametime,
                 scene *scene,
                 component_camera &cam,
-                const glm::mat4 &camera_transform);
+                const glm::mat4 &component_transform,
+                framebuffer *fb = &DEFAULT_FRAMEBUFFER);
 
     void finish_render();
 
@@ -60,6 +63,9 @@ private:
     void update_mesh(component_mesh &mesh, component_transform &trans) const;
 
     void load_material(std::shared_ptr<material> mat) const;
+
+    void create_framebuffer(framebuffer *fb);
+    void update_framebuffer_texture(framebuffer *fb);
 
 private:
     renderer() = delete;

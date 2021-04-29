@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+#include <glm/gtx/euler_angles.hpp>
+
 #include "scene/component_camera.hpp"
 #include "scene/component_tag.hpp"
 #include "scene/component_transform.hpp"
@@ -123,9 +125,9 @@ static void draw_transform(blood::component_transform &comp)
     ImGui::Checkbox("Rotation Euler", &euler);
     if (euler)
     {
-        glm::vec3 euler = glm::degrees(glm::eulerAngles(comp.rot));
+        glm::vec3 euler = glm::eulerAngles(comp.rot);
         ImGui::DragFloat3("Rotation", &euler.x, 1.f);
-        comp.rot = glm::quat(euler);
+        comp.rot = glm::quat(glm::radians(euler));
     }
     else
         ImGui::DragFloat4("Rotation", &comp.rot.x, 0.1);
@@ -181,7 +183,18 @@ static void draw_components(blood::scene *scene)
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene *scene)
+static void draw_scene(int id)
+{
+    ImGui::Begin("Scene");
+
+    ImVec2 wsize{(ImGui::GetWindowSize().x - 15), (ImGui::GetWindowSize().y - 40)};
+
+    ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
+
+    ImGui::End();
+}
+
+bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb)
 {
     static bool styled = false;
 
@@ -210,9 +223,7 @@ bool draw_editor_ui(blood::scene *scene)
 
     draw_scene_info(scene);
     draw_components(scene);
-
-    ImGui::Begin("Scene");
-    ImGui::End();
+    draw_scene(fb.texture_handle);
 
     return close;
 }
