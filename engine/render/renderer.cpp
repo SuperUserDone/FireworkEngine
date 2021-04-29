@@ -12,7 +12,6 @@
 #include "renderer.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_mesh.hpp"
-#include "scene/component_ui_controller.hpp"
 #include "scene/scene.hpp"
 
 namespace blood
@@ -43,14 +42,23 @@ void renderer::process_events()
     }
 }
 
-void renderer::render_imgui(void *state, std::function<void()> callback)
+void renderer::clear_fb(uint id)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, id);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void renderer::render_imgui(void *state, std::function<bool()> callback)
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(m_window);
 
     ImGui::NewFrame();
 
-    callback();
+    if (callback())
+        m_should_close = true;
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -85,26 +93,6 @@ void renderer::render(double frametime,
             auto [mesh_comp, trans_comp] = view.get(entity);
 
             render_mesh(mesh_comp, trans_comp, cam);
-        }
-    }
-
-    // UI
-    {
-        auto view = scene->m_entt.view<component_ui_controller>();
-
-        static bool warned = false;
-        if (view.size() > 1 && warned)
-        {
-            LOG_E("More than one UI controller in scene... Bad things WILL happen and things WILL "
-                  "break!");
-            warned = true;
-        }
-
-        for (auto entity : view)
-        {
-            auto &ui = view.get<component_ui_controller>(entity);
-
-            render_imgui(nullptr, ui.draw);
         }
     }
 }
@@ -228,6 +216,8 @@ void renderer::init_imgui()
 
     // Style
     ImGui::StyleColorsDark();
+
+    io.Fonts->AddFontFromFileTTF("./font/NotoSans-Regular.ttf", 18.594061258312f);
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look
     // identical to regular ones.

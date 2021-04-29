@@ -5,6 +5,7 @@
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
 #include "core/util.hpp"
+#include "editor_ui.hpp"
 #include "scene/component_camera.hpp"
 #include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
@@ -170,8 +171,15 @@ void editor_loop::render_thread()
             }
             else
             {
-                m_renderer->render(
-                    frametime, m_scene_manager->get_active_scene(), m_edit_cam.cam, m_edit_cam);
+                m_renderer->clear_fb(0);
+
+                // m_renderer->render(
+                //    frametime, m_scene_manager->get_active_scene(), m_edit_cam.cam, m_edit_cam);
+
+                m_renderer->render_imgui(nullptr, [this]() {
+                    return draw_editor_ui(this->m_scene_manager->get_active_scene());
+                });
+
                 m_renderer->finish_render();
             }
 

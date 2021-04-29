@@ -11,11 +11,14 @@ set(ENGINE_SRC
     "../extern/imgui-docking/imgui_widgets.cpp"
     "../extern/imgui-docking/imgui_draw.cpp"
     "../extern/imgui-docking/imgui_tables.cpp"
-    "../extern/imgui-docking/backends/imgui_impl_sdl.cpp")
+    "../extern/imgui-docking/backends/imgui_impl_sdl.cpp"
+    "../extern/imgui-docking/misc/freetype/imgui_freetype.cpp"
+    "../extern/imgui-docking/misc/cpp/imgui_stdlib.cpp")
 
 add_library(blood-engine ${ENGINE_SRC})
 
-target_compile_definitions(blood-engine PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD2)
+target_compile_definitions(blood-engine PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD2
+                                               IMGUI_ENABLE_FREETYPE)
 
 if(MSVC)
   set(ENGINE_LINK "")
@@ -25,4 +28,4 @@ else()
   set(ENGINE_LINK "pthread")
 endif(MSVC)
 
-target_link_libraries(blood-engine SDL2 ${ENGINE_LINK} fmt::fmt)
+target_link_libraries(blood-engine SDL2 ${ENGINE_LINK} freetype fmt::fmt)

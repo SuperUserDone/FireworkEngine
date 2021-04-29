@@ -2,7 +2,6 @@
 #include "core/native_script.hpp"
 #include "imgui.h"
 #include "scene/component_nativescript.hpp"
-#include "scene/component_ui_controller.hpp"
 #include <cstdio>
 #include <memory>
 
@@ -17,26 +16,11 @@ public:
     test_script() : blood::native_script() {}
     virtual ~test_script() {}
 
-    void draw_ui()
-    {
-        ImGui::Begin("Test");
-
-        ImGui::DragFloat3("Pos", &this->trans->pos.x, 0.01);
-        ImGui::Text("FrameTime %.3fms (%.1f FPS)", render_time, 1000.f / render_time);
-        ImGui::Text("TickTime %.3fms (%.1f TPS)", tick_time, 1000.f / tick_time);
-
-        ImGui::End();
-    }
-
     virtual void on_start() override
     {
         LOG_D("Start");
 
         trans = &m_entity.get_component<blood::component_transform>();
-
-        auto &ui = m_entity.get_component<blood::component_ui_controller>();
-
-        ui.draw = [this]() { this->draw_ui(); };
     }
     virtual void on_tick_update(double deltatime) override
     {
@@ -87,7 +71,6 @@ int main(int argc, char const *argv[])
     blood::component_transform &transform = entity.add_component<blood::component_transform>();
     blood::component_mesh &mesh = entity.add_component<blood::component_mesh>();
     blood::component_nativescript &script = entity.add_component<blood::component_nativescript>();
-    blood::component_ui_controller &ui = entity.add_component<blood::component_ui_controller>();
 
     script.bind<test_script>();
 

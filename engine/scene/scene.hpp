@@ -28,6 +28,8 @@ public:
 
     std::mutex m_scene_mutex;
 
+    entt::registry &get_registry() { return m_entt; }
+
 private:
     entt::registry m_entt;
 

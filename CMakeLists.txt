@@ -15,8 +15,8 @@ include_directories(
   "extern/imgui-docking/")
 
 add_subdirectory(extern/fmt)
-
 add_subdirectory(extern/sdl)
+add_subdirectory(extern/freetype)
 
 add_subdirectory(engine)
 add_subdirectory(player)

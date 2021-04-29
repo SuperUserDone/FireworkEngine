@@ -25,7 +25,8 @@ public:
     bool check_close() { return m_should_close; }
     void process_events();
 
-    void render_imgui(void *state, std::function<void()> callback);
+    void clear_fb(uint id);
+    void render_imgui(void *state, std::function<bool()> callback);
     void render(double frametime,
                 scene *scene,
                 component_camera &cam,
