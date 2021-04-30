@@ -16,6 +16,6 @@ struct framebuffer
     glm::uvec2 size = {0, 0};
 };
 
-static inline framebuffer DEFAULT_FRAMEBUFFER = (framebuffer){0};
+static inline framebuffer DEFAULT_FRAMEBUFFER = framebuffer{0};
 
 } // namespace blood

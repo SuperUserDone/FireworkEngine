@@ -38,7 +38,7 @@ struct render_settings
      * \brief Enable vsync
      *
      */
-    bool vsync = false;
+    bool vsync = true;
 
     /**
      * \brief The monitor to apear on

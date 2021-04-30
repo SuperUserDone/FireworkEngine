@@ -33,26 +33,14 @@ public:
             trans->pos.x -= 0.001 * deltatime;
         if (blood::input::is_key_down(blood::input::KEY_d))
             trans->pos.x += 0.001 * deltatime;
-
-        tick_time = deltatime;
-
-        if (deltatime > 16.9)
-            LOG_DF("Update {}", 1000 / deltatime);
     }
     virtual void on_render_update(double deltatime) override
     {
-        if (deltatime > 16.9)
-            LOG_DF("Render {}", 1000 / deltatime);
+        LOG_DF("Render {}", 1000 / deltatime);
     }
     virtual void on_destroy() override { LOG_D("Destroy"); }
 
 private:
-    uint u_frames = 0;
-    uint r_frames = 0;
-
-    double tick_time;
-    double render_time;
-
     blood::component_transform *trans;
 };
 
