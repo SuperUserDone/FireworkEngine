@@ -104,6 +104,7 @@ public:
 
     static inline bool deserialize(scene *ptr, const std::string &vfs_path)
     {
+        LOG_IF("Loading Scene from {}({})", vfs_path, vfs::vfs_resolve_path(vfs_path));
         std::ifstream i(vfs::vfs_resolve_path(vfs_path));
         json j;
         i >> j;

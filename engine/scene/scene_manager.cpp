@@ -18,7 +18,7 @@ void scene_manager::stage_scene(scene *p_scene)
     m_staging = p_scene;
 }
 
-void scene_manager::swap()
+void scene_manager::do_swap()
 {
     if (m_staging != nullptr)
     {
@@ -30,6 +30,8 @@ void scene_manager::swap()
     {
         LOG_W("Trying to swap scene without initialising staging");
     }
+
+    m_swap = false;
 }
 
 scene_manager::~scene_manager()
