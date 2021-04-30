@@ -69,8 +69,8 @@ void renderer::render_imgui(void *state, std::function<bool()> callback)
 }
 
 void renderer::render(double frametime,
-                      scene *scene,
-                      component_camera &cam,
+                      const scene *scene,
+                      const component_camera &cam,
                       const glm::mat4 &camera_transform,
                       framebuffer *fb,
                       glm::uvec2 size)
@@ -159,7 +159,10 @@ void renderer::init_cameras()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void renderer::setup_camera(component_camera &cam, const glm::mat4 &camera_transform, int x, int y)
+void renderer::setup_camera(const component_camera &cam,
+                            const glm::mat4 &camera_transform,
+                            int x,
+                            int y)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
 
@@ -264,9 +267,9 @@ void renderer::init_imgui()
     ImGui_ImplOpenGL3_Init("#version 400");
 }
 
-void renderer::render_mesh(component_mesh &mesh,
-                           component_transform &trans,
-                           component_camera &cam) const
+void renderer::render_mesh(const component_mesh &mesh,
+                           const component_transform &trans,
+                           const component_camera &cam) const
 {
     if (mesh.render_data.vao == -1)
         load_mesh(mesh, trans);
@@ -288,7 +291,7 @@ void renderer::render_mesh(component_mesh &mesh,
     glDrawElements(GL_TRIANGLES, mesh.indicies.size(), GL_UNSIGNED_INT, 0);
 }
 
-void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
+void renderer::load_mesh(const component_mesh &mesh, const component_transform &trans) const
 {
     uint vao;
     uint vbo;
@@ -324,7 +327,7 @@ void renderer::load_mesh(component_mesh &mesh, component_transform &trans) const
     mesh.render_data.vao = vao;
 }
 
-void renderer::update_mesh(component_mesh &mesh, component_transform &trans) const
+void renderer::update_mesh(const component_mesh &mesh, const component_transform &trans) const
 {
     uint vao = mesh.render_data.vao;
     uint vbo = mesh.render_data.vertex_buffer;

@@ -71,8 +71,6 @@ void editor_loop::update_thread()
 
         // Run update
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
-
             // Update scripts
             auto view =
                 m_scene_manager->get_active_scene()->m_entt.view<blood::component_nativescript>();
@@ -149,8 +147,6 @@ void editor_loop::render_thread()
 
         // Draw frame
         {
-            std::lock_guard<std::mutex> lock(m_scene_manager->get_active_scene()->m_scene_mutex);
-
             // Draw scene for every camera
             if (!m_stop_update)
             {

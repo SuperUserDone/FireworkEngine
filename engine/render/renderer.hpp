@@ -30,8 +30,8 @@ public:
     void render_imgui(void *state, std::function<bool()> callback);
 
     void render(double frametime,
-                scene *scene,
-                component_camera &cam,
+                const scene *scene,
+                const component_camera &cam,
                 const glm::mat4 &component_transform,
                 framebuffer *fb = &DEFAULT_FRAMEBUFFER,
                 glm::uvec2 size = {0, 0});
@@ -53,15 +53,17 @@ private:
     uint m_camera_buffer = 0;
 
     void init_cameras();
-    void setup_camera(component_camera &cam, const glm::mat4 &camera_transform, int x, int y);
+    void setup_camera(const component_camera &cam, const glm::mat4 &camera_transform, int x, int y);
 
     void create_window();
     void create_gl_context();
     void init_imgui();
 
-    void render_mesh(component_mesh &mesh, component_transform &trans, component_camera &cam) const;
-    void load_mesh(component_mesh &mesh, component_transform &trans) const;
-    void update_mesh(component_mesh &mesh, component_transform &trans) const;
+    void render_mesh(const component_mesh &mesh,
+                     const component_transform &trans,
+                     const component_camera &cam) const;
+    void load_mesh(const component_mesh &mesh, const component_transform &trans) const;
+    void update_mesh(const component_mesh &mesh, const component_transform &trans) const;
 
     void load_material(std::shared_ptr<material> mat) const;
 

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <memory>
 
+#include <core/input.hpp>
 #include <core/loop.hpp>
 #include <scene/component_camera.hpp>
 #include <scene/component_mesh.hpp>
@@ -24,16 +25,23 @@ public:
     }
     virtual void on_tick_update(double deltatime) override
     {
+        if (blood::input::is_key_down(blood::input::KEY_w))
+            trans->pos.y += 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_s))
+            trans->pos.y -= 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_a))
+            trans->pos.x -= 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_d))
+            trans->pos.x += 0.001 * deltatime;
+
         tick_time = deltatime;
 
-        if (u_frames++ % 300 == 2)
+        if (deltatime > 16.9)
             LOG_DF("Update {}", 1000 / deltatime);
     }
     virtual void on_render_update(double deltatime) override
     {
-        render_time = deltatime;
-
-        if (r_frames++ % 300 == 1)
+        if (deltatime > 16.9)
             LOG_DF("Render {}", 1000 / deltatime);
     }
     virtual void on_destroy() override { LOG_D("Destroy"); }
@@ -55,6 +63,7 @@ private:
 int main(int argc, char const *argv[])
 {
     blood::loop loop;
+    loop.set_fps_limit(0);
 
     auto smr = loop.get_scenemanager().lock();
 

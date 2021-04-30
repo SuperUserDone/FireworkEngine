@@ -24,7 +24,7 @@ struct material
         const char *vert_source = nullptr;
         const char *frag_source = nullptr;
 
-        struct
+        mutable struct
         {
             int shader_program = -1;
         } render_data;
@@ -52,9 +52,9 @@ struct component_mesh
 
     std::shared_ptr<material> m_mat;
 
-    bool changed = false;
+    mutable bool changed = false;
 
-    struct
+    mutable struct
     {
         int vertex_buffer = -1;
         int index_buffer = -1;

@@ -13,7 +13,7 @@ struct component_transform
     glm::quat rot = glm::quat(glm::vec3(0, 0, 0));
     glm::vec3 scale = {1, 1, 1};
 
-    operator glm::mat4()
+    operator glm::mat4() const
     {
         glm::mat4 mat(1.f);
 

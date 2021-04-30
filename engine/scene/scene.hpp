@@ -26,12 +26,10 @@ public:
 
     entity create_entity(const std::string &name);
 
-    std::mutex m_scene_mutex;
-
     entt::registry &get_registry() { return m_entt; }
 
 private:
-    entt::registry m_entt;
+    mutable entt::registry m_entt;
 
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 
