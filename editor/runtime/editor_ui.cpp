@@ -5,9 +5,7 @@
 
 #include <glm/gtx/euler_angles.hpp>
 
-#include "scene/component_camera.hpp"
-#include "scene/component_tag.hpp"
-#include "scene/component_transform.hpp"
+#include "scene/components.hpp"
 
 static void style_editor()
 {
@@ -178,6 +176,8 @@ static void draw_components(blood::scene *scene)
                 draw_transform(trans);
             }
         }
+
+        // if (scene->get_registry().any_of<blood::component_mesh>())
     }
 
     ImGui::End();

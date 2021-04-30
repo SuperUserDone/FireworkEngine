@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-#include "component_tag.hpp"
+#include "components.hpp"
 #include "core/util.hpp"
 
 namespace blood

@@ -10,8 +10,7 @@
 #include "core/logger.hpp"
 #include "render/deletion_helpers.hpp"
 #include "renderer.hpp"
-#include "scene/component_camera.hpp"
-#include "scene/component_mesh.hpp"
+#include "scene/components.hpp"
 #include "scene/scene.hpp"
 
 namespace blood

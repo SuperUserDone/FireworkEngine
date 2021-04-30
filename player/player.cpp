@@ -1,15 +1,12 @@
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
 #include "imgui.h"
-#include "scene/component_nativescript.hpp"
 #include <cstdio>
 #include <memory>
 
 #include <core/input.hpp>
 #include <core/loop.hpp>
-#include <scene/component_camera.hpp>
-#include <scene/component_mesh.hpp>
-#include <scene/component_transform.hpp>
+#include <scene/components.hpp>
 
 class test_script : public blood::native_script
 {

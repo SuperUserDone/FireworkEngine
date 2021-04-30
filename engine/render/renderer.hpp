@@ -6,9 +6,7 @@
 #include "core/settings.hpp"
 #include "deletion_helpers.hpp"
 #include "framebuffer.hpp"
-#include "scene/component_camera.hpp"
-#include "scene/component_mesh.hpp"
-#include "scene/component_transform.hpp"
+#include "scene/components.hpp"
 #include "scene/scene.hpp"
 
 #ifdef WIN32

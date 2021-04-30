@@ -5,7 +5,7 @@
 #include <mutex>
 #include <string>
 
-#include "component_mesh.hpp"
+#include "components.hpp"
 #include "scene.hpp"
 
 namespace blood

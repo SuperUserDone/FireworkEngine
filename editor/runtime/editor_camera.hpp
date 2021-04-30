@@ -1,7 +1,6 @@
 #pragma once
 
-#include "scene/component_camera.hpp"
-#include "scene/component_transform.hpp"
+#include "scene/components.hpp"
 
 struct editor_camera
 {

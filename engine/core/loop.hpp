@@ -11,9 +11,7 @@
 #include "core/native_script.hpp"
 #include "logger.hpp"
 #include "render/renderer.hpp"
-#include "scene/component_camera.hpp"
-#include "scene/component_nativescript.hpp"
-#include "scene/entity.hpp"
+#include "scene/components.hpp"
 #include "scene/scene_manager.hpp"
 #include "util.hpp"
 

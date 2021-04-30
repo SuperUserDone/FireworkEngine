@@ -6,8 +6,6 @@
 #include "core/native_script.hpp"
 #include "core/util.hpp"
 #include "editor_ui.hpp"
-#include "scene/component_camera.hpp"
-#include "scene/component_nativescript.hpp"
 #include "scene/entity.hpp"
 
 editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor")

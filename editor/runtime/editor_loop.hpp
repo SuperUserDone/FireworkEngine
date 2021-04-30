@@ -10,6 +10,7 @@
 #include "core/loop.hpp"
 #include "editor_camera.hpp"
 #include "render/renderer.hpp"
+#include "scene/components.hpp"
 #include "scene/scene_manager.hpp"
 
 class editor_loop : public blood::loop

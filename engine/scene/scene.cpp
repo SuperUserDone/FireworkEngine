@@ -1,6 +1,6 @@
 #include "render/deletion_helpers.hpp"
 #include "scene.hpp"
-#include "scene/component_mesh.hpp"
+#include "scene/components.hpp"
 
 namespace blood
 {
