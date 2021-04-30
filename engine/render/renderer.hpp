@@ -33,7 +33,8 @@ public:
                 scene *scene,
                 component_camera &cam,
                 const glm::mat4 &component_transform,
-                framebuffer *fb = &DEFAULT_FRAMEBUFFER);
+                framebuffer *fb = &DEFAULT_FRAMEBUFFER,
+                glm::uvec2 size = {0, 0});
 
     void finish_render();
 

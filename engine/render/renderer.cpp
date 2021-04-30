@@ -72,12 +72,23 @@ void renderer::render(double frametime,
                       scene *scene,
                       component_camera &cam,
                       const glm::mat4 &camera_transform,
-                      framebuffer *fb)
+                      framebuffer *fb,
+                      glm::uvec2 size)
 {
 
     // Camera stuff
+
     int x, y;
-    SDL_GetWindowSize(m_window, &x, &y);
+    if (size.x == 0 || size.y == 0)
+    {
+        SDL_GetWindowSize(m_window, &x, &y);
+    }
+    else
+    {
+        x = size.x;
+        y = size.y;
+    }
+
     glViewport(0, 0, x, y);
     setup_camera(cam, camera_transform, x, y);
 

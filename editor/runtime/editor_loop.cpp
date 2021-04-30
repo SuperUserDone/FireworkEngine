@@ -175,19 +175,26 @@ void editor_loop::render_thread()
 
                 static blood::framebuffer fb;
 
+                static glm::uvec2 size = {0, 0};
+
                 m_renderer->clear_fb(&fb);
 
                 m_renderer->render(frametime,
                                    m_scene_manager->get_active_scene(),
                                    m_edit_cam.cam,
                                    m_edit_cam,
-                                   &fb);
+                                   &fb,
+                                   size);
 
                 blood::framebuffer fb_cpy = fb;
+                glm::uvec2 size_cpy = size;
 
-                m_renderer->render_imgui(nullptr, [this, &fb_cpy]() {
-                    return draw_editor_ui(this->m_scene_manager->get_active_scene(), fb_cpy);
+                m_renderer->render_imgui(nullptr, [&]() {
+                    return draw_editor_ui(
+                        this->m_scene_manager->get_active_scene(), fb_cpy, size_cpy);
                 });
+
+                size = size_cpy;
 
                 m_renderer->finish_render();
             }

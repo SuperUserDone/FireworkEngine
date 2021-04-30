@@ -183,18 +183,20 @@ static void draw_components(blood::scene *scene)
     ImGui::End();
 }
 
-static void draw_scene(int id)
+static void draw_scene(int id, glm::uvec2 &size)
 {
     ImGui::Begin("Scene");
 
     ImVec2 wsize{(ImGui::GetWindowSize().x - 15), (ImGui::GetWindowSize().y - 40)};
+
+    size = {wsize.x, wsize.y};
 
     ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb)
+bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &size)
 {
     static bool styled = false;
 
@@ -223,7 +225,7 @@ bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb)
 
     draw_scene_info(scene);
     draw_components(scene);
-    draw_scene(fb.texture_handle);
+    draw_scene(fb.texture_handle, size);
 
     return close;
 }

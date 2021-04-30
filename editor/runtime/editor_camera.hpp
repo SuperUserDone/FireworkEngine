@@ -6,7 +6,7 @@
 struct editor_camera
 {
     glm::vec3 target = {0, 0, 0};
-    glm::vec3 pos = {0, 0, 3};
+    glm::vec3 pos = {3, 3, 3};
 
     blood::component_camera cam;
 
