@@ -41,7 +41,7 @@ void renderer::process_events()
     }
 }
 
-void renderer::clear_fb(fb_handle *fb)
+void renderer::clear_fb(framebuffer *fb)
 {
     if (fb->fb_handle == -1)
         return;
@@ -71,7 +71,7 @@ void renderer::render(double frametime,
                       const scene *scene,
                       const component_camera &cam,
                       const glm::mat4 &camera_transform,
-                      fb_handle *fb,
+                      framebuffer *fb,
                       glm::uvec2 size)
 {
 
@@ -409,9 +409,9 @@ void renderer::load_material(std::shared_ptr<material> mat) const
     mat->shader.render_data.shader_program = shader_program;
 }
 
-void renderer::create_framebuffer(fb_handle *fb) { glGenFramebuffers(1, (uint *)&fb->fb_handle); }
+void renderer::create_framebuffer(framebuffer *fb) { glGenFramebuffers(1, (uint *)&fb->fb_handle); }
 
-void renderer::update_framebuffer_texture(fb_handle *fb)
+void renderer::update_framebuffer_texture(framebuffer *fb)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
 

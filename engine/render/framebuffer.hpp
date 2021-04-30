@@ -7,7 +7,7 @@
 namespace blood
 {
 
-struct fb_handle
+struct framebuffer
 {
     int fb_handle = -1;
     int texture_handle = -1;
@@ -16,6 +16,6 @@ struct fb_handle
     glm::uvec2 size = {0, 0};
 };
 
-static inline fb_handle DEFAULT_FRAMEBUFFER = fb_handle{0};
+static inline framebuffer DEFAULT_FRAMEBUFFER = framebuffer{0};
 
 } // namespace blood

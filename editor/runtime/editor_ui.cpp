@@ -144,6 +144,12 @@ static void draw_camera(blood::component_camera &cam)
         ImGui::Text("Not Implemented");
 }
 
+static void draw_mesh(blood::component_mesh &mesh)
+{
+    // TODO
+    ImGui::Text("Not Implemented");
+}
+
 static void draw_components(blood::scene *scene)
 {
     ImGui::Begin("Components");
@@ -177,7 +183,14 @@ static void draw_components(blood::scene *scene)
             }
         }
 
-        // if (scene->get_registry().any_of<blood::component_mesh>())
+        if (scene->get_registry().any_of<blood::component_mesh>((entt::entity)curr))
+        {
+            if (ImGui::CollapsingHeader("Mesh"))
+            {
+                auto &mesh = scene->get_registry().get<blood::component_mesh>((entt::entity)curr);
+                draw_mesh(mesh);
+            }
+        }
     }
 
     ImGui::End();
@@ -196,7 +209,7 @@ static void draw_scene(int id, glm::uvec2 &size)
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene *scene, blood::fb_handle &fb, glm::uvec2 &size)
+bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &size)
 {
     static bool styled = false;
 
