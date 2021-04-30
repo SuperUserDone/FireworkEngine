@@ -9,15 +9,22 @@ namespace blood
 
 scene_manager::scene_manager() : m_active(new scene()) {}
 
-void scene_manager::stage_scene(scene *p_scene) { m_staging = p_scene; }
+void scene_manager::stage_scene(scene *p_scene)
+{
+    if (m_staging)
+    {
+        delete m_staging;
+    }
+    m_staging = p_scene;
+}
 
 void scene_manager::swap()
 {
     if (m_staging != nullptr)
     {
-        delete m_active;
+        scene *temp = m_active;
         m_active = m_staging;
-        m_staging = nullptr;
+        m_staging = temp;
     }
     else
     {

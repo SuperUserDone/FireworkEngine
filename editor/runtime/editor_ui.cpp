@@ -5,7 +5,27 @@
 
 #include <glm/gtx/euler_angles.hpp>
 
+#include "core/input.hpp"
 #include "scene/components.hpp"
+
+static bool shortcut_wrapper(blood::input::mod_keys mod, blood::input::key key, bool *clicked)
+{
+    static bool save_pressed = false;
+
+    bool pressed = blood::input::check_shotcut(mod, key);
+
+    if (pressed && !save_pressed)
+    {
+        *clicked = true;
+        save_pressed = true;
+    }
+    if (save_pressed && !pressed)
+    {
+        save_pressed = false;
+    }
+
+    return *clicked;
+}
 
 static void style_editor()
 {
@@ -209,8 +229,9 @@ static void draw_scene(int id, glm::uvec2 &size)
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &size)
+bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec2 &size)
 {
+    blood::scene *scene = man->get_active_scene();
     static bool styled = false;
 
     bool close = false;
@@ -221,12 +242,25 @@ bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &siz
         styled = true;
     }
 
+    static bool save = false;
+
+    shortcut_wrapper(blood::input::MODKEY_CTRL, blood::input::KEY_s, &save);
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
+            save = ImGui::MenuItem("Save", "Ctrl+S");
+            if (ImGui::MenuItem("Load"))
+            {
+                curr = 0;
+                blood::scene *new_scene = new blood::scene();
+                blood::scene_serializer::deserialize(new_scene, "root://test.bscn.json");
+                man->stage_scene(new_scene);
+                man->swap();
+            }
             ImGui::Separator();
-            close = ImGui::MenuItem("Close", NULL);
+            close = ImGui::MenuItem("Close");
 
             ImGui::EndMenu();
         }
@@ -240,5 +274,10 @@ bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &siz
     draw_components(scene);
     draw_scene(fb.texture_handle, size);
 
+    if (save)
+    {
+        blood::scene_serializer::serialize(scene, "root://test.bscn.json");
+        save = false;
+    }
     return close;
 }

@@ -14,7 +14,7 @@ struct vertex
     glm::vec3 pos;
     glm::vec3 norm;
     glm::vec3 tan;
-    uint8_t color_index;
+    glm::vec2 uvs;
 };
 
 struct material
@@ -50,7 +50,7 @@ struct component_mesh
     std::vector<vertex> verticies;
     std::vector<uint32_t> indicies;
 
-    std::shared_ptr<material> m_mat;
+    mutable std::shared_ptr<material> m_mat;
 
     mutable bool changed = false;
 

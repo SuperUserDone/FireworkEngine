@@ -25,6 +25,7 @@ public:
     void set_background_color(glm::vec3 color) { m_back_color = color; }
 
     entity create_entity(const std::string &name);
+    entity create_entity(const std::string &name, uint32_t id);
 
     entt::registry &get_registry() { return m_entt; }
 

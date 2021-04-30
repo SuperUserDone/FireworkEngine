@@ -184,8 +184,7 @@ void editor_loop::render_thread()
                 glm::uvec2 size_cpy = size;
 
                 m_renderer->render_imgui(nullptr, [&]() {
-                    return draw_editor_ui(
-                        this->m_scene_manager->get_active_scene(), fb_cpy, size_cpy);
+                    return draw_editor_ui(this->m_scene_manager.get(), fb_cpy, size_cpy);
                 });
 
                 size = size_cpy;

@@ -41,4 +41,8 @@ bool scene::loading_done()
 }
 
 entity scene::create_entity(const std::string &name) { return entity(&m_entt, name); }
+entity scene::create_entity(const std::string &name, uint32_t id)
+{
+    return entity(&m_entt, name, id);
+}
 } // namespace blood

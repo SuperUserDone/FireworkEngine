@@ -5,9 +5,11 @@
 
 namespace blood
 {
-entity::entity(entt::registry *reg, const std::string &name) : m_reg(reg)
+entity::entity(entt::registry *reg, const std::string &name) : entity(reg, name, get_uuid()) {}
+
+entity::entity(entt::registry *reg, const std::string &name, uint32_t id) : m_reg(reg)
 {
-    m_id = m_reg->create((entt::entity)get_uuid());
+    m_id = m_reg->create((entt::entity)id);
 
     m_reg->emplace<component_tag>(m_id, component_tag{name});
 }

@@ -235,6 +235,27 @@ void renderer::create_gl_context()
 
     SDL_GL_MakeCurrent(m_window, m_context);
     SDL_GL_SetSwapInterval(m_settings.vsync);
+
+    m_placeholder_mat = std::make_shared<blood::material>();
+
+    m_placeholder_mat->shader.frag_source = R"(
+#version 450 core
+out vec4 FragColor;
+in vec4 vertexColor;
+void main() { FragColor = vertexColor; }
+)";
+
+    m_placeholder_mat->shader.vert_source = R"(
+#version 450 core
+layout(location = 0) in vec3 aPos;
+layout(std140, binding = 0) uniform Matrices{
+mat4 projection;
+mat4 view;
+};
+layout(location = 0) uniform mat4 model;
+out vec4 vertexColor;
+void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }
+)";
 }
 
 void renderer::init_imgui()
@@ -275,6 +296,9 @@ void renderer::render_mesh(const component_mesh &mesh,
 
     if (mesh.changed)
         update_mesh(mesh, trans);
+
+    if (!mesh.m_mat)
+        mesh.m_mat = m_placeholder_mat;
 
     if (mesh.m_mat->shader.render_data.shader_program == -1)
         load_material(mesh.m_mat);

@@ -13,6 +13,7 @@ class entity
 public:
     entity() {}
     entity(entt::registry *reg, const std::string &name);
+    entity(entt::registry *reg, const std::string &name, uint32_t id);
     entity(entt::registry *reg, entt::entity id) : m_reg(reg), m_id(id) {}
 
     entity(entity &&other) = default;

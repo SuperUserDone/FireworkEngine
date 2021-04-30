@@ -68,6 +68,8 @@ private:
     void create_framebuffer(framebuffer *fb);
     void update_framebuffer_texture(framebuffer *fb);
 
+    std::shared_ptr<material> m_placeholder_mat;
+
 private:
     renderer() = delete;
     renderer(const renderer &other) = delete;

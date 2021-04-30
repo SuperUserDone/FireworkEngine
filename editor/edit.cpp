@@ -5,6 +5,8 @@
 #include "runtime/editor_loop.hpp"
 #include "runtime/parse_args.hpp"
 
+#include "vfs/vfs.hpp"
+
 #ifdef main
 #undef main
 #endif
@@ -18,6 +20,8 @@ int main(int argc, const char *argv[])
         print_usage();
         return 0;
     }
+
+    blood::vfs::vfs_register(args.project_location, "root");
 
     editor_loop loop;
 
@@ -38,29 +42,6 @@ int main(int argc, const char *argv[])
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
     mesh.indicies = {0, 1, 2};
-
-    std::shared_ptr<blood::material> mat = std::make_shared<blood::material>();
-
-    mat->shader.frag_source = R"(
-#version 450 core
-out vec4 FragColor;
-in vec4 vertexColor;
-void main() { FragColor = vertexColor; }
-)";
-
-    mat->shader.vert_source = R"(
-#version 450 core
-layout(location = 0) in vec3 aPos;
-layout(std140, binding = 0) uniform Matrices{
-mat4 projection;
-mat4 view;
-};
-layout(location = 0) uniform mat4 model;
-out vec4 vertexColor;
-void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }
-)";
-
-    mesh.m_mat = mat;
 
     transform.pos = {0, 0, 2};
 
