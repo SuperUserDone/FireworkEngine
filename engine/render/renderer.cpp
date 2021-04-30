@@ -41,11 +41,11 @@ void renderer::process_events()
     }
 }
 
-void renderer::clear_fb(framebuffer *fb)
+void renderer::clear_fb(fb_handle *fb)
 {
-    if (fb->framebuffer == -1)
+    if (fb->fb_handle == -1)
         return;
-    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -71,7 +71,7 @@ void renderer::render(double frametime,
                       const scene *scene,
                       const component_camera &cam,
                       const glm::mat4 &camera_transform,
-                      framebuffer *fb,
+                      fb_handle *fb,
                       glm::uvec2 size)
 {
 
@@ -91,9 +91,9 @@ void renderer::render(double frametime,
     glViewport(0, 0, x, y);
     setup_camera(cam, camera_transform, x, y);
 
-    if (fb->framebuffer != 0)
+    if (fb->fb_handle != 0)
     {
-        if (fb->framebuffer == -1)
+        if (fb->fb_handle == -1)
         {
             create_framebuffer(fb);
         }
@@ -104,7 +104,7 @@ void renderer::render(double frametime,
         }
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
 
     // Clear background
     glm::vec3 color = scene->m_back_color;
@@ -409,14 +409,11 @@ void renderer::load_material(std::shared_ptr<material> mat) const
     mat->shader.render_data.shader_program = shader_program;
 }
 
-void renderer::create_framebuffer(framebuffer *fb)
-{
-    glGenFramebuffers(1, (uint *)&fb->framebuffer);
-}
+void renderer::create_framebuffer(fb_handle *fb) { glGenFramebuffers(1, (uint *)&fb->fb_handle); }
 
-void renderer::update_framebuffer_texture(framebuffer *fb)
+void renderer::update_framebuffer_texture(fb_handle *fb)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
 
     if (fb->texture_handle == -1)
         glGenTextures(1, (uint *)&fb->texture_handle);
@@ -441,7 +438,7 @@ void renderer::update_framebuffer_texture(framebuffer *fb)
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         LOG_F("Framebuffer is not complete!");
 
-    glBindFramebuffer(GL_FRAMEBUFFER, fb->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
 }
 
 void renderer::clean()

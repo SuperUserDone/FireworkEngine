@@ -196,7 +196,7 @@ static void draw_scene(int id, glm::uvec2 &size)
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene *scene, blood::framebuffer &fb, glm::uvec2 &size)
+bool draw_editor_ui(blood::scene *scene, blood::fb_handle &fb, glm::uvec2 &size)
 {
     static bool styled = false;
 

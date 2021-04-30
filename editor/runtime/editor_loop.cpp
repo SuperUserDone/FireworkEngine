@@ -167,7 +167,7 @@ void editor_loop::render_thread()
             {
                 m_renderer->clear_fb(&blood::DEFAULT_FRAMEBUFFER);
 
-                static blood::framebuffer fb;
+                static blood::fb_handle fb;
 
                 static glm::uvec2 size = {0, 0};
 
@@ -180,7 +180,7 @@ void editor_loop::render_thread()
                                    &fb,
                                    size);
 
-                blood::framebuffer fb_cpy = fb;
+                blood::fb_handle fb_cpy = fb;
                 glm::uvec2 size_cpy = size;
 
                 m_renderer->render_imgui(nullptr, [&]() {
