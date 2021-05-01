@@ -48,7 +48,6 @@ private:
 int main(int argc, char const *argv[])
 {
     blood::loop loop;
-    loop.set_fps_limit(0);
 
     auto smr = loop.get_scenemanager().lock();
 

@@ -10,10 +10,10 @@
 
 #include "core/native_script.hpp"
 #include "logger.hpp"
+#include "rate_limiter.hpp"
 #include "render/renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene_manager.hpp"
-#include "util.hpp"
 
 namespace blood
 {
@@ -40,9 +40,9 @@ public:
     /**
      * \brief Get the renderer
      *
-     * \return std::weak_ptr<renderer> refrence to blood::renderer
+     * \return renderer* pointer to blood::renderer
      */
-    std::weak_ptr<renderer> get_renderer() { return m_renderer; }
+    renderer *get_renderer() { return m_renderer; }
 
     /**
      * \brief Get the scenemanager
@@ -125,11 +125,11 @@ protected:
     virtual void update_thread();
     virtual void render_thread();
 
-    uint16_t m_fps_target = 60;
+    uint16_t m_fps_target = 0;
     uint16_t m_tps_target = 60;
     float m_tps_strech = 1.0f;
 
-    std::shared_ptr<renderer> m_renderer = nullptr;
+    renderer *m_renderer = nullptr;
     std::shared_ptr<scene_manager> m_scene_manager = nullptr;
 
 private:

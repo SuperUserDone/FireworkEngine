@@ -1,5 +1,8 @@
 #include "imgui.h"
 #include "loop.hpp"
+
+#include "rate_limiter.hpp"
+
 namespace blood
 {
 loop::loop()
@@ -62,19 +65,12 @@ void loop::update_thread()
 {
     while (!m_stop)
     {
-        static double frametime = 0;
-        int time_target = 0;
-
-        // Detrimine target us for tick
-        if (m_tps_target != 0)
-            time_target = 1000000 / trunc(m_tps_target * m_tps_strech);
-
-        // Start clock
-        uint64_t time_begin = get_precise_time_us();
-
         // Wait if singlestepping/paused
         std::unique_lock<std::mutex> lck(m_stop_lck);
         m_pause.wait(lck, [this]() { return !this->m_pause_pred; });
+
+        static double frametime = 0;
+        rate_limiter limiter(m_tps_target, &frametime);
 
         // Singlestepping flags
         if (m_single_stepping)
@@ -105,19 +101,6 @@ void loop::update_thread()
                 script.script->on_tick_update(frametime);
             }
         }
-
-        // Calclulate frametime
-        uint64_t time_end = get_precise_time_us();
-        uint64_t time_ellapsed = time_end - time_begin;
-
-        // Sleep for rest of the allocated frametime
-        if (time_target > time_ellapsed && m_tps_target != 0)
-            sleep_precise(time_target - time_ellapsed);
-
-        // Calculate updated frametime
-        time_end = get_precise_time_us();
-        time_ellapsed = time_end - time_begin;
-        frametime = time_ellapsed / 1000.f;
     }
 
     // Delete scripts
@@ -137,27 +120,13 @@ void loop::update_thread()
 
 void loop::render_thread()
 {
-    m_renderer = std::make_shared<renderer>(render_settings());
+    m_renderer = new renderer(render_settings());
 
     while (!m_stop)
     {
         static double frametime = 0;
-        static uint64_t last_clean = get_precise_time_us();
-        int time_target = 0;
 
-        // Detrimine target us for tick
-        if (m_fps_target != 0)
-            time_target = 1000000 / m_fps_target;
-
-        // Start clock
-        uint64_t time_begin = get_precise_time_us();
-
-        // Clean unused GPU data
-        if (time_begin - last_clean > 500000)
-        {
-            m_renderer->clean();
-            last_clean = get_precise_time_us();
-        }
+        rate_limiter limiter(m_fps_target, &frametime);
 
         // Draw frame
         {
@@ -204,20 +173,8 @@ void loop::render_thread()
             m_pause_pred = false;
             m_pause.notify_all();
         }
-
-        // Calclulate frametime
-        uint64_t time_end = get_precise_time_us();
-        uint64_t time_ellapsed = time_end - time_begin;
-
-        // Sleep for rest of the allocated frametime
-        if (time_target > time_ellapsed && m_tps_target != 0)
-            sleep_precise(time_target - time_ellapsed);
-
-        // Calculate updated frametime
-        time_end = get_precise_time_us();
-        time_ellapsed = time_end - time_begin;
-        frametime = time_ellapsed / 1000.f;
     }
+    delete m_renderer;
 }
 
 } // namespace blood

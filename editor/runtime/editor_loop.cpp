@@ -58,14 +58,7 @@ void editor_loop::update_thread()
     while (!m_stop_update)
     {
         static double frametime = 0;
-        int time_target = 0;
-
-        // Detrimine target us for tick
-        if (m_tps_target != 0)
-            time_target = 1000000 / trunc(m_tps_target * m_tps_strech);
-
-        // Start clock
-        uint64_t time_begin = blood::get_precise_time_us();
+        blood::rate_limiter limiter(m_tps_target, &frametime);
 
         // Run update
         {
@@ -89,19 +82,6 @@ void editor_loop::update_thread()
                 script.script->on_tick_update(frametime);
             }
         }
-
-        // Calclulate frametime
-        uint64_t time_end = blood::get_precise_time_us();
-        uint64_t time_ellapsed = time_end - time_begin;
-
-        // Sleep for rest of the allocated frametime
-        if (time_target > time_ellapsed && m_tps_target != 0)
-            blood::sleep_precise(time_target - time_ellapsed);
-
-        // Calculate updated frametime
-        time_end = blood::get_precise_time_us();
-        time_ellapsed = time_end - time_begin;
-        frametime = time_ellapsed / 1000.f;
     }
 
     // Delete scripts
@@ -121,27 +101,14 @@ void editor_loop::update_thread()
 
 void editor_loop::render_thread()
 {
-    m_renderer = std::make_shared<blood::renderer>(blood::render_settings());
+    m_renderer = new blood::renderer(blood::render_settings());
+
+    static double frametime = 0;
+    blood::rate_limiter limiter(m_fps_target, &frametime);
 
     while (!m_stop_render)
     {
         static double frametime = 0;
-        static uint64_t last_clean = blood::get_precise_time_us();
-        int time_target = 0;
-
-        // Detrimine target us for tick
-        if (m_fps_target != 0)
-            time_target = 1000000 / m_fps_target;
-
-        // Start clock
-        uint64_t time_begin = blood::get_precise_time_us();
-
-        // Clean unused GPU data
-        if (time_begin - last_clean > 500000)
-        {
-            m_renderer->clean();
-            last_clean = blood::get_precise_time_us();
-        }
 
         // Draw frame
         {
@@ -218,18 +185,6 @@ void editor_loop::render_thread()
             m_stop_render = true;
             m_stop_update = true;
         }
-
-        // Calclulate frametime
-        uint64_t time_end = blood::get_precise_time_us();
-        uint64_t time_ellapsed = time_end - time_begin;
-
-        // Sleep for rest of the allocated frametime
-        if (time_target > time_ellapsed && m_tps_target != 0)
-            blood::sleep_precise(time_target - time_ellapsed);
-
-        // Calculate updated frametime
-        time_end = blood::get_precise_time_us();
-        time_ellapsed = time_end - time_begin;
-        frametime = time_ellapsed / 1000.f;
     }
+    delete m_renderer;
 }
