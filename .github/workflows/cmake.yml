@@ -35,8 +35,8 @@ jobs:
                           os: windows-latest,
                           artifact: "windows_clang.7z",
                           build_type: "Release",
-                          cc: "clang-cl",
-                          cxx: "clang-cl",
+                          cc: "clang",
+                          cxx: "clang",
                           environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
                           archiver: "7z a",
                           generators: "Ninja",
@@ -63,15 +63,15 @@ jobs:
               run: |
                   echo github.event.action: ${{ github.event.action }}
                   echo github.event_name: ${{ github.event_name }}
-                  echo "PATH=$PATH:C:\msys64\mingw64\bin" >> $GITHUB_ENV
             - name: Install dependencies on windows
               if: startsWith(matrix.config.os, 'windows')
               shell: bash
               run: |
+                  echo "::add-path::C:\msys64\mingw64\bin"
+                  clang --version
                   choco install ninja cmake
                   ninja --version
                   cmake --version
-                  clang-cl --version
 
             - name: Install dependencies on ubuntu
               if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
