@@ -33,7 +33,7 @@ jobs:
                     - {
                           name: "Windows Latest Clang",
                           os: windows-latest,
-                          artifact: "windows_msvc.7z",
+                          artifact: "windows_clang.7z",
                           build_type: "Release",
                           cc: "clang",
                           cxx: "clang++",
@@ -62,10 +62,12 @@ jobs:
               run: |
                   echo github.event.action: ${{ github.event.action }}
                   echo github.event_name: ${{ github.event_name }}
+                  run: echo "PATH=$PATH:C:\msys64\mingw64\bin" >> $GITHUB_ENV
             - name: Install dependencies on windows
               if: startsWith(matrix.config.os, 'windows')
+              shell: powershell
               run: |
-                  choco install ninja cmake llvm
+                  choco install ninja cmake
                   ninja --version
                   cmake --version
                   clang --version
