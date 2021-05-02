@@ -4,3 +4,5 @@ build
 bloodlog.txt
 marrowlog.txt
 imgui.ini
+.ccls-cache
+compile_commands.json
