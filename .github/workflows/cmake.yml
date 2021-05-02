@@ -59,13 +59,14 @@ jobs:
                   submodules: recursive
 
             - name: Print env
+              shell: bash
               run: |
                   echo github.event.action: ${{ github.event.action }}
                   echo github.event_name: ${{ github.event_name }}
                   echo "PATH=$PATH:C:\msys64\mingw64\bin" >> $GITHUB_ENV
             - name: Install dependencies on windows
               if: startsWith(matrix.config.os, 'windows')
-              shell: powershell
+              shell: bash
               run: |
                   choco install ninja cmake
                   ninja --version
