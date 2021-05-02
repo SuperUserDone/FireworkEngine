@@ -4,7 +4,6 @@
 
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
-#include "core/util.hpp"
 #include "editor_ui.hpp"
 #include "scene/entity.hpp"
 
