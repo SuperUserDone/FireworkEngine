@@ -63,11 +63,15 @@ jobs:
               run: |
                   echo github.event.action: ${{ github.event.action }}
                   echo github.event_name: ${{ github.event_name }}
+            - name: set clang env path
+              if: runner.os == 'Windows'
+              shell: bash
+              run: |
+                  echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
             - name: Install dependencies on windows
               if: startsWith(matrix.config.os, 'windows')
               shell: bash
               run: |
-                  echo "::add-path::C:\msys64\mingw64\bin"
                   clang --version
                   choco install ninja cmake
                   ninja --version
