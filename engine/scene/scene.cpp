@@ -1,4 +1,3 @@
-#include "render/deletion_helpers.hpp"
 #include "scene.hpp"
 #include "scene/components.hpp"
 
@@ -22,17 +21,7 @@ scene &scene::operator=(scene &&other)
     return *this;
 }
 
-scene::~scene()
-{
-    auto view = m_entt.view<component_mesh>();
-
-    for (auto entity : view)
-    {
-        auto mesh = view.get<component_mesh>(entity);
-
-        mesh.queue_delete();
-    }
-}
+scene::~scene() {}
 
 bool scene::loading_done()
 {

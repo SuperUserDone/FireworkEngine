@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "entity.hpp"
-#include "render/deletion_helpers.hpp"
 
 class editor_loop;
 

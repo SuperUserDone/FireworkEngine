@@ -8,7 +8,6 @@
 #include <imgui.h>
 
 #include "core/logger.hpp"
-#include "render/deletion_helpers.hpp"
 #include "renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
@@ -135,8 +134,6 @@ void renderer::finish_render()
 
 renderer::~renderer()
 {
-    clean();
-
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
@@ -270,6 +267,8 @@ void renderer::init_imgui()
 
     // Style
     ImGui::StyleColorsDark();
+
+    LOG_I("Loading font NotoSans-Regulat.ttf")
 
     io.Fonts->AddFontFromFileTTF("./font/NotoSans-Regular.ttf", 18.594061258312f);
 
@@ -463,27 +462,6 @@ void renderer::update_framebuffer_texture(framebuffer *fb)
         LOG_F("Framebuffer is not complete!");
 
     glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
-}
-
-void renderer::clean()
-{
-    while (!deletion_queue::get_queue().empty())
-    {
-        auto cmd = deletion_queue::get_queue().pop_queue();
-
-        switch (cmd.type)
-        {
-        case deletion_command::GPU_BUFFER:
-            glDeleteBuffers(1, &cmd.id);
-            break;
-        case deletion_command::GPU_VAO:
-            glDeleteVertexArrays(1, &cmd.id);
-            break;
-        case deletion_command::GPU_SHADER_PROGRAM:
-            glDeleteProgram(cmd.id);
-            break;
-        }
-    }
 }
 
 } // namespace blood

@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "core/settings.hpp"
-#include "deletion_helpers.hpp"
 #include "framebuffer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
@@ -36,8 +35,6 @@ public:
 
     void finish_render();
 
-    void clean();
-
     ~renderer();
 
 private:
@@ -49,6 +46,7 @@ private:
     SDL_GLContext m_context;
 
     uint m_camera_buffer = 0;
+    std::shared_ptr<material> m_placeholder_mat;
 
     void init_cameras();
     void setup_camera(const component_camera &cam, const glm::mat4 &camera_transform, int x, int y);
@@ -68,7 +66,6 @@ private:
     void create_framebuffer(framebuffer *fb);
     void update_framebuffer_texture(framebuffer *fb);
 
-    std::shared_ptr<material> m_placeholder_mat;
 
 private:
     renderer() = delete;
