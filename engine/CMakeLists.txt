@@ -29,4 +29,4 @@ else()
   set(ENGINE_LINK "pthread")
 endif(MSVC)
 
-target_link_libraries(blood-engine SDL2 ${ENGINE_LINK} freetype fmt::fmt)
+target_link_libraries(blood-engine SDL2-static ${ENGINE_LINK} freetype fmt::fmt)

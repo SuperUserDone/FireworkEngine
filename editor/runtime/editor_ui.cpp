@@ -99,7 +99,7 @@ static void style_editor()
     style.TabRounding = 3;
 }
 
-static uint64_t curr = 0;
+static uint32_t curr = 0;
 static void draw_scene_info(blood::scene *scene)
 {
     ImGui::Begin("Scene View");
@@ -244,6 +244,10 @@ bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec
 
     static bool save = false;
 
+    static bool show_window_scene_view = true;
+    static bool show_window_components = true;
+    static bool show_window_scene = true;
+
     shortcut_wrapper(blood::input::MODKEY_CTRL, blood::input::KEY_s, &save);
 
     if (ImGui::BeginMainMenuBar())
@@ -264,15 +268,26 @@ bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec
 
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("Window"))
+        {
+            ImGui::MenuItem("Scene", nullptr, &show_window_scene);
+            ImGui::MenuItem("Scene View", nullptr, &show_window_scene_view);
+            ImGui::MenuItem("Components", nullptr, &show_window_components);
+
+            ImGui::EndMenu();
+        }
 
         ImGui::EndMainMenuBar();
     }
 
     ImGui::DockSpaceOverViewport();
 
-    draw_scene_info(scene);
-    draw_components(scene);
-    draw_scene(fb.texture_handle, size);
+    if (show_window_scene_view)
+        draw_scene_info(scene);
+    if (show_window_components)
+        draw_components(scene);
+    if (show_window_scene)
+        draw_scene(fb.texture_handle, size);
 
     if (save)
     {
