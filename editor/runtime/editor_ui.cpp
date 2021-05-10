@@ -143,9 +143,9 @@ static void draw_transform(blood::component_transform &comp)
     ImGui::Checkbox("Rotation Euler", &euler);
     if (euler)
     {
-        glm::vec3 euler = glm::eulerAngles(comp.rot);
+        glm::vec3 euler = glm::degrees(glm::eulerAngles(comp.rot));
         ImGui::DragFloat3("Rotation", &euler.x, 1.f);
-        comp.rot = glm::quat(glm::radians(euler));
+        comp.rot = glm::quat(glm::radians(glm::vec3(euler.x, euler.y, euler.z)));
     }
     else
         ImGui::DragFloat4("Rotation", &comp.rot.x, 0.1);
