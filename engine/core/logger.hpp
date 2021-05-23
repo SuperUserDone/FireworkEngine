@@ -78,13 +78,23 @@
         throw std::runtime_error(msg);                                                             \
     }
 
+#ifndef NDEBUG
 #define BLOODENGINE_ASSERT(c, s)                                                                   \
     if (!(c))                                                                                      \
-        LOG_RUNTIME_ERROR(s);
+        LOG_F(s);                                                                                  \
+    assert(c);
 
 #define BLOODENGINE_ASSERTF(c, s, ...)                                                             \
     if (!(c))                                                                                      \
-        LOG_RUNTIME_ERRORF(s, __VA_ARGS__);
+        LOG_FF(s, __VA_ARGS__);                                                                    \
+    assert(c);
+
+#else
+#define BLOODENGINE_ASSERT(c, s) ;
+
+#define BLOODENGINE_ASSERTF(c, s, ...) ;
+
+#endif
 
 class Logger
 {
