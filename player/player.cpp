@@ -1,11 +1,11 @@
 #include "core/logger.hpp"
 #include "core/native_script.hpp"
 #include "imgui.h"
-#include <cstdio>
-#include <memory>
 
 #include <core/input.hpp>
 #include <core/loop.hpp>
+#include <cstdio>
+#include <memory>
 #include <scene/components.hpp>
 
 class test_script : public blood::native_script
@@ -22,14 +22,10 @@ public:
     }
     virtual void on_tick_update(double deltatime) override
     {
-        if (blood::input::is_key_down(blood::input::KEY_w))
-            trans->pos.y += 0.001 * deltatime;
-        if (blood::input::is_key_down(blood::input::KEY_s))
-            trans->pos.y -= 0.001 * deltatime;
-        if (blood::input::is_key_down(blood::input::KEY_a))
-            trans->pos.x -= 0.001 * deltatime;
-        if (blood::input::is_key_down(blood::input::KEY_d))
-            trans->pos.x += 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_w)) trans->pos.y += 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_s)) trans->pos.y -= 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_a)) trans->pos.x -= 0.001 * deltatime;
+        if (blood::input::is_key_down(blood::input::KEY_d)) trans->pos.x += 0.001 * deltatime;
     }
     virtual void on_render_update(double deltatime) override
     {
@@ -95,8 +91,7 @@ void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); vertexC
 
     transform.pos = {0, 0, 2};
 
-    loop.start();
-    loop.block();
+    loop.tickloop();
 
     return 0;
 }

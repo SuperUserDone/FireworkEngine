@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cstdint>
-#include <stdint.h>
-
-#include <random>
-
 #include "logger.hpp"
+
+#include <atomic>
+#include <cstdint>
+#include <random>
+#include <stdint.h>
 
 #ifdef __linux__
 #include <time.h>
@@ -13,8 +13,7 @@
 #include <windows.h>
 #endif
 
-namespace blood
-{
+namespace blood {
 
 #ifdef __linux__
 
@@ -46,12 +45,10 @@ inline void sleep_precise(uint64_t time_us)
     HANDLE timer;
     LARGE_INTEGER li;
 
-    if (!(timer = CreateWaitableTimer(NULL, TRUE, NULL)))
-        return;
+    if (!(timer = CreateWaitableTimer(NULL, TRUE, NULL))) return;
 
     li.QuadPart = -ns;
-    if (!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE))
-    {
+    if (!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE)) {
         CloseHandle(timer);
         return;
     }
@@ -90,5 +87,40 @@ inline uint32_t get_uuid()
 
     return out;
 }
+
+class spinlock
+{
+private:
+    std::atomic_bool lock_ = {0};
+
+public:
+    void lock() noexcept
+    {
+        for (;;) {
+            // Optimistically assume the lock is free on the first try
+            if (!lock_.exchange(true, std::memory_order_acquire)) {
+                return;
+            }
+            // Wait for lock to be released without generating cache misses
+            while (lock_.load(std::memory_order_relaxed)) {
+#ifdef _MSC_VER
+                _mm_pause();
+#elif __clang__ || __GNUC__
+                __builtin_ia32_pause();
+#endif
+            }
+        }
+    }
+
+    bool try_lock() noexcept
+    {
+        // First do a relaxed load to check if lock is free in order to prevent
+        // unnecessary cache misses if someone does while(!try_lock())
+        return !lock_.load(std::memory_order_relaxed) &&
+               !lock_.exchange(true, std::memory_order_acquire);
+    }
+
+    void unlock() noexcept { lock_.store(false, std::memory_order_release); }
+};
 
 } // namespace blood

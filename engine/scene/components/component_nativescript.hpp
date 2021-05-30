@@ -1,15 +1,13 @@
 #pragma once
 
-#include <memory>
-
 #include "core/native_script.hpp"
 
-namespace blood
-{
+#include <memory>
+
+namespace blood {
 
 struct component_nativescript
 {
-
     native_script *(*create_instance)();
     void (*destroy_script)(component_nativescript *);
 

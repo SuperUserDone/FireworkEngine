@@ -1,11 +1,10 @@
+#include "runtime/editor_loop.hpp"
+#include "runtime/parse_args.hpp"
+#include "vfs/vfs.hpp"
+
 #include <cstdio>
 #include <math.h>
 #include <memory>
-
-#include "runtime/editor_loop.hpp"
-#include "runtime/parse_args.hpp"
-
-#include "vfs/vfs.hpp"
 
 #ifdef main
 #undef main
@@ -15,8 +14,7 @@ int main(int argc, const char *argv[])
 {
     auto args = parse_args(argc, argv);
 
-    if (args.project_location == "")
-    {
+    if (args.project_location == "") {
         print_usage();
         return 0;
     }
@@ -45,8 +43,8 @@ int main(int argc, const char *argv[])
 
     transform.pos = {0, 0, 2};
 
-    loop.stop();
-    loop.block();
+    loop.start();
+    loop.tickloop();
 
     return 0;
 }
