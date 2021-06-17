@@ -1,15 +1,14 @@
 #pragma once
 
-#include <iomanip>
-#include <json.hpp>
-#include <string>
-
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
 #include "vfs/vfs.hpp"
 
-namespace glm
-{
+#include <iomanip>
+#include <json.hpp>
+#include <string>
+
+namespace glm {
 using namespace nlohmann;
 static void to_json(json &j, const glm::vec3 &p) { j = json::array({p.x, p.y, p.z}); }
 static void from_json(const json &j, glm::vec3 &p) { p = {j[0], j[1], j[2]}; }
@@ -19,8 +18,7 @@ static void to_json(json &j, const glm::quat &p) { j = json::array({p.x, p.y, p.
 static void from_json(const json &j, glm::quat &p) { p = glm::quat(j[3], j[0], j[1], j[2]); }
 } // namespace glm
 
-namespace blood
-{
+namespace blood {
 using namespace nlohmann;
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(vertex, pos, norm, tan, uvs);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(component_transform, pos, rot, scale);
@@ -46,6 +44,7 @@ static void from_json(const json &j, component_mesh &p)
 {
     j.at("verticies").get_to(p.verticies);
     j.at("indicies").get_to(p.indicies);
+    p.update();
 }
 
 class scene_serializer
@@ -62,8 +61,7 @@ public:
         auto &reg = ptr->get_registry();
 
         auto view = reg.view<blood::component_tag>();
-        for (auto entity : view)
-        {
+        for (auto entity : view) {
             auto &tag = view.get<blood::component_tag>(entity);
 
             json ent;
@@ -72,20 +70,17 @@ public:
 
             blood::entity entity_obj(&reg, entity);
 
-            if (entity_obj.has_component<blood::component_transform>())
-            {
+            if (entity_obj.has_component<blood::component_transform>()) {
                 auto &trans = entity_obj.get_component<blood::component_transform>();
 
                 ent["components"]["transform"] = trans;
             }
-            if (entity_obj.has_component<blood::component_camera>())
-            {
+            if (entity_obj.has_component<blood::component_camera>()) {
                 auto &comp = entity_obj.get_component<blood::component_camera>();
 
                 ent["components"]["camera"] = comp;
             }
-            if (entity_obj.has_component<blood::component_mesh>())
-            {
+            if (entity_obj.has_component<blood::component_mesh>()) {
                 auto &comp = entity_obj.get_component<blood::component_mesh>();
 
                 ent["components"]["mesh"] = comp;
@@ -113,25 +108,20 @@ public:
 
         auto &entities = j["scene"]["entities"];
 
-        for (auto &&ent : entities)
-        {
-            if (ptr->get_registry().valid((entt::entity)ent["id"]))
-                return false;
+        for (auto &&ent : entities) {
+            if (ptr->get_registry().valid((entt::entity)ent["id"])) return false;
 
             auto entity = ptr->create_entity(ent["name"], ent["id"]);
             auto &&comp = ent["components"];
-            if (!comp["camera"].is_null())
-            {
+            if (!comp["camera"].is_null()) {
                 entity.add_component<blood::component_camera>(
                     (blood::component_camera)comp["camera"]);
             }
-            if (!comp["transform"].is_null())
-            {
+            if (!comp["transform"].is_null()) {
                 entity.add_component<blood::component_transform>(
                     (blood::component_transform)comp["transform"]);
             }
-            if (!comp["mesh"].is_null())
-            {
+            if (!comp["mesh"].is_null()) {
                 entity.add_component<blood::component_mesh>((blood::component_mesh)comp["mesh"]);
             }
         }

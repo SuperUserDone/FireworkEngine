@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <fmt/format.h>
 #include <fstream>
 #include <mutex>
@@ -29,24 +30,24 @@
 
 #else
 
-#define BLK ""
-#define RED ""
-#define GRN ""
-#define YEL ""
-#define BLU ""
-#define MAG ""
-#define CYN ""
-#define WHT ""
+#define BLK   ""
+#define RED   ""
+#define GRN   ""
+#define YEL   ""
+#define BLU   ""
+#define MAG   ""
+#define CYN   ""
+#define WHT   ""
 
 // Regular bold text
-#define BBLK ""
-#define BRED ""
-#define BGRN ""
-#define BYEL ""
-#define BBLU ""
-#define BMAG ""
-#define BCYN ""
-#define BWHT ""
+#define BBLK  ""
+#define BRED  ""
+#define BGRN  ""
+#define BYEL  ""
+#define BBLU  ""
+#define BMAG  ""
+#define BCYN  ""
+#define BWHT  ""
 
 // Reset
 #define COLRS ""
@@ -80,13 +81,11 @@
 
 #ifndef NDEBUG
 #define BLOODENGINE_ASSERT(c, s)                                                                   \
-    if (!(c))                                                                                      \
-        LOG_F(s);                                                                                  \
+    if (!(c)) LOG_F(s);                                                                            \
     assert(c);
 
 #define BLOODENGINE_ASSERTF(c, s, ...)                                                             \
-    if (!(c))                                                                                      \
-        LOG_FF(s, __VA_ARGS__);                                                                    \
+    if (!(c)) LOG_FF(s, __VA_ARGS__);                                                              \
     assert(c);
 
 #else
@@ -110,8 +109,7 @@ public:
 
     std::string get_level_col(int level)
     {
-        switch (level)
-        {
+        switch (level) {
         case 0:
             return std::string(WHT) + "[DEBUG]";
             break;
@@ -140,8 +138,7 @@ public:
 
     std::string get_level(int level)
     {
-        switch (level)
-        {
+        switch (level) {
         case 0:
             return "[DEBUG]";
             break;
@@ -170,17 +167,14 @@ public:
 
     Logger(int level, const std::string &file, int line, const std::string &message)
     {
-        if (m_file)
-        {
+        if (m_file) {
             m_file << fmt::format(
                 "{} [{}:{}] {}\n", get_level(level), file, std::to_string(line), message);
 
-            if (level >= 2)
-                m_file.flush();
+            if (level >= 2) m_file.flush();
         }
 
-        if (m_level > level)
-            return;
+        if (m_level > level) return;
 
 #ifndef WIN32
         fmt::print(

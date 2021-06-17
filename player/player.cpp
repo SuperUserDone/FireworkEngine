@@ -29,7 +29,7 @@ public:
     }
     virtual void on_render_update(double deltatime) override
     {
-        LOG_DF("Render {}", 1000 / deltatime);
+        // LOG_DF("Render {}", 1000 / deltatime);
     }
     virtual void on_destroy() override { LOG_D("Destroy"); }
 
@@ -65,29 +65,7 @@ int main(int argc, char const *argv[])
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
     mesh.indicies = {0, 1, 2};
-
-    std::shared_ptr<blood::material> mat = std::make_shared<blood::material>();
-
-    mat->shader.frag_source = R"(
-#version 450 core
-out vec4 FragColor;
-in vec4 vertexColor;
-void main() { FragColor = vertexColor; }
-)";
-
-    mat->shader.vert_source = R"(
-#version 450 core
-layout(location = 0) in vec3 aPos;
-layout(std140, binding = 0) uniform Matrices{
-mat4 projection;
-mat4 view;
-};
-layout(location = 0) uniform mat4 model;
-out vec4 vertexColor;
-void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }
-)";
-
-    mesh.m_mat = mat;
+    mesh.update();
 
     transform.pos = {0, 0, 2};
 

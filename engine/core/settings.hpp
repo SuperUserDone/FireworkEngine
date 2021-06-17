@@ -4,8 +4,13 @@
 #include <stdint.h>
 #include <string>
 
-namespace blood
+namespace blood {
+
+enum renderer_impl
 {
+    RENDERER_NONE,
+    RENDERER_OPENGL33
+};
 
 struct render_settings
 {
@@ -13,10 +18,7 @@ struct render_settings
      * \brief The render api backend to use
      *
      */
-    enum
-    {
-        RENDERER_OPENGL33
-    } renderer_api = RENDERER_OPENGL33;
+    renderer_impl renderer_api = RENDERER_OPENGL33;
 
     /**
      * \brief Screen size

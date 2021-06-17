@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 set(ENGINE_SRC
-    "render/renderer.cpp"
     "core/loop.cpp"
     "core/input.cpp"
+    "render/renderer.cpp"
+    "render/render_api/render_api.cpp"
+    "render/render_api/opengl/render_api_opengl.cpp"
     "scene/scene.cpp"
     "scene/entity.cpp"
     "scene/scene_manager.cpp"
