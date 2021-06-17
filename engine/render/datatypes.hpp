@@ -48,6 +48,7 @@ static constexpr uint32_t get_datatype_size(layout_types type)
         return 4 * 16;
         break;
     }
+    return 0;
 }
 
 }; // namespace blood

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/settings.hpp"
-#include "framebuffer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
 

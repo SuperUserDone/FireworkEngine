@@ -1,12 +1,10 @@
+#include "core/input.hpp"
 #include "editor_ui.hpp"
-
-#include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
+#include "scene/components.hpp"
 
 #include <glm/gtx/euler_angles.hpp>
-
-#include "core/input.hpp"
-#include "scene/components.hpp"
+#include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 static bool shortcut_wrapper(blood::input::mod_keys mod, blood::input::key key, bool *clicked)
 {
@@ -14,13 +12,11 @@ static bool shortcut_wrapper(blood::input::mod_keys mod, blood::input::key key, 
 
     bool pressed = blood::input::check_shotcut(mod, key);
 
-    if (pressed && !save_pressed)
-    {
+    if (pressed && !save_pressed) {
         *clicked = true;
         save_pressed = true;
     }
-    if (save_pressed && !pressed)
-    {
+    if (save_pressed && !pressed) {
         save_pressed = false;
     }
 
@@ -111,20 +107,16 @@ static void draw_scene_info(blood::scene *scene)
     int i = view.size();
 
     ImGui::Text("Scene:");
-    if (ImGui::BeginListBox("##sceneview",
-                            ImVec2(-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing())))
-    {
-        for (auto entity : view)
-        {
+    if (ImGui::BeginListBox(
+            "##sceneview", ImVec2(-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing()))) {
+        for (auto entity : view) {
 
             auto &tag = view.get<blood::component_tag>(entity);
 
             const bool is_selected = (curr == (uint64_t)entity);
-            if (ImGui::Selectable(tag.name.c_str(), is_selected))
-                curr = (uint64_t)entity;
+            if (ImGui::Selectable(tag.name.c_str(), is_selected)) curr = (uint64_t)entity;
 
-            if (is_selected)
-                ImGui::SetItemDefaultFocus();
+            if (is_selected) ImGui::SetItemDefaultFocus();
         }
 
         ImGui::EndListBox();
@@ -141,13 +133,11 @@ static void draw_transform(blood::component_transform &comp)
 
     static bool euler = true;
     ImGui::Checkbox("Rotation Euler", &euler);
-    if (euler)
-    {
+    if (euler) {
         glm::vec3 euler = glm::degrees(glm::eulerAngles(comp.rot));
         ImGui::DragFloat3("Rotation", &euler.x, 1.f);
         comp.rot = glm::quat(glm::radians(glm::vec3(euler.x, euler.y, euler.z)));
-    }
-    else
+    } else
         ImGui::DragFloat4("Rotation", &comp.rot.x, 0.1);
 
     ImGui::DragFloat3("Scale", &comp.scale.x, 0.1);
@@ -160,8 +150,7 @@ static void draw_camera(blood::component_camera &cam)
     // TODO preview
     static bool preview = false;
     ImGui::Checkbox("Preview", &preview);
-    if (preview)
-        ImGui::Text("Not Implemented");
+    if (preview) ImGui::Text("Not Implemented");
 }
 
 static void draw_mesh(blood::component_mesh &mesh)
@@ -174,39 +163,31 @@ static void draw_components(blood::scene *scene)
 {
     ImGui::Begin("Components");
 
-    if (curr != 0)
-    {
-        if (scene->get_registry().any_of<blood::component_tag>((entt::entity)curr))
-        {
+    if (curr != 0) {
+        if (scene->get_registry().any_of<blood::component_tag>((entt::entity)curr)) {
             auto &tag = scene->get_registry().get<blood::component_tag>((entt::entity)curr);
 
             ImGui::InputText("Name", &tag.name);
             ImGui::Text("ID: %X", curr);
         }
 
-        if (scene->get_registry().any_of<blood::component_camera>((entt::entity)curr))
-        {
-            if (ImGui::CollapsingHeader("Camera"))
-            {
+        if (scene->get_registry().any_of<blood::component_camera>((entt::entity)curr)) {
+            if (ImGui::CollapsingHeader("Camera")) {
                 auto &cam = scene->get_registry().get<blood::component_camera>((entt::entity)curr);
                 draw_camera(cam);
             }
         }
 
-        if (scene->get_registry().any_of<blood::component_transform>((entt::entity)curr))
-        {
-            if (ImGui::CollapsingHeader("Transform"))
-            {
+        if (scene->get_registry().any_of<blood::component_transform>((entt::entity)curr)) {
+            if (ImGui::CollapsingHeader("Transform")) {
                 auto &trans =
                     scene->get_registry().get<blood::component_transform>((entt::entity)curr);
                 draw_transform(trans);
             }
         }
 
-        if (scene->get_registry().any_of<blood::component_mesh>((entt::entity)curr))
-        {
-            if (ImGui::CollapsingHeader("Mesh"))
-            {
+        if (scene->get_registry().any_of<blood::component_mesh>((entt::entity)curr)) {
+            if (ImGui::CollapsingHeader("Mesh")) {
                 auto &mesh = scene->get_registry().get<blood::component_mesh>((entt::entity)curr);
                 draw_mesh(mesh);
             }
@@ -216,7 +197,7 @@ static void draw_components(blood::scene *scene)
     ImGui::End();
 }
 
-static void draw_scene(int id, glm::uvec2 &size)
+static void draw_scene(glm::uvec2 &size)
 {
     ImGui::Begin("Scene");
 
@@ -224,20 +205,19 @@ static void draw_scene(int id, glm::uvec2 &size)
 
     size = {wsize.x, wsize.y};
 
-    ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
+    // ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec2 &size)
+bool draw_editor_ui(blood::scene_manager *man, glm::uvec2 &size)
 {
     blood::scene *scene = man->get_active_scene();
     static bool styled = false;
 
     bool close = false;
 
-    if (!styled)
-    {
+    if (!styled) {
         style_editor();
         styled = true;
     }
@@ -250,13 +230,10 @@ bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec
 
     shortcut_wrapper(blood::input::MODKEY_CTRL, blood::input::KEY_s, &save);
 
-    if (ImGui::BeginMainMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
             save = ImGui::MenuItem("Save", "Ctrl+S");
-            if (ImGui::MenuItem("Load"))
-            {
+            if (ImGui::MenuItem("Load")) {
                 curr = 0;
                 blood::scene *new_scene = new blood::scene();
                 blood::scene_serializer::deserialize(new_scene, "root://test.bscn.json");
@@ -268,8 +245,7 @@ bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec
 
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Window"))
-        {
+        if (ImGui::BeginMenu("Window")) {
             ImGui::MenuItem("Scene", nullptr, &show_window_scene);
             ImGui::MenuItem("Scene View", nullptr, &show_window_scene_view);
             ImGui::MenuItem("Components", nullptr, &show_window_components);
@@ -282,15 +258,11 @@ bool draw_editor_ui(blood::scene_manager *man, blood::framebuffer &fb, glm::uvec
 
     ImGui::DockSpaceOverViewport();
 
-    if (show_window_scene_view)
-        draw_scene_info(scene);
-    if (show_window_components)
-        draw_components(scene);
-    if (show_window_scene)
-        draw_scene(fb.texture_handle, size);
+    if (show_window_scene_view) draw_scene_info(scene);
+    if (show_window_components) draw_components(scene);
+    if (show_window_scene) draw_scene(size);
 
-    if (save)
-    {
+    if (save) {
         blood::scene_serializer::serialize(scene, "root://test.bscn.json");
         save = false;
     }

@@ -114,8 +114,7 @@ public:
 
     virtual void end() {}
 
-    virtual glm::uvec2 getsize() {}
-
+    virtual glm::uvec2 getsize() { return glm::uvec2(1.f); }
     virtual ~render_api() {}
 
 protected:
