@@ -12,7 +12,7 @@ namespace blood {
 class render_api_impl
 {
 public:
-    static render_api *init(const render_settings &m_settings);
+    static render_api *init(render_settings &m_settings);
     static render_api *get_api();
     static void delete_api();
 

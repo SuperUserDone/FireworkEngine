@@ -36,7 +36,21 @@ struct component_mesh
         temp.stride = sizeof(vertex);
         temp.type = LAYOUT_FLOAT3;
         temp.vao_attrib = 0;
+        layout.push_back(temp);
 
+        temp.normalized = true;
+        temp.offset = offsetof(vertex, norm);
+        temp.vao_attrib = 1;
+        layout.push_back(temp);
+
+        temp.offset = offsetof(vertex, tan);
+        temp.vao_attrib = 2;
+        layout.push_back(temp);
+
+        temp.normalized = false;
+        temp.offset = offsetof(vertex, uvs);
+        temp.type = LAYOUT_FLOAT2;
+        temp.vao_attrib = 3;
         layout.push_back(temp);
 
         m_vao.add_buffer(m_buf, layout);

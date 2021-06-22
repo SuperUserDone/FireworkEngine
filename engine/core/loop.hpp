@@ -86,6 +86,8 @@ protected:
     virtual void destroy_scripts();
     // virtual void load_scripts();
 
+    settings m_settings;
+
     uint16_t m_fps_target = 0;
     float m_tps_strech = 1.0f;
 

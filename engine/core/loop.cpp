@@ -8,7 +8,10 @@ loop::loop()
     // Init Logger
     Logger::init_logger(0, "bloodlog.txt");
     LOG_I("Starting BloodEngine")
-    m_renderer = new renderer(render_settings());
+
+    // init renderer
+    render_api_impl::init(m_settings.renderer);
+    m_renderer = new renderer(m_settings.renderer);
 
     m_scene_manager = std::make_shared<scene_manager>();
 }

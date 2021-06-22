@@ -4,18 +4,24 @@
 #include "opengl_window.hpp"
 
 namespace blood {
-
 class render_api_opengl : public render_api
 {
 public:
-    render_api_opengl(const render_settings &settings);
+    render_api_opengl(render_settings &settings);
 
     renderer_impl get_impl() override { return RENDERER_OPENGL33; }
 
     framebuffer_id alloc_framebuffer() override;
-
-    void clear_fb(framebuffer_id id) override;
+    void set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color) override;
+    void set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex) override;
+    void set_fbo_depth_stencil_renderbuffer(framebuffer_id id, renderbuffer_id rb) override;
+    void use_fbo(framebuffer_id id) override;
     void delete_framebuffer(framebuffer_id id) override;
+
+    renderbuffer_id alloc_renderbuffer(int x, int y, renderbuffer_format use) override;
+    void delete_renderbuffer(renderbuffer_id id) override;
+
+    void clear(glm::vec4 color) override;
 
     void begin(glm::vec4 color = {0, 0, 0, 1}) override;
 
@@ -44,9 +50,13 @@ public:
     bool link_shader_program(const shader_program_id id) override;
     void delete_shader_program(const shader_program_id id) override;
 
-    texture_id alloc_texture() override;
-    void set_texture2d_data(
-        texture_id id, uint32_t x, uint32_t y, const color_format, const void *data) override;
+    texture_id alloc_texture2d() override;
+    void set_texture2d_data(texture_id id,
+                            uint32_t x,
+                            uint32_t y,
+                            const color_format,
+                            const void *data,
+                            texture_properties props) override;
     void delete_texture2d(texture_id id) override;
 
     void draw_vertexarray(vao_id varr,
@@ -69,7 +79,7 @@ public:
 
 private:
     shader_program_id m_error_shader;
-    render_settings m_settings;
+    render_settings &m_settings;
 
     opengl_window m_win;
 };

@@ -6,7 +6,7 @@ namespace blood {
 
 render_api *render_api_impl::m_api = nullptr;
 
-render_api *render_api_impl::init(const render_settings &settings)
+render_api *render_api_impl::init(render_settings &settings)
 {
     switch (settings.renderer_api) {
     case RENDERER_NONE:

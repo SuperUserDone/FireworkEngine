@@ -21,31 +21,110 @@ enum layout_types
     LAYOUT_UINT4
 };
 
+enum alloc_mode : uint8_t
+{
+    MODE_DYNAMIC,
+    MODE_STATIC
+};
+
+enum shader_type
+{
+    SHADER_VERTEX,
+    SHADER_FRAGMENT,
+};
+
+enum color_format
+{
+    FORMAT_R,
+    FORMAT_RG,
+    FORMAT_RGB,
+    FORMAT_RGBA,
+    FORMAT_DEPTH24_STENCIL8,
+};
+
+enum texture_filter
+{
+    FILTER_NEAREST,
+    FILTER_LINEAR
+};
+
+enum renderbuffer_format
+{
+    RENDERBUFFER_DEPTH24_STENCIL8,
+};
+
+struct vao_element
+{
+    layout_types type;
+    uint16_t vao_attrib = 0;
+    uint16_t size = 0;
+    uint16_t offset = 0;
+    uint16_t stride = 0;
+    bool normalized = false;
+};
+
+struct texture_properties
+{
+    texture_filter min;
+    texture_filter mag;
+    bool mipmap = false;
+};
+
+typedef void *buffer_id;
+typedef void *vao_id;
+typedef void *framebuffer_id;
+typedef void *shader_id;
+typedef void *shader_program_id;
+typedef void *texture_id;
+typedef void *renderbuffer_id;
+
+static constexpr uint32_t get_color_format_size(color_format type)
+{
+    switch (type) {
+    case FORMAT_R:
+        return 1;
+        break;
+    case FORMAT_RG:
+        return 2;
+        break;
+    case FORMAT_RGB:
+        return 3;
+        break;
+    case FORMAT_RGBA:
+        return 4;
+        break;
+    case FORMAT_DEPTH24_STENCIL8:
+        return 4;
+        break;
+    }
+    return 0;
+}
+
 static constexpr uint32_t get_datatype_size(layout_types type)
 {
     switch (type) {
     case LAYOUT_FLOAT:
     case LAYOUT_INT:
     case LAYOUT_UINT:
-        return 4;
+        return 1;
         break;
     case LAYOUT_FLOAT2:
     case LAYOUT_INT2:
     case LAYOUT_UINT2:
-        return 4 * 2;
+        return 2;
         break;
     case LAYOUT_FLOAT3:
     case LAYOUT_INT3:
     case LAYOUT_UINT3:
-        return 4 * 3;
+        return 3;
         break;
     case LAYOUT_FLOAT4:
     case LAYOUT_INT4:
     case LAYOUT_UINT4:
-        return 4 * 4;
+        return 4;
         break;
     case LAYOUT_FLOAT_MAT4:
-        return 4 * 16;
+        return 4;
         break;
     }
     return 0;

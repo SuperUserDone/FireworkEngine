@@ -9,56 +9,30 @@
 
 namespace blood {
 
-enum alloc_mode : uint8_t
-{
-    MODE_DYNAMIC,
-    MODE_STATIC
-};
-
-enum shader_type
-{
-    SHADER_VERTEX,
-    SHADER_FRAGMENT,
-};
-
-enum color_format
-{
-    FORMAT_R,
-    FORMAT_RG,
-    FORMAT_RGB,
-    FORMAT_RGBA,
-};
-
-struct vao_element
-{
-    layout_types type;
-    uint16_t vao_attrib = 0;
-    uint16_t size = 0;
-    uint16_t offset = 0;
-    uint16_t stride = 0;
-    bool normalized = false;
-};
-
-typedef void *buffer_id;
-typedef void *vao_id;
-typedef void *framebuffer_id;
-typedef void *shader_id;
-typedef void *shader_program_id;
-typedef void *texture_id;
-
 class render_api
 {
 public:
     render_api() {}
-    render_api(const render_settings m_settings) {}
-
-    virtual framebuffer_id alloc_framebuffer() { return nullptr; }
+    render_api(render_settings &m_settings) {}
 
     virtual renderer_impl get_impl() { return RENDERER_NONE; }
     virtual bool check_close() { return m_close; }
 
-    virtual void clear_fb(framebuffer_id id) {}
+    virtual framebuffer_id alloc_framebuffer() { return nullptr; }
+    virtual void set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color) {}
+    virtual void set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex) {}
+    virtual void set_fbo_depth_stencil_renderbuffer(framebuffer_id id, renderbuffer_id tex) {}
+
+    virtual void use_fbo(framebuffer_id id) {}
     virtual void delete_framebuffer(framebuffer_id id) {}
+
+    virtual renderbuffer_id alloc_renderbuffer(int x, int y, renderbuffer_format use)
+    {
+        return nullptr;
+    }
+    virtual void delete_renderbuffer(renderbuffer_id id) {}
+
+    virtual void clear(glm::vec4 color) {}
 
     virtual void begin(glm::vec4 color = {0, 0, 0, 1}) {}
 
@@ -92,9 +66,13 @@ public:
     virtual bool link_shader_program(const shader_program_id id) { return true; }
     virtual void delete_shader_program(const shader_program_id id) {}
 
-    virtual texture_id alloc_texture() { return nullptr; }
-    virtual void set_texture2d_data(
-        texture_id id, uint32_t x, uint32_t y, const color_format, const void *data)
+    virtual texture_id alloc_texture2d() { return nullptr; }
+    virtual void set_texture2d_data(texture_id id,
+                                    uint32_t x,
+                                    uint32_t y,
+                                    const color_format,
+                                    const void *data,
+                                    texture_properties props)
     {}
     virtual void delete_texture2d(texture_id id) {}
 

@@ -16,7 +16,7 @@ void editor_loop::stop() { m_pause = true; }
 
 void editor_loop::tickloop()
 {
-    m_renderer = new blood::renderer(blood::render_settings());
+    m_renderer = new blood::renderer(m_settings.renderer);
 
     while (!m_stop) {
         static double frametime = 0;

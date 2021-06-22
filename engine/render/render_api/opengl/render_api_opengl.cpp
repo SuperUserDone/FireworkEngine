@@ -61,11 +61,59 @@ static GLuint to_gl_type(blood::layout_types type)
     return 0;
 }
 
+static GLuint to_gl_type(blood::color_format fil)
+{
+    switch (fil) {
+    case blood::FORMAT_R:
+        return GL_R;
+        break;
+    case blood::FORMAT_RG:
+        return GL_RG;
+        break;
+    case blood::FORMAT_RGB:
+        return GL_RGB;
+        break;
+    case blood::FORMAT_RGBA:
+        return GL_RGBA;
+    case blood::FORMAT_DEPTH24_STENCIL8:
+        return GL_DEPTH24_STENCIL8;
+        break;
+    }
+
+    BLOODENGINE_ASSERT(false, "Not implemented");
+    return 0;
+}
+
+static GLuint to_gl_type(blood::renderbuffer_format format)
+{
+    switch (format) {
+    case blood::RENDERBUFFER_DEPTH24_STENCIL8:
+        return GL_DEPTH24_STENCIL8;
+        break;
+    }
+    BLOODENGINE_ASSERT(false, "Not implemented");
+    return 0;
+}
+
+static GLuint to_gl_type(blood::texture_filter filter, bool mipmap = false)
+{
+    switch (filter) {
+    case blood::FILTER_LINEAR:
+        return mipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR;
+    case blood::FILTER_NEAREST:
+        return mipmap ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST;
+    }
+
+    BLOODENGINE_ASSERT(false, "Not implemented");
+    return 0;
+}
+
 namespace blood {
-render_api_opengl::render_api_opengl(const render_settings &settings)
+render_api_opengl::render_api_opengl(render_settings &settings)
     : m_settings(settings), m_win(settings)
 {
     glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_STENCIL_TEST);
 
     auto a = R"(
 #version 450 core
@@ -108,9 +156,28 @@ framebuffer_id render_api_opengl::alloc_framebuffer()
     return id;
 }
 
-void render_api_opengl::clear_fb(framebuffer_id id)
+void render_api_opengl::set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color)
 {
-    // TODO
+    for (int i = 0; i < color.size(); i++) {
+        glNamedFramebufferTexture(
+            *(uint32_t *)id, GL_COLOR_ATTACHMENT0 + i, *(uint32_t *)color[i], 0);
+    }
+}
+
+void render_api_opengl::set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex)
+{
+    glNamedFramebufferTexture(*(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, *(uint32_t *)tex, 0);
+}
+
+void render_api_opengl::set_fbo_depth_stencil_renderbuffer(framebuffer_id id, renderbuffer_id rb)
+{
+    glNamedFramebufferRenderbuffer(
+        *(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, *(uint32_t *)rb, 0);
+}
+
+void render_api_opengl::use_fbo(framebuffer_id id)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, *(uint32_t *)id);
 }
 
 void render_api_opengl::delete_framebuffer(framebuffer_id id)
@@ -119,14 +186,35 @@ void render_api_opengl::delete_framebuffer(framebuffer_id id)
     delete (uint32_t *)id;
 }
 
+renderbuffer_id render_api_opengl::alloc_renderbuffer(int x, int y, renderbuffer_format use)
+{
+    uint32_t *id = new uint32_t;
+
+    glCreateRenderbuffers(1, id);
+    glNamedRenderbufferStorage(*id, to_gl_type(use), x, y);
+
+    return id;
+}
+
+void render_api_opengl::delete_renderbuffer(renderbuffer_id id)
+{
+    glDeleteRenderbuffers(1, (uint32_t *)id);
+    delete (uint32_t *)id;
+}
+
+void render_api_opengl::clear(glm::vec4 color)
+{
+    glClearColor(color.r, color.g, color.b, color.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
 void render_api_opengl::begin(glm::vec4 color)
 {
     auto size = m_win.getsize();
 
     glViewport(0, 0, size.x, size.y);
 
-    glClearColor(color.r, color.g, color.b, color.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    clear(color);
 }
 
 buffer_id render_api_opengl::alloc_buffer(size_t size, const void *data, alloc_mode mode)
@@ -252,7 +340,7 @@ bool render_api_opengl::link_shader_program(const shader_program_id id)
 
     if (!success) {
         glGetShaderInfoLog(*(uint32_t *)id, 512, NULL, shader_log);
-        LOG_EF("Could not link shader program:\n {}", shader_log)
+        LOG_EF("Could not link shader program:\n {}", shader_log);
         return false;
     } else {
         return true;
@@ -265,20 +353,40 @@ void render_api_opengl::delete_shader_program(const shader_program_id id)
     delete (uint32_t *)id;
 }
 
-texture_id render_api_opengl::alloc_texture()
-{ // TODO
-    return nullptr;
+texture_id render_api_opengl::alloc_texture2d()
+{
+    uint32_t *id = new uint32_t;
+
+    glCreateTextures(GL_TEXTURE_2D, 1, id);
+
+    return id;
 }
 
-void render_api_opengl::set_texture2d_data(
-    texture_id id, uint32_t x, uint32_t y, const color_format, const void *data)
+void render_api_opengl::set_texture2d_data(texture_id id,
+                                           uint32_t x,
+                                           uint32_t y,
+                                           const color_format,
+                                           const void *data,
+                                           texture_properties props)
 {
-    // TODO
+    glBindTexture(GL_TEXTURE_2D, *(uint32_t *)id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, to_gl_type(props.min, props.mipmap));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, to_gl_type(props.mag));
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    if (props.mipmap) glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void render_api_opengl::delete_texture2d(texture_id id)
 {
-    // TODO
+    glDeleteTextures(1, (uint32_t *)id);
+    delete (uint32_t *)id;
 }
 
 void render_api_opengl::draw_vertexarray(vao_id varr,
@@ -287,7 +395,8 @@ void render_api_opengl::draw_vertexarray(vao_id varr,
                                          shader_program_id shader,
                                          const std::vector<texture_id> &textures) const
 {
-    if (shader) glUseProgram(*(uint32_t *)shader);
+    if (shader)
+        glUseProgram(*(uint32_t *)shader);
     else
         glUseProgram(*(uint32_t *)m_error_shader);
 
@@ -305,11 +414,17 @@ void render_api_opengl::draw_elements(vao_id varr,
                                       shader_program_id shader,
                                       const std::vector<texture_id> &textures) const
 {
-    if (shader) glUseProgram(*(uint32_t *)shader);
+    if (shader)
+        glUseProgram(*(uint32_t *)shader);
     else
         glUseProgram(*(uint32_t *)m_error_shader);
 
     glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
+
+    for (int i = 0; i < textures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
+    }
 
     glBindVertexArray(*(uint32_t *)varr);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *(uint32_t *)index_buf);
