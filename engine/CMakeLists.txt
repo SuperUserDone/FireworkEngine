@@ -26,7 +26,7 @@ target_compile_definitions(blood-engine PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD2
 if(MSVC)
   set(ENGINE_LINK "")
 elseif(UNIX)
-  set(ENGINE_LINK "pthread" "dl")
+  set(ENGINE_LINK "pthread" "dl" "tracy")
 else()
   set(ENGINE_LINK "pthread")
 endif(MSVC)

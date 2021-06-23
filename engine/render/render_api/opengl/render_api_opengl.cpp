@@ -3,6 +3,8 @@
 
 #define GLAD_GL_IMPLEMENTATION
 
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 #include <glad/gl.h>
 
 static GLuint to_gl_type(blood::alloc_mode mode)
@@ -135,6 +137,7 @@ framebuffer_id render_api_opengl::alloc_framebuffer()
 {
     uint32_t *id = new uint32_t;
 
+    TracyGpuZone("Alloc Framebuffer");
     glCreateFramebuffers(1, id);
 
     return id;
@@ -143,6 +146,7 @@ framebuffer_id render_api_opengl::alloc_framebuffer()
 void render_api_opengl::set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color)
 {
     for (int i = 0; i < color.size(); i++) {
+        TracyGpuZone("Set Framebuffer Color Attatchment");
         glNamedFramebufferTexture(
             *(uint32_t *)id, GL_COLOR_ATTACHMENT0 + i, *(uint32_t *)color[i], 0);
     }
@@ -150,28 +154,33 @@ void render_api_opengl::set_fbo_color(framebuffer_id id, const std::vector<textu
 
 void render_api_opengl::set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex)
 {
+    TracyGpuZone("Set Framebuffer depth/stencil Attatchment texture");
     glNamedFramebufferTexture(*(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, *(uint32_t *)tex, 0);
 }
 
 void render_api_opengl::set_fbo_depth_stencil_renderbuffer(framebuffer_id id, renderbuffer_id rb)
 {
+    TracyGpuZone("Set Framebuffer depth/stencil Attatchment renderbuffer");
     glNamedFramebufferRenderbuffer(
         *(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, *(uint32_t *)rb, 0);
 }
 
 void render_api_opengl::use_fbo(framebuffer_id id)
 {
+    TracyGpuZone("Bind Framebuffer");
     glBindFramebuffer(GL_FRAMEBUFFER, *(uint32_t *)id);
 }
 
 void render_api_opengl::delete_framebuffer(framebuffer_id id)
 {
+    TracyGpuZone("Delete Framebuffer");
     glDeleteFramebuffers(1, (uint32_t *)id);
     delete (uint32_t *)id;
 }
 
 renderbuffer_id render_api_opengl::alloc_renderbuffer(int x, int y, renderbuffer_format use)
 {
+    TracyGpuZone("Allocate renderbuffer");
     uint32_t *id = new uint32_t;
 
     glCreateRenderbuffers(1, id);
@@ -182,12 +191,14 @@ renderbuffer_id render_api_opengl::alloc_renderbuffer(int x, int y, renderbuffer
 
 void render_api_opengl::delete_renderbuffer(renderbuffer_id id)
 {
+    TracyGpuZone("Delete Renderbuffer");
     glDeleteRenderbuffers(1, (uint32_t *)id);
     delete (uint32_t *)id;
 }
 
 void render_api_opengl::clear(glm::vec4 color)
 {
+    TracyGpuZone("Clear FBO");
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
@@ -204,6 +215,8 @@ void render_api_opengl::begin(glm::vec4 color)
 buffer_id render_api_opengl::alloc_buffer(size_t size, const void *data, alloc_mode mode)
 {
     uint32_t *id = new uint32_t;
+
+    TracyGpuZone("Allocate buffer");
     glCreateBuffers(1, id);
     glNamedBufferData(*id, size, data, to_gl_type(mode));
 
@@ -215,16 +228,19 @@ void render_api_opengl::set_buffer_data(buffer_id buf,
                                         const void *data,
                                         alloc_mode mode)
 {
+    TracyGpuZone("Fill buffer");
     glNamedBufferData(*(uint32_t *)buf, size, data, to_gl_type(mode));
 }
 
 void render_api_opengl::bind_as_uniformbuffer(buffer_id id, uint32_t binding)
 {
+    TracyGpuZone("Use buffer as UBO");
     glBindBufferBase(GL_UNIFORM_BUFFER, binding, *(uint32_t *)id);
 }
 
 void render_api_opengl::delete_buffer(buffer_id buf)
 {
+    TracyGpuZone("Delete buffer");
     glDeleteBuffers(1, (uint32_t *)buf);
     delete (uint32_t *)buf;
 }
@@ -233,6 +249,7 @@ vao_id render_api_opengl::alloc_vertexarray()
 {
     uint32_t *id = new uint32_t;
 
+    TracyGpuZone("Allocate VAO");
     glCreateVertexArrays(1, id);
 
     return id;
@@ -242,10 +259,14 @@ void render_api_opengl::set_vertexarray_buffer(vao_id varr,
                                                const buffer_id &buf,
                                                const std::vector<vao_element> &layout)
 {
-    glBindVertexArray(*(uint32_t *)varr);
-    glBindBuffer(GL_ARRAY_BUFFER, *(uint32_t *)buf);
+    {
+        TracyGpuZone("Bind VAO");
+        glBindVertexArray(*(uint32_t *)varr);
+        glBindBuffer(GL_ARRAY_BUFFER, *(uint32_t *)buf);
+    }
 
     for (auto &&el : layout) {
+        TracyGpuZone("Set VAO layout");
         glEnableVertexAttribArray(el.vao_attrib);
         glBindVertexBuffer(el.vao_attrib, *(uint32_t *)buf, el.offset, el.stride);
         glVertexAttribPointer(el.vao_attrib,
@@ -256,12 +277,17 @@ void render_api_opengl::set_vertexarray_buffer(vao_id varr,
                               (void *)static_cast<size_t>(el.offset));
     }
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    {
+        TracyGpuZone("Unbind VAO");
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 }
 
 void render_api_opengl::delete_vertexarray(vao_id varr)
 {
+    TracyGpuZone("Delete VAO");
+
     glDeleteVertexArrays(1, (uint32_t *)varr);
 
     delete (uint32_t *)varr;
@@ -271,6 +297,7 @@ shader_id render_api_opengl::alloc_shader(shader_type type)
 {
     uint32_t *id = new uint32_t;
 
+    TracyGpuZone("Allocate Shader");
     *id = glCreateShader(to_gl_type(type));
 
     return id;
@@ -278,24 +305,34 @@ shader_id render_api_opengl::alloc_shader(shader_type type)
 
 bool render_api_opengl::compile_shader(shader_id id, const char *source)
 {
-    glShaderSource(*(uint32_t *)id, 1, &source, nullptr);
-    glCompileShader(*(uint32_t *)id);
+    {
+        TracyGpuZone("Set Shader Source");
+        glShaderSource(*(uint32_t *)id, 1, &source, nullptr);
+    }
+    {
+        TracyGpuZone("Compile shader");
+        glCompileShader(*(uint32_t *)id);
+    }
 
-    int success;
-    char shader_log[512];
-    glGetShaderiv(*(uint32_t *)id, GL_COMPILE_STATUS, &success);
+    {
+        TracyGpuZone("Get shader compiling status");
+        int success;
+        char shader_log[512];
+        glGetShaderiv(*(uint32_t *)id, GL_COMPILE_STATUS, &success);
 
-    if (!success) {
-        glGetShaderInfoLog(*(uint32_t *)id, 512, NULL, shader_log);
-        LOG_EF("Could not compile shader:\n {}", shader_log)
-        return false;
-    } else {
-        return true;
+        if (!success) {
+            glGetShaderInfoLog(*(uint32_t *)id, 512, NULL, shader_log);
+            LOG_EF("Could not compile shader:\n {}", shader_log)
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 
 void render_api_opengl::delete_shader(shader_id id)
 {
+    TracyGpuZone("Delete shader");
     glDeleteShader(*(uint32_t *)id);
     delete (uint32_t *)id;
 }
@@ -304,6 +341,7 @@ shader_program_id render_api_opengl::alloc_shader_program()
 {
     uint32_t *id = new uint32_t;
 
+    TracyGpuZone("Allocate Shader program");
     *id = glCreateProgram();
 
     return id;
@@ -311,28 +349,36 @@ shader_program_id render_api_opengl::alloc_shader_program()
 
 void render_api_opengl::add_shader_to_program(const shader_program_id id, const shader_id shader)
 {
+    TracyGpuZone("Attatch Shader to Shader program");
     glAttachShader(*(uint32_t *)id, *(uint32_t *)shader);
 }
 
 bool render_api_opengl::link_shader_program(const shader_program_id id)
 {
-    glLinkProgram(*(uint32_t *)id);
+    {
+        TracyGpuZone("Link Shader program");
+        glLinkProgram(*(uint32_t *)id);
+    }
 
-    int success;
-    char shader_log[512];
-    glGetProgramiv(*(uint32_t *)id, GL_LINK_STATUS, &success);
+    {
+        TracyGpuZone("Get Shader program status");
+        int success;
+        char shader_log[512];
+        glGetProgramiv(*(uint32_t *)id, GL_LINK_STATUS, &success);
 
-    if (!success) {
-        glGetShaderInfoLog(*(uint32_t *)id, 512, NULL, shader_log);
-        LOG_EF("Could not link shader program:\n {}", shader_log);
-        return false;
-    } else {
-        return true;
+        if (!success) {
+            glGetShaderInfoLog(*(uint32_t *)id, 512, NULL, shader_log);
+            LOG_EF("Could not link shader program:\n {}", shader_log);
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 
 void render_api_opengl::delete_shader_program(const shader_program_id id)
 {
+    TracyGpuZone("Delete shader program");
     glDeleteProgram(*(uint32_t *)id);
     delete (uint32_t *)id;
 }
@@ -341,6 +387,7 @@ texture_id render_api_opengl::alloc_texture2d()
 {
     uint32_t *id = new uint32_t;
 
+    TracyGpuZone("Allocate Texture");
     glCreateTextures(GL_TEXTURE_2D, 1, id);
 
     return id;
@@ -353,6 +400,7 @@ void render_api_opengl::set_texture2d_data(texture_id id,
                                            const void *data,
                                            texture_properties props)
 {
+    TracyGpuZone("Set Texture Data");
     glBindTexture(GL_TEXTURE_2D, *(uint32_t *)id);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -369,6 +417,7 @@ void render_api_opengl::set_texture2d_data(texture_id id,
 
 void render_api_opengl::delete_texture2d(texture_id id)
 {
+    TracyGpuZone("Delete Texture");
     glDeleteTextures(1, (uint32_t *)id);
     delete (uint32_t *)id;
 }
@@ -379,16 +428,25 @@ void render_api_opengl::draw_vertexarray(vao_id varr,
                                          shader_program_id shader,
                                          const std::vector<texture_id> &textures) const
 {
-    if (shader)
-        glUseProgram(*(uint32_t *)shader);
-    else
-        glUseProgram(*(uint32_t *)m_error_shader);
+    {
+        TracyGpuZone("Bind shader");
+        if (shader)
+            glUseProgram(*(uint32_t *)shader);
+        else
+            glUseProgram(*(uint32_t *)m_error_shader);
+    }
 
-    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
+    {
+        TracyGpuZone("Set Uniforms");
+        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
+    }
 
-    glBindVertexArray(*(uint32_t *)varr);
-    glDrawArrays(GL_TRIANGLES, 0, triangle_count);
-    glBindVertexArray(0);
+    {
+        TracyGpuZone("Draw Call");
+        glBindVertexArray(*(uint32_t *)varr);
+        glDrawArrays(GL_TRIANGLES, 0, triangle_count);
+        glBindVertexArray(0);
+    }
 }
 
 void render_api_opengl::draw_elements(vao_id varr,
@@ -398,27 +456,42 @@ void render_api_opengl::draw_elements(vao_id varr,
                                       shader_program_id shader,
                                       const std::vector<texture_id> &textures) const
 {
-    if (shader)
-        glUseProgram(*(uint32_t *)shader);
-    else
-        glUseProgram(*(uint32_t *)m_error_shader);
-
-    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
-
-    for (int i = 0; i < textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
+    {
+        TracyGpuZone("Bind Shader");
+        if (shader)
+            glUseProgram(*(uint32_t *)shader);
+        else
+            glUseProgram(*(uint32_t *)m_error_shader);
     }
 
-    glBindVertexArray(*(uint32_t *)varr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *(uint32_t *)index_buf);
-    glDrawElements(GL_TRIANGLES, triangle_count, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    {
+        TracyGpuZone("Set Uniforms");
+        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
+    }
+
+    {
+        TracyGpuZone("Bind Textures");
+        for (int i = 0; i < textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
+        }
+    }
+
+    {
+        TracyGpuZone("Draw Call");
+        glBindVertexArray(*(uint32_t *)varr);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *(uint32_t *)index_buf);
+        glDrawElements(GL_TRIANGLES, triangle_count, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
 }
 
 void render_api_opengl::end()
 {
-    glFlush();
+    {
+        TracyGpuZone("Flush");
+        glFlush();
+    }
 
     m_win.process_events();
     m_close = m_win.check_close();
@@ -427,6 +500,7 @@ void render_api_opengl::end()
 
 void render_api_opengl::draw_imgui(std::function<bool(void)> func) const
 {
+    TracyGpuZone("Draw imgui");
     m_win.render_imgui(func);
 }
 

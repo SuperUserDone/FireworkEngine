@@ -18,7 +18,7 @@ public:
     ~editor_ui() {}
 
 private:
-    glm::uvec2 size;
+    glm::uvec2 size = {10, 10};
 
     size_t tex_id;
 

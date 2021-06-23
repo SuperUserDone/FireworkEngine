@@ -122,7 +122,9 @@ public:
                     (blood::component_transform)comp["transform"]);
             }
             if (!comp["mesh"].is_null()) {
-                entity.add_component<blood::component_mesh>((blood::component_mesh)comp["mesh"]);
+                auto &mesh = entity.add_component<blood::component_mesh>(
+                    (blood::component_mesh)comp["mesh"]);
+                mesh.update();
             }
         }
 

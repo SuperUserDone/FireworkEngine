@@ -9,6 +9,17 @@ class buffer
 public:
     buffer() { m_id = render_api_impl::get_api()->alloc_buffer(0, nullptr); }
 
+    buffer(buffer &&other) { *this = std::move(other); }
+    buffer &operator=(buffer &&other)
+    {
+        if (this != &other) {
+            m_id = other.m_id;
+
+            other.m_id = nullptr;
+        }
+        return *this;
+    }
+
     buffer(const size_t size, const void *data, const alloc_mode mode = MODE_STATIC)
     {
         m_id = render_api_impl::get_api()->alloc_buffer(size, data, mode);
@@ -24,12 +35,19 @@ public:
         render_api_impl::get_api()->bind_as_uniformbuffer(m_id, location);
     }
 
-    ~buffer() { render_api_impl::get_api()->delete_buffer(m_id); }
+    ~buffer()
+    {
+        if (m_id != nullptr) render_api_impl::get_api()->delete_buffer(m_id);
+    }
 
     buffer_id get_id() const { return m_id; }
 
 private:
     buffer_id m_id = nullptr;
+
+private:
+    buffer(const buffer &other) = delete;
+    buffer &operator=(const buffer &other) = delete;
 };
 
 } // namespace blood

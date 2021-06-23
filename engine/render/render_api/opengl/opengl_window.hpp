@@ -5,6 +5,8 @@
 #include "glad/gl.h"
 
 #include <SDL.h>
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl.h>
 #include <glm/glm.hpp>
@@ -68,6 +70,8 @@ public:
 
         SDL_GL_MakeCurrent(m_window, m_context);
         SDL_GL_SetSwapInterval(m_settings.vsync);
+
+        TracyGpuContext;
 
         init_imgui();
     }
@@ -143,7 +147,11 @@ public:
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void swap_buffers() { SDL_GL_SwapWindow(m_window); }
+    void swap_buffers()
+    {
+        SDL_GL_SwapWindow(m_window);
+        TracyGpuCollect;
+    }
 
     ~opengl_window()
     {

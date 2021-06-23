@@ -8,6 +8,8 @@
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
 
+#include <Tracy.hpp>
+
 #define rapi blood::render_api_impl::get_api()
 
 namespace blood {
@@ -54,6 +56,7 @@ void renderer::render(const scene *scene)
     renderpass_postfx(m_fbo.get_texture(), &DEFAULT_FRAMEBUFFER, m_fullscreen_shader);
 
     rapi->end();
+    FrameMark;
 }
 
 void renderer::render_editor(const scene *scene,
@@ -86,11 +89,12 @@ void renderer::render_editor(const scene *scene,
     rapi->draw_imgui(draw_ui);
 
     rapi->end();
+    FrameMark;
 }
 
 void renderer::renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj)
 {
-
+    ZoneScopedN("Geometry pass");
     rapi->clear(glm::vec4(scene->m_back_color, 1.f));
 
     glm::mat4 arr[2];
@@ -116,6 +120,7 @@ void renderer::renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::m
 
 void renderer::renderpass_postfx(texture2d &src, framebuffer_id dest, shader_program &shader)
 {
+    ZoneScopedN("FX Pass");
     rapi->use_fbo(dest);
 
     rapi->draw_elements(m_quad_mesh.m_vao.get_id(),
