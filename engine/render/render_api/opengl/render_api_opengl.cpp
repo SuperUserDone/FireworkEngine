@@ -1,6 +1,8 @@
+#include "render/render_data/builtin_shaders.hpp"
 #include "render_api_opengl.hpp"
 
 #define GLAD_GL_IMPLEMENTATION
+
 #include <glad/gl.h>
 
 static GLuint to_gl_type(blood::alloc_mode mode)
@@ -115,30 +117,12 @@ render_api_opengl::render_api_opengl(render_settings &settings)
     glEnable(GL_DEPTH_TEST);
     // glEnable(GL_STENCIL_TEST);
 
-    auto a = R"(
-#version 450 core
-layout(location = 0) in vec3 aPos;
-layout(std140, binding = 0) uniform Matrices{
-mat4 projection;
-mat4 view;
-};
-layout(location = 0) uniform mat4 model;
-out vec4 vertexColor;
-void main() { gl_Position = projection * view * model * vec4(aPos, 1.0); vertexColor = vec4(0.5, 0.0, 0.0, 1.0); }
-)";
-    auto b = R"(
-#version 450 core
-out vec4 FragColor;
-in vec4 vertexColor;
-void main() { FragColor = vertexColor; }
-)";
-
     auto vs = alloc_shader(SHADER_VERTEX);
     auto fs = alloc_shader(SHADER_FRAGMENT);
     m_error_shader = alloc_shader_program();
 
-    compile_shader(vs, a);
-    compile_shader(fs, b);
+    compile_shader(vs, vertex_err);
+    compile_shader(fs, fragment_err);
     add_shader_to_program(m_error_shader, vs);
     add_shader_to_program(m_error_shader, fs);
     link_shader_program(m_error_shader);

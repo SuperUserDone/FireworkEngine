@@ -2,6 +2,7 @@
 
 #include "core/logger.hpp"
 #include "render_api/render_api.hpp"
+#include "render_data/builtin_shaders.hpp"
 #include "renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
@@ -58,28 +59,8 @@ renderer::renderer(render_settings &p_render_settings)
         m_quad_mesh.update();
     }
 
-    m_fullscreen_shader.set_source_fragment(
-        R"(
-#version 450 core
-out vec4 FragColor;
-in vec2 TexCoords;
-layout(binding = 0) uniform sampler2D screenTexture;
-void main()
-{ 
-    FragColor = texture(screenTexture, TexCoords);
-}
-        )");
-    m_fullscreen_shader.set_source_vertex(R"(
-#version 450 core
-layout (location = 0) in vec3 aPos;
-layout (location = 3) in vec2 aTexCoords;
-out vec2 TexCoords;
-void main()
-{
-    gl_Position = vec4(aPos, 1.0); 
-    TexCoords = aTexCoords;
-}  
-    )");
+    m_fullscreen_shader.set_source_vertex(vertex_screen);
+    m_fullscreen_shader.set_source_fragment(fragment_screen);
 
     m_fullscreen_shader.compile();
 
