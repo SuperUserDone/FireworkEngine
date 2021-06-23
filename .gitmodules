@@ -13,3 +13,7 @@
 [submodule "extern/freetype"]
 	path = extern/freetype
 	url = https://gitlab.freedesktop.org/freetype/freetype.git
+[submodule "extern/tracy"]
+	path = extern/tracy
+	url = https://github.com/wolfpld/tracy.git
+	branch = tags/v0.7.8
