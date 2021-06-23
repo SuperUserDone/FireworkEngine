@@ -103,7 +103,7 @@ public:
         // Style
         ImGui::StyleColorsDark();
 
-        LOG_I("Loading font NotoSans-Regulat.ttf")
+        LOG_I("Loading font NotoSans-Regular.ttf")
 
         io.Fonts->AddFontFromFileTTF("./font/NotoSans-Regular.ttf", 18.594061258312f);
 
@@ -128,7 +128,7 @@ public:
         return glm::uvec2(x, y);
     }
 
-    void render_imgui(std::function<bool()> callback)
+    void render_imgui(std::function<bool()> callback) const
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -161,6 +161,6 @@ private:
     SDL_Window *m_window;
     SDL_GLContext m_context;
     render_settings m_settings;
-    bool m_close = false;
+    mutable bool m_close = false;
 };
 } // namespace blood

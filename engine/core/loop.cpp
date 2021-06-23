@@ -3,24 +3,17 @@
 #include "rate_limiter.hpp"
 
 namespace blood {
-loop::loop()
-{
-    // Init Logger
-    Logger::init_logger(0, "bloodlog.txt");
-    LOG_I("Starting BloodEngine")
-
-    // init renderer
-    render_api_impl::init(m_settings.renderer);
-    m_renderer = new renderer(m_settings.renderer);
-
-    m_scene_manager = std::make_shared<scene_manager>();
-}
+loop::loop() : loop("bloodlog.txt", "Starting bloodengine Player") {}
 
 loop::loop(const std::string &logname, const std::string &name)
 {
     // Init Logger
     Logger::init_logger(0, logname);
     LOG_I(name)
+
+    // init renderer
+    render_api_impl::init(m_settings.renderer);
+    m_renderer = new renderer(m_settings.renderer);
 
     m_scene_manager = std::make_shared<scene_manager>();
 }

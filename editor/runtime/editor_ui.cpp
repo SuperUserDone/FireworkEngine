@@ -197,7 +197,7 @@ static void draw_components(blood::scene *scene)
     ImGui::End();
 }
 
-static void draw_scene(glm::uvec2 &size)
+static void draw_scene(glm::uvec2 &size, size_t id)
 {
     ImGui::Begin("Scene");
 
@@ -205,14 +205,16 @@ static void draw_scene(glm::uvec2 &size)
 
     size = {wsize.x, wsize.y};
 
-    // ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::Image((ImTextureID)(uint64_t)id, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGui::End();
 }
 
-bool draw_editor_ui(blood::scene_manager *man, glm::uvec2 &size)
+editor_ui::editor_ui(blood::scene_manager *man) : m_scene_man(man) {}
+
+bool editor_ui::draw()
 {
-    blood::scene *scene = man->get_active_scene();
+    blood::scene *scene = m_scene_man->get_active_scene();
     static bool styled = false;
 
     bool close = false;
@@ -237,8 +239,8 @@ bool draw_editor_ui(blood::scene_manager *man, glm::uvec2 &size)
                 curr = 0;
                 blood::scene *new_scene = new blood::scene();
                 blood::scene_serializer::deserialize(new_scene, "root://test.bscn.json");
-                man->stage_scene(new_scene);
-                man->swap();
+                m_scene_man->stage_scene(new_scene);
+                m_scene_man->swap();
             }
             ImGui::Separator();
             close = ImGui::MenuItem("Close");
@@ -260,7 +262,7 @@ bool draw_editor_ui(blood::scene_manager *man, glm::uvec2 &size)
 
     if (show_window_scene_view) draw_scene_info(scene);
     if (show_window_components) draw_components(scene);
-    if (show_window_scene) draw_scene(size);
+    if (show_window_scene) draw_scene(size, tex_id);
 
     if (save) {
         blood::scene_serializer::serialize(scene, "root://test.bscn.json");

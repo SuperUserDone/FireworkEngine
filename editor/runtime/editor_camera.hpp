@@ -9,7 +9,7 @@ struct editor_camera
 
     blood::component_camera cam;
 
-    operator glm::mat4() { return glm::inverse(glm::lookAt(pos, target, {0, 1, 0})); }
+    operator glm::mat4() { return glm::lookAt(pos, target, {0, 1, 0}); }
 
     void update(double dt) {}
 };

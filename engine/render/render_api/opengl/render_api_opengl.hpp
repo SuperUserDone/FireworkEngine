@@ -73,6 +73,10 @@ public:
 
     void end() override;
 
+    void draw_imgui(std::function<bool(void)> func) const override;
+
+    void viewport(glm::uvec2 size) override;
+
     glm::uvec2 getsize() override;
 
     ~render_api_opengl() override;

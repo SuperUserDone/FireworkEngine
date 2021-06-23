@@ -40,6 +40,7 @@ int main(int argc, const char *argv[])
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
     mesh.indicies = {0, 1, 2};
+    mesh.update();
 
     transform.pos = {0, 0, 2};
 

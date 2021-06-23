@@ -4,4 +4,23 @@
 #include "scene/scene_manager.hpp"
 #include "serialize/scene_serializer.hpp"
 
-bool draw_editor_ui(blood::scene_manager *man, glm::uvec2 &size);
+class editor_ui
+{
+public:
+    editor_ui(blood::scene_manager *man);
+
+    glm::uvec2 get_size() { return size; }
+
+    bool draw();
+
+    void set_tex_id(size_t id) { tex_id = id; }
+
+    ~editor_ui() {}
+
+private:
+    glm::uvec2 size;
+
+    size_t tex_id;
+
+    blood::scene_manager *m_scene_man;
+};

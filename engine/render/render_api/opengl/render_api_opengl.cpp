@@ -425,6 +425,13 @@ void render_api_opengl::end()
     m_win.swap_buffers();
 }
 
+void render_api_opengl::draw_imgui(std::function<bool(void)> func) const
+{
+    m_win.render_imgui(func);
+}
+
+void render_api_opengl::viewport(glm::uvec2 size) { glViewport(0, 0, size.x, size.y); }
+
 glm::uvec2 render_api_opengl::getsize() { return m_win.getsize(); }
 
 render_api_opengl::~render_api_opengl() { delete_shader_program(m_error_shader); }

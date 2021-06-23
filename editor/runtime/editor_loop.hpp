@@ -2,6 +2,7 @@
 
 #include "core/loop.hpp"
 #include "editor_camera.hpp"
+#include "editor_ui.hpp"
 #include "render/renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene_manager.hpp"
@@ -39,6 +40,8 @@ public:
 
 private:
     editor_camera m_edit_cam;
+
+    std::shared_ptr<editor_ui> m_ui;
 
 protected:
     virtual void render(double frametime) override;

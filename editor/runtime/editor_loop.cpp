@@ -6,7 +6,10 @@
 
 #include <mutex>
 
-editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor") {}
+editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor")
+{
+    m_ui = std::make_shared<editor_ui>(m_scene_manager.get());
+}
 
 editor_loop::~editor_loop() { m_stop = true; }
 
@@ -16,7 +19,6 @@ void editor_loop::stop() { m_pause = true; }
 
 void editor_loop::tickloop()
 {
-    m_renderer = new blood::renderer(m_settings.renderer);
 
     while (!m_stop) {
         static double frametime = 0;
@@ -26,15 +28,21 @@ void editor_loop::tickloop()
         render(frametime);
     }
     destroy_scripts();
-
-    // Delete renderer
-    delete m_renderer;
 }
 
 void editor_loop::render(double frametime)
 {
     // Draw frame
-    m_renderer->render_editor(m_scene_manager->get_active_scene());
+    using namespace std::placeholders;
+
+    m_renderer->render_editor(m_scene_manager->get_active_scene(),
+                              (glm::mat4)m_edit_cam,
+                              m_edit_cam.cam.get_projection(m_ui->get_size().x, m_ui->get_size().y),
+                              std::bind(&editor_ui::draw, m_ui.get()),
+                              std::bind(&editor_ui::get_size, m_ui.get()),
+                              std::bind(&editor_ui::set_tex_id, m_ui.get(), _1)
+
+    );
 
     // Update scripts
     {

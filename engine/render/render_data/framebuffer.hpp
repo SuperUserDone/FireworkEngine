@@ -28,6 +28,8 @@ public:
         render_api_impl::get_api()->set_fbo_depth_stencil_renderbuffer(m_id, rb.get_id());
     }
 
+    framebuffer_id get_id() const { return m_id; }
+
     void use() { render_api_impl::get_api()->use_fbo(m_id); }
 
     ~framebuffer() { render_api_impl::get_api()->delete_renderbuffer(m_id); }

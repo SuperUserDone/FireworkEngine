@@ -3,6 +3,7 @@
 #include "core/settings.hpp"
 #include "render/datatypes.hpp"
 
+#include <functional>
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>
@@ -89,6 +90,10 @@ public:
                                shader_program_id shader,
                                const std::vector<texture_id> &textures) const
     {}
+
+    virtual void draw_imgui(std::function<bool(void)> func) const {}
+
+    virtual void viewport(glm::uvec2 size) {}
 
     virtual void end() {}
 
