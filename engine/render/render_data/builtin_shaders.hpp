@@ -21,7 +21,7 @@ void main()
     FragColor = texture(screenTexture, TexCoords);
 })";
 
-static inline const char *vertex_err = R"(
+static inline const char *vertex_std = R"(
 #version 450 core
 layout(location = 0) in vec3 aPos;
 layout(std140, binding = 0) uniform Matrices{
@@ -31,6 +31,15 @@ mat4 view;
 layout(location = 0) uniform mat4 model;
 void main() { 
 gl_Position = projection * view * model * vec4(aPos, 1.0); 
+}
+)";
+
+static inline const char *fragment_outline = R"(
+#version 450 core
+out vec4 FragColor;
+
+void main() { 
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0); 
 }
 )";
 

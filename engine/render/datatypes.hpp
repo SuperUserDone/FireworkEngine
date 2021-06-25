@@ -40,6 +40,7 @@ enum color_format
     FORMAT_RGB,
     FORMAT_RGBA,
     FORMAT_DEPTH24_STENCIL8,
+    FORMAT_DEPTH24,
 };
 
 enum texture_filter
@@ -51,6 +52,19 @@ enum texture_filter
 enum renderbuffer_format
 {
     RENDERBUFFER_DEPTH24_STENCIL8,
+    RENDERBUFFER_DEPTH24,
+};
+
+enum depth_test_mode
+{
+    TEST_NEVER,
+    TEST_LESS,
+    TEST_EQUAL,
+    TEST_LEQUAL,
+    TEST_GREATER,
+    TEST_NOTEQUAL,
+    TEST_GEQUAL,
+    TEST_ALWAYS
 };
 
 struct vao_element
@@ -77,28 +91,6 @@ typedef void *shader_id;
 typedef void *shader_program_id;
 typedef void *texture_id;
 typedef void *renderbuffer_id;
-
-static constexpr uint32_t get_color_format_size(color_format type)
-{
-    switch (type) {
-    case FORMAT_R:
-        return 1;
-        break;
-    case FORMAT_RG:
-        return 2;
-        break;
-    case FORMAT_RGB:
-        return 3;
-        break;
-    case FORMAT_RGBA:
-        return 4;
-        break;
-    case FORMAT_DEPTH24_STENCIL8:
-        return 4;
-        break;
-    }
-    return 0;
-}
 
 static constexpr uint32_t get_datatype_size(layout_types type)
 {

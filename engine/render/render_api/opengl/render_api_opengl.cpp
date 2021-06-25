@@ -82,6 +82,9 @@ static GLuint to_gl_type(blood::color_format fil)
     case blood::FORMAT_DEPTH24_STENCIL8:
         return GL_DEPTH24_STENCIL8;
         break;
+    case blood::FORMAT_DEPTH24:
+        return GL_DEPTH_COMPONENT24;
+        break;
     }
 
     BLOODENGINE_ASSERT(false, "Not implemented");
@@ -93,6 +96,9 @@ static GLuint to_gl_type(blood::renderbuffer_format format)
     switch (format) {
     case blood::RENDERBUFFER_DEPTH24_STENCIL8:
         return GL_DEPTH24_STENCIL8;
+        break;
+    case blood::RENDERBUFFER_DEPTH24:
+        return GL_DEPTH_COMPONENT24;
         break;
     }
     BLOODENGINE_ASSERT(false, "Not implemented");
@@ -112,18 +118,50 @@ static GLuint to_gl_type(blood::texture_filter filter, bool mipmap = false)
     return 0;
 }
 
+static GLuint to_gl_type(blood::depth_test_mode mode)
+{
+    switch (mode) {
+    case blood::TEST_ALWAYS:
+        return GL_ALWAYS;
+        break;
+    case blood::TEST_LESS:
+        return GL_LESS;
+        break;
+    case blood::TEST_GREATER:
+        return GL_GREATER;
+        break;
+    case blood::TEST_EQUAL:
+        return GL_EQUAL;
+        break;
+    case blood::TEST_GEQUAL:
+        return GL_GEQUAL;
+        break;
+    case blood::TEST_LEQUAL:
+        return GL_LEQUAL;
+        break;
+    case blood::TEST_NEVER:
+        return GL_NEVER;
+        break;
+    case blood::TEST_NOTEQUAL:
+        return GL_NOTEQUAL;
+        break;
+    }
+
+    BLOODENGINE_ASSERT(false, "Not implemented");
+    return 0;
+}
+
 namespace blood {
 render_api_opengl::render_api_opengl(render_settings &settings)
     : m_settings(settings), m_win(settings)
 {
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_STENCIL_TEST);
 
     auto vs = alloc_shader(SHADER_VERTEX);
     auto fs = alloc_shader(SHADER_FRAGMENT);
     m_error_shader = alloc_shader_program();
 
-    compile_shader(vs, vertex_err);
+    compile_shader(vs, vertex_std);
     compile_shader(fs, fragment_err);
     add_shader_to_program(m_error_shader, vs);
     add_shader_to_program(m_error_shader, fs);
@@ -200,7 +238,7 @@ void render_api_opengl::clear(glm::vec4 color)
 {
     TracyGpuZone("Clear FBO");
     glClearColor(color.r, color.g, color.b, color.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void render_api_opengl::begin(glm::vec4 color)
@@ -496,6 +534,11 @@ void render_api_opengl::end()
     m_win.process_events();
     m_close = m_win.check_close();
     m_win.swap_buffers();
+}
+
+void render_api_opengl::set_depth_mode(depth_test_mode mode) const
+{
+    glDepthFunc(to_gl_type(mode));
 }
 
 void render_api_opengl::draw_imgui(std::function<bool(void)> func) const

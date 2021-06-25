@@ -73,6 +73,8 @@ public:
 
     void end() override;
 
+    virtual void set_depth_mode(depth_test_mode mode) const override;
+
     void draw_imgui(std::function<bool(void)> func) const override;
 
     void viewport(glm::uvec2 size) override;

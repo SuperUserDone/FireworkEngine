@@ -27,6 +27,11 @@ renderer::renderer(render_settings &p_render_settings)
 
     m_fullscreen_shader.compile();
 
+    m_outline_shader.set_source_vertex(vertex_std);
+    m_outline_shader.set_source_fragment(fragment_outline);
+
+    m_outline_shader.compile();
+
     m_camera.bind_uniform(0);
 }
 

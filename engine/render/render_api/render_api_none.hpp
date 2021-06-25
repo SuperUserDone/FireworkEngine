@@ -91,6 +91,8 @@ public:
                                const std::vector<texture_id> &textures) const
     {}
 
+    virtual void set_depth_mode(depth_test_mode mode) const {}
+
     virtual void draw_imgui(std::function<bool(void)> func) const {}
 
     virtual void viewport(glm::uvec2 size) {}
