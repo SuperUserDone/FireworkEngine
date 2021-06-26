@@ -92,6 +92,7 @@ public:
     {}
 
     virtual void set_depth_mode(depth_test_mode mode) const {}
+    virtual void set_depth_mask(bool mode) const {}
 
     virtual void draw_imgui(std::function<bool(void)> func) const {}
 

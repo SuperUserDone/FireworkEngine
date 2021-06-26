@@ -73,7 +73,8 @@ public:
 
     void end() override;
 
-    virtual void set_depth_mode(depth_test_mode mode) const override;
+    void set_depth_mode(depth_test_mode mode) const override;
+    void set_depth_mask(bool mode) const override;
 
     void draw_imgui(std::function<bool(void)> func) const override;
 

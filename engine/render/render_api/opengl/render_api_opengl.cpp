@@ -531,15 +531,20 @@ void render_api_opengl::end()
         glFlush();
     }
 
-    m_win.process_events();
-    m_close = m_win.check_close();
-    m_win.swap_buffers();
+    {
+        TracyGpuZone("Swap");
+        m_win.process_events();
+        m_close = m_win.check_close();
+        m_win.swap_buffers();
+    }
 }
 
 void render_api_opengl::set_depth_mode(depth_test_mode mode) const
 {
     glDepthFunc(to_gl_type(mode));
 }
+
+void render_api_opengl::set_depth_mask(bool mode) const { glDepthMask(mode ? GL_TRUE : GL_FALSE); }
 
 void render_api_opengl::draw_imgui(std::function<bool(void)> func) const
 {
