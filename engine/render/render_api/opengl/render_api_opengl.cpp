@@ -69,7 +69,7 @@ static GLuint to_gl_type(blood::color_format fil)
 {
     switch (fil) {
     case blood::FORMAT_R:
-        return GL_R;
+        return GL_RED;
         break;
     case blood::FORMAT_RG:
         return GL_RG;
