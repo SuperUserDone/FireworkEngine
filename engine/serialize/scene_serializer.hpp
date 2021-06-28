@@ -174,6 +174,8 @@ public:
     {
         FILE *fp = vfs::vfs_fopen(vfs_path, "r");
 
+        if (!fp) return false;
+
         ::capnp::PackedFdMessageReader msg(fileno(fp));
 
         capnp::Scene::Reader scene_ser = msg.getRoot<capnp::Scene>();

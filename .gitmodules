@@ -20,4 +20,4 @@
 [submodule "extern/capnp"]
 	path = extern/capnp
 	url = https://github.com/capnproto/capnproto.git
-	branch = release-0.8.0
+	branch = tags/v0.8.0
