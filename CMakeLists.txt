@@ -21,6 +21,10 @@ include_directories(
 add_subdirectory(extern/fmt)
 add_subdirectory(extern/sdl)
 add_subdirectory(extern/freetype)
+
+set(CAPNP_LITE ON)
+set(EXTERNAL_CAPNP ON)
+set(BUILD_TESTING OFF)
 add_subdirectory(extern/capnp)
 
 add_subdirectory(engine)
