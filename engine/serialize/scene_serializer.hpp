@@ -1,50 +1,91 @@
 #pragma once
 
+#include "scene.capnp.h"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
 #include "vfs/vfs.hpp"
 
+#include <capnp/message.h>
+#include <capnp/serialize-packed.h>
 #include <iomanip>
-#include <json.hpp>
 #include <string>
 
-namespace glm {
-using namespace nlohmann;
-static void to_json(json &j, const glm::vec3 &p) { j = json::array({p.x, p.y, p.z}); }
-static void from_json(const json &j, glm::vec3 &p) { p = {j[0], j[1], j[2]}; }
-static void to_json(json &j, const glm::vec2 &p) { j = json::array({p.x, p.y}); }
-static void from_json(const json &j, glm::vec2 &p) { p = {j[0], j[1]}; }
-static void to_json(json &j, const glm::quat &p) { j = json::array({p.x, p.y, p.z, p.w}); }
-static void from_json(const json &j, glm::quat &p) { p = glm::quat(j[3], j[0], j[1], j[2]); }
-} // namespace glm
-
 namespace blood {
-using namespace nlohmann;
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(vertex, pos, norm, tan, uvs);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(component_transform, pos, rot, scale);
 
-static void to_json(json &j, const component_camera &p)
+template <typename T, typename B>
+static void write_vec3(const T &vec3, B &target)
 {
-    j["clipf"] = p.clip_far;
-    j["clipn"] = p.clip_near;
-    j["fov"] = p.fov;
+    target.setX(vec3.x);
+    target.setY(vec3.y);
+    target.setZ(vec3.z);
 }
-static void from_json(const json &j, component_camera &p)
+
+template <typename T, typename B>
+static void write_vec4(const T &vec3, B &target)
 {
-    p.clip_far = j.at("clipf");
-    p.clip_near = j.at("clipn");
-    p.fov = std::clamp((float)j.at("fov"), 30.f, 120.f);
+    target.setX(vec3.x);
+    target.setY(vec3.y);
+    target.setZ(vec3.z);
+    target.setW(vec3.w);
 }
-static void to_json(json &j, const component_mesh &p)
+
+template <typename T, typename B>
+static void write_vec2(const T &vec3, B &target)
 {
-    j["verticies"] = p.verticies;
-    j["indicies"] = p.indicies;
+    target.setX(vec3.x);
+    target.setY(vec3.y);
 }
-static void from_json(const json &j, component_mesh &p)
+
+template <typename T, typename B>
+static void read_vec3(T &vec3, const B &target)
 {
-    j.at("verticies").get_to(p.verticies);
-    j.at("indicies").get_to(p.indicies);
-    p.update();
+    vec3.x = target.getX();
+    vec3.y = target.getY();
+    vec3.z = target.getZ();
+}
+
+template <typename T, typename B>
+static void read_vec4(T &vec3, const B &target)
+{
+    vec3.x = target.getX();
+    vec3.y = target.getY();
+    vec3.z = target.getZ();
+    vec3.w = target.getW();
+}
+
+template <typename T, typename B>
+static void read_vec2(T &vec2, const B &target)
+{
+    vec2.x = target.getX();
+    vec2.y = target.getY();
+}
+
+template <typename T, typename B>
+static void write_vertex(const T &vert, B &target)
+{
+    auto pos = target.getPos();
+    auto norm = target.getNorm();
+    auto tan = target.getTan();
+    auto uvs = target.getUv();
+
+    write_vec3(vert.pos, pos);
+    write_vec3(vert.norm, norm);
+    write_vec3(vert.tan, tan);
+    write_vec2(vert.uvs, uvs);
+}
+
+template <typename T, typename B>
+static void read_vertex(T &vert, const B &target)
+{
+    auto pos = target.getPos();
+    auto norm = target.getNorm();
+    auto tan = target.getTan();
+    auto uvs = target.getUv();
+
+    read_vec3(vert.pos, pos);
+    read_vec3(vert.norm, norm);
+    read_vec3(vert.tan, tan);
+    read_vec2(vert.uvs, uvs);
 }
 
 class scene_serializer
@@ -52,82 +93,145 @@ class scene_serializer
 public:
     static inline bool serialize(scene *ptr, const std::string &vfs_path)
     {
-        using namespace nlohmann;
-        json j;
+        FILE *fp = vfs::vfs_fopen(vfs_path, "w");
 
-        j["scene"]["name"] = "untitled";
-        auto &scene = j["scene"];
+        ::capnp::MallocMessageBuilder msg;
+
+        capnp::Scene::Builder scene_ser = msg.initRoot<capnp::Scene>();
 
         auto &reg = ptr->get_registry();
 
-        auto view = reg.view<blood::component_tag>();
-        for (auto entity : view) {
-            auto &tag = view.get<blood::component_tag>(entity);
+        scene_ser.setName(ptr->m_name);
+        auto entities = scene_ser.initEntities(reg.alive());
 
-            json ent;
-            ent["name"] = tag.name;
-            ent["id"] = entity;
+        int entities_count = 0;
 
-            blood::entity entity_obj(&reg, entity);
+        reg.each([&](auto entity) {
+            if (reg.all_of<component_tag>(entity)) {
+                auto &tag = reg.get<component_tag>(entity);
 
-            if (entity_obj.has_component<blood::component_transform>()) {
-                auto &trans = entity_obj.get_component<blood::component_transform>();
+                entities[entities_count].setId((uint32_t)entity);
+                entities[entities_count].setName(tag.name);
 
-                ent["components"]["transform"] = trans;
+                if (reg.all_of<component_camera>(entity)) {
+                    auto &cam = reg.get<component_camera>(entity);
+
+                    auto cam_ser = entities[entities_count].initCamera();
+
+                    cam_ser.setClipFar(cam.clip_far);
+                    cam_ser.setClipNear(cam.clip_near);
+                    cam_ser.setFov(cam.fov);
+                }
+
+                if (reg.all_of<component_transform>(entity)) {
+                    auto &trans = reg.get<component_transform>(entity);
+
+                    auto trans_ser = entities[entities_count].initTransform();
+
+                    auto pos = trans_ser.getPos();
+                    auto rot = trans_ser.getRot();
+                    auto scale = trans_ser.getScale();
+
+                    write_vec3(trans.pos, pos);
+                    write_vec4(trans.rot, rot);
+                    write_vec3(trans.scale, scale);
+                }
+
+                if (reg.all_of<component_mesh>(entity)) {
+                    component_mesh &mesh = reg.get<component_mesh>(entity);
+
+                    auto mesh_ser = entities[entities_count].initMesh();
+
+                    auto vert = mesh_ser.initVerticies(mesh.verticies.size());
+                    auto ind = mesh_ser.initIndicies(mesh.indicies.size());
+
+                    int i = 0;
+
+                    for (auto &a : mesh.verticies) {
+                        auto vertex = vert[i];
+
+                        write_vertex(a, vertex);
+                        i++;
+                    }
+
+                    i = 0;
+                    for (auto &a : mesh.indicies) {
+                        ind.set(i, a);
+
+                        i++;
+                    }
+                }
             }
-            if (entity_obj.has_component<blood::component_camera>()) {
-                auto &comp = entity_obj.get_component<blood::component_camera>();
+            entities_count++;
+        });
 
-                ent["components"]["camera"] = comp;
-            }
-            if (entity_obj.has_component<blood::component_mesh>()) {
-                auto &comp = entity_obj.get_component<blood::component_mesh>();
-
-                ent["components"]["mesh"] = comp;
-            }
-
-            scene["entities"].push_back(ent);
-        }
-
-        LOG_IF("Saving Scene to {}({})", vfs_path, vfs::vfs_resolve_path(vfs_path));
-
-        std::ofstream o(vfs::vfs_resolve_path(vfs_path));
-        o << std::setw(4) << j;
-        o.close();
-
+        ::capnp::writePackedMessageToFd(fileno(fp), msg);
+        fclose(fp);
         return true;
     }
 
     static inline bool deserialize(scene *ptr, const std::string &vfs_path)
     {
-        LOG_IF("Loading Scene from {}({})", vfs_path, vfs::vfs_resolve_path(vfs_path));
-        std::ifstream i(vfs::vfs_resolve_path(vfs_path));
-        json j;
-        i >> j;
-        i.close();
+        FILE *fp = vfs::vfs_fopen(vfs_path, "r");
 
-        auto &entities = j["scene"]["entities"];
+        ::capnp::PackedFdMessageReader msg(fileno(fp));
 
-        for (auto &&ent : entities) {
-            if (ptr->get_registry().valid((entt::entity)ent["id"])) return false;
+        capnp::Scene::Reader scene_ser = msg.getRoot<capnp::Scene>();
 
-            auto entity = ptr->create_entity(ent["name"], ent["id"]);
-            auto &&comp = ent["components"];
-            if (!comp["camera"].is_null()) {
-                entity.add_component<blood::component_camera>(
-                    (blood::component_camera)comp["camera"]);
-            }
-            if (!comp["transform"].is_null()) {
-                entity.add_component<blood::component_transform>(
-                    (blood::component_transform)comp["transform"]);
-            }
-            if (!comp["mesh"].is_null()) {
-                auto &mesh = entity.add_component<blood::component_mesh>(
-                    (blood::component_mesh)comp["mesh"]);
-                mesh.update();
+        auto &reg = ptr->get_registry();
+
+        if (scene_ser.hasName()) ptr->set_name(scene_ser.getName());
+        if (scene_ser.hasEntities()) {
+            auto ent = scene_ser.getEntities();
+
+            for (auto a : ent) {
+                a.getName();
+                auto entity_new = ptr->create_entity(a.getName(), a.getId());
+
+                if (a.hasCamera()) {
+                    auto cam = a.getCamera();
+                    float far = cam.getClipFar();
+                    float near = cam.getClipNear();
+                    float fov = std::clamp(cam.getFov(), 45.f, 120.f);
+
+                    entity_new.add_component<component_camera>(component_camera{fov, near, far});
+                }
+
+                if (a.hasTransform()) {
+                    auto trans = a.getTransform();
+                    auto &comp = entity_new.add_component<component_transform>();
+
+                    read_vec3(comp.pos, trans.getPos());
+                    read_vec4(comp.rot, trans.getRot());
+                    read_vec3(comp.scale, trans.getScale());
+                }
+
+                if (a.hasMesh()) {
+                    auto mesh = a.getMesh();
+                    auto &comp = entity_new.add_component<component_mesh>();
+
+                    auto indicies = mesh.getIndicies();
+                    auto verticies = mesh.getVerticies();
+
+                    comp.indicies.reserve(indicies.size());
+                    comp.verticies.reserve(verticies.size());
+
+                    for (uint32_t ind : indicies) {
+                        comp.indicies.push_back(ind);
+                    }
+
+                    for (auto vertex : verticies) {
+                        blood::vertex vertex_a;
+                        read_vertex(vertex_a, vertex);
+                        comp.verticies.push_back(vertex_a);
+                    }
+
+                    comp.update();
+                }
             }
         }
 
+        fclose(fp);
         return true;
     }
 

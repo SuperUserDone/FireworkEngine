@@ -32,7 +32,6 @@ struct component_mesh
         vao_element temp;
         temp.normalized = false;
         temp.offset = offsetof(vertex, pos);
-        temp.size = sizeof(vertex);
         temp.stride = sizeof(vertex);
         temp.type = LAYOUT_FLOAT3;
         temp.vao_attrib = 0;

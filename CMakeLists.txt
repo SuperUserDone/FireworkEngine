@@ -13,13 +13,15 @@ include_directories(
   "extern/fmt/include"
   "${CMAKE_BINARY_DIR}/extern/sdl/include"
   "extern/sdl/include"
-  "extern/imgui-docking/")
+  "extern/imgui-docking/"
+  "extern/capnp/")
 
 # add_definitions(-DTRACY_ENABLE)
 
 add_subdirectory(extern/fmt)
 add_subdirectory(extern/sdl)
 add_subdirectory(extern/freetype)
+add_subdirectory(extern/capnp)
 
 add_subdirectory(engine)
 add_subdirectory(player)

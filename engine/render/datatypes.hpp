@@ -71,7 +71,6 @@ struct vao_element
 {
     layout_types type;
     uint16_t vao_attrib = 0;
-    uint16_t size = 0;
     uint16_t offset = 0;
     uint16_t stride = 0;
     bool normalized = false;

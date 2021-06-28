@@ -17,3 +17,7 @@
 	path = extern/tracy
 	url = https://github.com/wolfpld/tracy.git
 	branch = tags/v0.7.8
+[submodule "extern/capnp"]
+	path = extern/capnp
+	url = https://github.com/capnproto/capnproto.git
+	branch = tags/v0.8.0

@@ -1,15 +1,14 @@
 #pragma once
 
+#include "entity.hpp"
+
 #include <entt/entt.hpp>
 #include <mutex>
 #include <vector>
 
-#include "entity.hpp"
-
 class editor_loop;
 
-namespace blood
-{
+namespace blood {
 
 class scene
 {
@@ -18,6 +17,9 @@ public:
     scene(scene &&other);
     scene &operator=(scene &&other);
     ~scene();
+
+    void set_name(const std::string &name) { m_name = name; }
+    std::string get_name() { return m_name; }
 
     bool loading_done();
 
@@ -31,11 +33,14 @@ public:
 private:
     mutable entt::registry m_entt;
 
+    std::string m_name = "Scene";
+
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 
     friend class renderer;
     friend class loop;
     friend class ::editor_loop;
+    friend class scene_serializer;
 
 private:
     scene(const scene &other) = delete;
