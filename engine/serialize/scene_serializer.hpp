@@ -190,11 +190,12 @@ public:
 
                 if (a.hasCamera()) {
                     auto cam = a.getCamera();
-                    float far = cam.getClipFar();
-                    float near = cam.getClipNear();
-                    float fov = std::clamp(cam.getFov(), 45.f, 120.f);
+                    float c_far = cam.getClipFar();
+                    float c_near = cam.getClipNear();
+                    float c_fov = std::clamp(cam.getFov(), 45.f, 120.f);
 
-                    entity_new.add_component<component_camera>(component_camera{fov, near, far});
+                    entity_new.add_component<component_camera>(
+                        component_camera{c_fov, c_near, c_far});
                 }
 
                 if (a.hasTransform()) {
@@ -220,9 +221,9 @@ public:
                         comp.indicies.push_back(ind);
                     }
 
-                    for (auto vertex : verticies) {
+                    for (auto n_vertex : verticies) {
                         blood::vertex vertex_a;
-                        read_vertex(vertex_a, vertex);
+                        read_vertex(vertex_a, n_vertex);
                         comp.verticies.push_back(vertex_a);
                     }
 
