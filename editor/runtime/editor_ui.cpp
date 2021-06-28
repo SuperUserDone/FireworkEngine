@@ -265,7 +265,7 @@ bool editor_ui::draw()
     if (show_window_scene) draw_scene(size, tex_id);
 
     if (save) {
-        blood::scene_serializer::serialize(scene, "root://test.bscn.json");
+        blood::scene_serializer::serialize(scene, "root://" + scene->get_name() + ".bscn");
         save = false;
     }
     return close;
