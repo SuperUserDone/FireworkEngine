@@ -8,6 +8,14 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(MSVC_VERSION GREATER_EQUAL "1900")
+  include(CheckCXXCompilerFlag)
+  check_cxx_compiler_flag("/std:c++latest" _cpp_latest_flag_supported)
+  if(_cpp_latest_flag_supported)
+    add_compile_options("/std:c++latest")
+  endif()
+endif()
+
 include_directories(
   "engine"
   "extern/tracy"
