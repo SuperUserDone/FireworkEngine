@@ -24,9 +24,6 @@ include_directories(
 set(BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
-set(CAPNP_LITE
-    ON
-    CACHE BOOL "" FORCE)
 add_subdirectory(extern/capnp)
 
 add_subdirectory(extern/fmt)
