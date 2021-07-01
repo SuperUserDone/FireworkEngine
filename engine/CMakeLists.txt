@@ -12,6 +12,7 @@ set(ENGINE_SRC
     "serialize/entity.capnp.c++"
     "serialize/scene.capnp.c++"
     "serialize/vector.capnp.c++"
+    "serialize/scene_serializer.cpp"
     "../extern/imgui-docking/imgui.cpp"
     "../extern/imgui-docking/backends/imgui_impl_opengl3.cpp"
     "../extern/imgui-docking/imgui_widgets.cpp"
@@ -34,5 +35,11 @@ else()
   set(ENGINE_LINK "pthread")
 endif(MSVC)
 
-target_link_libraries(blood-engine SDL2-static ${ENGINE_LINK} freetype fmt::fmt
-                      capnp)
+target_link_libraries(
+  blood-engine
+  SDL2-static
+  ${ENGINE_LINK}
+  freetype
+  fmt::fmt
+  capnp
+  kj)
