@@ -8,14 +8,6 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(MSVC_VERSION GREATER_EQUAL "1900")
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag("/std:c++latest" _cpp_latest_flag_supported)
-  if(_cpp_latest_flag_supported)
-    add_compile_options("/std:c++latest")
-  endif()
-endif()
-
 include_directories(
   "engine"
   "extern/tracy"
@@ -29,7 +21,12 @@ include_directories(
 
 # add_definitions(-DTRACY_ENABLE)
 
-set(BUILD_TESTING OFF)
+set(BUILD_TESTING
+    OFF
+    CACHE BOOL "" FORCE)
+set(CAPNP_LITE
+    ON
+    CACHE BOOL "" FORCE)
 add_subdirectory(extern/capnp)
 
 add_subdirectory(extern/fmt)

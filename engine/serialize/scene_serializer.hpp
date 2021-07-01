@@ -1,12 +1,12 @@
 #pragma once
 
+#include "capnp/message.h"
+#include "capnp/serialize-packed.h"
 #include "scene.capnp.h"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
 #include "vfs/vfs.hpp"
 
-#include <capnp/message.h>
-#include <capnp/serialize-packed.h>
 #include <iomanip>
 #include <string>
 
