@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(
+  "extern/capnp/c++"
   "engine"
   "extern/tracy"
   "extern/include"
@@ -16,8 +17,7 @@ include_directories(
   "extern/fmt/include"
   "${CMAKE_BINARY_DIR}/extern/sdl/include"
   "extern/sdl/include"
-  "extern/imgui-docking/"
-  "extern/capnp/c++")
+  "extern/imgui-docking/")
 
 # add_definitions(-DTRACY_ENABLE)
 
