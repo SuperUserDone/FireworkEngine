@@ -232,15 +232,14 @@ bool editor_ui::draw()
 
     shortcut_wrapper(blood::input::MODKEY_CTRL, blood::input::KEY_s, &save);
 
+    bool load = false;
+
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             save = ImGui::MenuItem("Save", "Ctrl+S");
             if (ImGui::MenuItem("Load")) {
                 curr = 0;
-                blood::scene *new_scene = new blood::scene();
-                blood::scene_serializer::deserialize(new_scene, "root://test.bscn.json");
-                m_scene_man->stage_scene(new_scene);
-                m_scene_man->swap();
+                load = true;
             }
             ImGui::Separator();
             close = ImGui::MenuItem("Close");
@@ -256,6 +255,38 @@ bool editor_ui::draw()
         }
 
         ImGui::EndMainMenuBar();
+
+        if (load) ImGui::OpenPopup("Open");
+
+        if (ImGui::BeginPopupModal("Open")) {
+            ImGui::Text("Open File");
+
+            static char name[32];
+
+            bool entered = ImGui::InputText("Name", name, 32, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            static bool show_error = false;
+            if (show_error) {
+                ImGui::TextColored(ImVec4(0.75, 0.2, 0.2, 1.0), "Could not open or parse scene!");
+            }
+
+            if (ImGui::Button("Close")) ImGui::CloseCurrentPopup();
+
+            ImGui::SameLine();
+            if (ImGui::Button("Open") || entered) {
+                blood::scene *new_scene = new blood::scene();
+
+                if (blood::scene_serializer::deserialize(
+                        new_scene, "root://" + std::string(name) + ".bscn")) {
+                    m_scene_man->stage_scene(new_scene);
+                    m_scene_man->swap();
+                    ImGui::CloseCurrentPopup();
+
+                } else
+                    show_error = true;
+            }
+            ImGui::EndPopup();
+        }
     }
 
     ImGui::DockSpaceOverViewport();

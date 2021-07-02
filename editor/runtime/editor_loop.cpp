@@ -1,10 +1,6 @@
-#include "core/logger.hpp"
 #include "core/native_script.hpp"
 #include "editor_loop.hpp"
 #include "editor_ui.hpp"
-#include "scene/entity.hpp"
-
-#include <mutex>
 
 editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor")
 {
