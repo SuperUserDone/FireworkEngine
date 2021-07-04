@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace blood {
+namespace fw {
 
 struct component_nativescript
 {
@@ -24,4 +24,4 @@ struct component_nativescript
     native_script *script = nullptr;
 };
 
-} // namespace blood
+} // namespace fw

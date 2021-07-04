@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 project(
-  BloodEngine
+  FireworkEngine
   LANGUAGES CXX
   VERSION 0.0.1)
 
@@ -40,6 +40,6 @@ endif()
 
 install(
   DIRECTORY engine/
-  DESTINATION include/blood_engine
+  DESTINATION include/firework_engine
   FILES_MATCHING
   PATTERN "*.hpp")

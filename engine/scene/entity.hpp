@@ -1,12 +1,11 @@
 #pragma once
 
+#include "core/logger.hpp"
+
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
-#include "core/logger.hpp"
-
-namespace blood
-{
+namespace fw {
 
 class entity
 {
@@ -24,7 +23,7 @@ public:
     template <typename T, typename... Args>
     T &add_component(Args &&...args)
     {
-        BLOODENGINE_ASSERT(!has_component<T>(), "Entity already has component.");
+        FIREWORK_ASSERT(!has_component<T>(), "Entity already has component.");
 
         return m_reg->emplace<T>(m_id, std::forward<Args>(args)...);
     }
@@ -32,7 +31,7 @@ public:
     template <typename T>
     T &get_component()
     {
-        BLOODENGINE_ASSERT(has_component<T>(), "Entity does have component.");
+        FIREWORK_ASSERT(has_component<T>(), "Entity does have component.");
 
         return m_reg->get<T>(m_id);
     }
@@ -52,4 +51,4 @@ private:
     entity &operator=(const entity &other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

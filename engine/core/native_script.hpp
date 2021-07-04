@@ -4,8 +4,7 @@
 
 class editor_loop;
 
-namespace blood
-{
+namespace fw {
 
 class native_script
 {
@@ -24,4 +23,4 @@ protected:
     friend class ::editor_loop;
 };
 
-} // namespace blood
+} // namespace fw

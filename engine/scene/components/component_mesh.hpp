@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-namespace blood {
+namespace fw {
 struct vertex
 {
     glm::vec3 pos;
@@ -70,4 +70,4 @@ struct component_mesh
     vertex_array m_vao;
 };
 
-} // namespace blood
+} // namespace fw

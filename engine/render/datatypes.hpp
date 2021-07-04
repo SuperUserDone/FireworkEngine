@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace blood {
+namespace fw {
 
 enum layout_types
 {
@@ -121,4 +121,4 @@ static constexpr uint32_t get_datatype_size(layout_types type)
     return 0;
 }
 
-}; // namespace blood
+}; // namespace fw

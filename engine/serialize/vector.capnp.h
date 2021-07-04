@@ -28,7 +28,7 @@ CAPNP_DECLARE_SCHEMA(94d30ae2ebd3aec0);
 }  // namespace schemas
 }  // namespace capnp
 
-namespace blood {
+namespace fw {
 namespace capnp {
 
 struct Vec2f {
@@ -975,16 +975,16 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasPos() const;
-  inline  ::blood::capnp::Vec3f::Reader getPos() const;
+  inline  ::fw::capnp::Vec3f::Reader getPos() const;
 
   inline bool hasNorm() const;
-  inline  ::blood::capnp::Vec3f::Reader getNorm() const;
+  inline  ::fw::capnp::Vec3f::Reader getNorm() const;
 
   inline bool hasTan() const;
-  inline  ::blood::capnp::Vec3f::Reader getTan() const;
+  inline  ::fw::capnp::Vec3f::Reader getTan() const;
 
   inline bool hasUv() const;
-  inline  ::blood::capnp::Vec2f::Reader getUv() const;
+  inline  ::fw::capnp::Vec2f::Reader getUv() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1015,32 +1015,32 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasPos();
-  inline  ::blood::capnp::Vec3f::Builder getPos();
-  inline void setPos( ::blood::capnp::Vec3f::Reader value);
-  inline  ::blood::capnp::Vec3f::Builder initPos();
-  inline void adoptPos(::capnp::Orphan< ::blood::capnp::Vec3f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec3f> disownPos();
+  inline  ::fw::capnp::Vec3f::Builder getPos();
+  inline void setPos( ::fw::capnp::Vec3f::Reader value);
+  inline  ::fw::capnp::Vec3f::Builder initPos();
+  inline void adoptPos(::capnp::Orphan< ::fw::capnp::Vec3f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec3f> disownPos();
 
   inline bool hasNorm();
-  inline  ::blood::capnp::Vec3f::Builder getNorm();
-  inline void setNorm( ::blood::capnp::Vec3f::Reader value);
-  inline  ::blood::capnp::Vec3f::Builder initNorm();
-  inline void adoptNorm(::capnp::Orphan< ::blood::capnp::Vec3f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec3f> disownNorm();
+  inline  ::fw::capnp::Vec3f::Builder getNorm();
+  inline void setNorm( ::fw::capnp::Vec3f::Reader value);
+  inline  ::fw::capnp::Vec3f::Builder initNorm();
+  inline void adoptNorm(::capnp::Orphan< ::fw::capnp::Vec3f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec3f> disownNorm();
 
   inline bool hasTan();
-  inline  ::blood::capnp::Vec3f::Builder getTan();
-  inline void setTan( ::blood::capnp::Vec3f::Reader value);
-  inline  ::blood::capnp::Vec3f::Builder initTan();
-  inline void adoptTan(::capnp::Orphan< ::blood::capnp::Vec3f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec3f> disownTan();
+  inline  ::fw::capnp::Vec3f::Builder getTan();
+  inline void setTan( ::fw::capnp::Vec3f::Reader value);
+  inline  ::fw::capnp::Vec3f::Builder initTan();
+  inline void adoptTan(::capnp::Orphan< ::fw::capnp::Vec3f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec3f> disownTan();
 
   inline bool hasUv();
-  inline  ::blood::capnp::Vec2f::Builder getUv();
-  inline void setUv( ::blood::capnp::Vec2f::Reader value);
-  inline  ::blood::capnp::Vec2f::Builder initUv();
-  inline void adoptUv(::capnp::Orphan< ::blood::capnp::Vec2f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec2f> disownUv();
+  inline  ::fw::capnp::Vec2f::Builder getUv();
+  inline void setUv( ::fw::capnp::Vec2f::Reader value);
+  inline  ::fw::capnp::Vec2f::Builder initUv();
+  inline void adoptUv(::capnp::Orphan< ::fw::capnp::Vec2f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec2f> disownUv();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1060,10 +1060,10 @@ public:
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
       : _typeless(kj::mv(typeless)) {}
 
-  inline  ::blood::capnp::Vec3f::Pipeline getPos();
-  inline  ::blood::capnp::Vec3f::Pipeline getNorm();
-  inline  ::blood::capnp::Vec3f::Pipeline getTan();
-  inline  ::blood::capnp::Vec2f::Pipeline getUv();
+  inline  ::fw::capnp::Vec3f::Pipeline getPos();
+  inline  ::fw::capnp::Vec3f::Pipeline getNorm();
+  inline  ::fw::capnp::Vec3f::Pipeline getTan();
+  inline  ::fw::capnp::Vec2f::Pipeline getUv();
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -1460,34 +1460,34 @@ inline bool Vertex::Builder::hasPos() {
   return !_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec3f::Reader Vertex::Reader::getPos() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec3f::Reader Vertex::Reader::getPos() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::getPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::getPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec3f::Pipeline Vertex::Pipeline::getPos() {
-  return  ::blood::capnp::Vec3f::Pipeline(_typeless.getPointerField(0));
+inline  ::fw::capnp::Vec3f::Pipeline Vertex::Pipeline::getPos() {
+  return  ::fw::capnp::Vec3f::Pipeline(_typeless.getPointerField(0));
 }
 #endif  // !CAPNP_LITE
-inline void Vertex::Builder::setPos( ::blood::capnp::Vec3f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::set(_builder.getPointerField(
+inline void Vertex::Builder::setPos( ::fw::capnp::Vec3f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::initPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::initPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 inline void Vertex::Builder::adoptPos(
-    ::capnp::Orphan< ::blood::capnp::Vec3f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec3f> Vertex::Builder::disownPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec3f> Vertex::Builder::disownPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
@@ -1499,34 +1499,34 @@ inline bool Vertex::Builder::hasNorm() {
   return !_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec3f::Reader Vertex::Reader::getNorm() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec3f::Reader Vertex::Reader::getNorm() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::getNorm() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::getNorm() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec3f::Pipeline Vertex::Pipeline::getNorm() {
-  return  ::blood::capnp::Vec3f::Pipeline(_typeless.getPointerField(1));
+inline  ::fw::capnp::Vec3f::Pipeline Vertex::Pipeline::getNorm() {
+  return  ::fw::capnp::Vec3f::Pipeline(_typeless.getPointerField(1));
 }
 #endif  // !CAPNP_LITE
-inline void Vertex::Builder::setNorm( ::blood::capnp::Vec3f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::set(_builder.getPointerField(
+inline void Vertex::Builder::setNorm( ::fw::capnp::Vec3f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::initNorm() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::initNorm() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Vertex::Builder::adoptNorm(
-    ::capnp::Orphan< ::blood::capnp::Vec3f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec3f> Vertex::Builder::disownNorm() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec3f> Vertex::Builder::disownNorm() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
@@ -1538,34 +1538,34 @@ inline bool Vertex::Builder::hasTan() {
   return !_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec3f::Reader Vertex::Reader::getTan() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec3f::Reader Vertex::Reader::getTan() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::getTan() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::getTan() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec3f::Pipeline Vertex::Pipeline::getTan() {
-  return  ::blood::capnp::Vec3f::Pipeline(_typeless.getPointerField(2));
+inline  ::fw::capnp::Vec3f::Pipeline Vertex::Pipeline::getTan() {
+  return  ::fw::capnp::Vec3f::Pipeline(_typeless.getPointerField(2));
 }
 #endif  // !CAPNP_LITE
-inline void Vertex::Builder::setTan( ::blood::capnp::Vec3f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::set(_builder.getPointerField(
+inline void Vertex::Builder::setTan( ::fw::capnp::Vec3f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec3f::Builder Vertex::Builder::initTan() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder Vertex::Builder::initTan() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 inline void Vertex::Builder::adoptTan(
-    ::capnp::Orphan< ::blood::capnp::Vec3f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec3f> Vertex::Builder::disownTan() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec3f> Vertex::Builder::disownTan() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
@@ -1577,34 +1577,34 @@ inline bool Vertex::Builder::hasUv() {
   return !_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec2f::Reader Vertex::Reader::getUv() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec2f::Reader Vertex::Reader::getUv() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::get(_reader.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec2f::Builder Vertex::Builder::getUv() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec2f::Builder Vertex::Builder::getUv() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::get(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec2f::Pipeline Vertex::Pipeline::getUv() {
-  return  ::blood::capnp::Vec2f::Pipeline(_typeless.getPointerField(3));
+inline  ::fw::capnp::Vec2f::Pipeline Vertex::Pipeline::getUv() {
+  return  ::fw::capnp::Vec2f::Pipeline(_typeless.getPointerField(3));
 }
 #endif  // !CAPNP_LITE
-inline void Vertex::Builder::setUv( ::blood::capnp::Vec2f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::set(_builder.getPointerField(
+inline void Vertex::Builder::setUv( ::fw::capnp::Vec2f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::set(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec2f::Builder Vertex::Builder::initUv() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec2f::Builder Vertex::Builder::initUv() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::init(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 inline void Vertex::Builder::adoptUv(
-    ::capnp::Orphan< ::blood::capnp::Vec2f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec2f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::adopt(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec2f> Vertex::Builder::disownUv() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec2f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec2f> Vertex::Builder::disownUv() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::disown(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 

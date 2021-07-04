@@ -15,7 +15,7 @@
 #include <string>
 #include <thread>
 
-namespace blood {
+namespace fw {
 /**
  * \brief The main game loop
  *
@@ -39,14 +39,14 @@ public:
     /**
      * \brief Get the renderer
      *
-     * \return renderer* pointer to blood::renderer
+     * \return renderer* pointer to renderer
      */
     renderer *get_renderer() { return m_renderer; }
 
     /**
      * \brief Get the scenemanager
      *
-     * \return std::weak_ptr<scene_manager> refrence to blood::scene_manager
+     * \return std::weak_ptr<scene_manager> refrence to scene_manager
      */
     std::weak_ptr<scene_manager> get_scenemanager() { return m_scene_manager; }
     // std::weak_ptr<void> get_physicsmanager() { return std::make_shared<void>(nullptr); }
@@ -104,4 +104,4 @@ private:
     loop &operator=(loop other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

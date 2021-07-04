@@ -8,7 +8,7 @@
 
 class editor_loop;
 
-namespace blood {
+namespace fw {
 
 class scene
 {
@@ -47,4 +47,4 @@ private:
     scene &operator=(const scene &other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

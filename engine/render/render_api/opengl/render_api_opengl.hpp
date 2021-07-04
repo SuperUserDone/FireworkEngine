@@ -3,7 +3,7 @@
 #include "../render_api_none.hpp"
 #include "opengl_window.hpp"
 
-namespace blood {
+namespace fw {
 class render_api_opengl : public render_api
 {
 public:
@@ -91,4 +91,4 @@ private:
     opengl_window m_win;
 };
 
-} // namespace blood
+} // namespace fw

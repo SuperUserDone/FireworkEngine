@@ -14,7 +14,7 @@
 typedef unsigned int uint;
 #endif
 
-namespace blood {
+namespace fw {
 
 class renderer
 {
@@ -57,4 +57,4 @@ private:
     renderer &operator=(renderer other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

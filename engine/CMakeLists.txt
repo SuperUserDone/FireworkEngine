@@ -22,10 +22,10 @@ set(ENGINE_SRC
     "../extern/imgui-docking/misc/freetype/imgui_freetype.cpp"
     "../extern/imgui-docking/misc/cpp/imgui_stdlib.cpp")
 
-add_library(blood-engine ${ENGINE_SRC})
+add_library(firework-engine ${ENGINE_SRC})
 
-target_compile_definitions(blood-engine PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD2
-                                               IMGUI_ENABLE_FREETYPE)
+target_compile_definitions(firework-engine PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD2
+                                                  IMGUI_ENABLE_FREETYPE)
 
 if(MSVC)
   set(ENGINE_LINK "")
@@ -36,7 +36,7 @@ else()
 endif(MSVC)
 
 target_link_libraries(
-  blood-engine
+  firework-engine
   SDL2-static
   ${ENGINE_LINK}
   freetype

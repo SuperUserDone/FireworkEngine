@@ -18,7 +18,7 @@ void editor_loop::tickloop()
 
     while (!m_stop) {
         static double frametime = 0;
-        blood::rate_limiter limiter(m_fps_target, &frametime);
+        fw::rate_limiter limiter(m_fps_target, &frametime);
 
         update(frametime);
         render(frametime);
@@ -43,10 +43,10 @@ void editor_loop::render(double frametime)
     // Update scripts
     {
         auto view =
-            m_scene_manager->get_active_scene()->m_entt.view<blood::component_nativescript>();
+            m_scene_manager->get_active_scene()->m_entt.view<fw::component_nativescript>();
 
         for (auto ent : view) {
-            auto &script = view.get<blood::component_nativescript>(ent);
+            auto &script = view.get<fw::component_nativescript>(ent);
 
             if (script.script) {
                 script.script->on_render_update(frametime);

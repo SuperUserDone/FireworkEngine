@@ -1,7 +1,7 @@
 @0xcfe440017f3e59e5;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("blood::capnp");
+$Cxx.namespace("fw::capnp");
 
 struct Vec2f
 {

@@ -23,7 +23,7 @@ CAPNP_DECLARE_SCHEMA(be87ccb5daae5404);
 }  // namespace schemas
 }  // namespace capnp
 
-namespace blood {
+namespace fw {
 namespace capnp {
 
 struct ComponentCamera {
@@ -192,7 +192,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasVerticies() const;
-  inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader getVerticies() const;
+  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader getVerticies() const;
 
   inline bool hasIndicies() const;
   inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Reader getIndicies() const;
@@ -226,11 +226,11 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasVerticies();
-  inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder getVerticies();
-  inline void setVerticies( ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value);
-  inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder initVerticies(unsigned int size);
-  inline void adoptVerticies(::capnp::Orphan< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value);
-  inline ::capnp::Orphan< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>> disownVerticies();
+  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder getVerticies();
+  inline void setVerticies( ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value);
+  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder initVerticies(unsigned int size);
+  inline void adoptVerticies(::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value);
+  inline ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>> disownVerticies();
 
   inline bool hasIndicies();
   inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Builder getIndicies();
@@ -284,13 +284,13 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasPos() const;
-  inline  ::blood::capnp::Vec3f::Reader getPos() const;
+  inline  ::fw::capnp::Vec3f::Reader getPos() const;
 
   inline bool hasRot() const;
-  inline  ::blood::capnp::Vec4f::Reader getRot() const;
+  inline  ::fw::capnp::Vec4f::Reader getRot() const;
 
   inline bool hasScale() const;
-  inline  ::blood::capnp::Vec3f::Reader getScale() const;
+  inline  ::fw::capnp::Vec3f::Reader getScale() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -321,25 +321,25 @@ public:
 #endif  // !CAPNP_LITE
 
   inline bool hasPos();
-  inline  ::blood::capnp::Vec3f::Builder getPos();
-  inline void setPos( ::blood::capnp::Vec3f::Reader value);
-  inline  ::blood::capnp::Vec3f::Builder initPos();
-  inline void adoptPos(::capnp::Orphan< ::blood::capnp::Vec3f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec3f> disownPos();
+  inline  ::fw::capnp::Vec3f::Builder getPos();
+  inline void setPos( ::fw::capnp::Vec3f::Reader value);
+  inline  ::fw::capnp::Vec3f::Builder initPos();
+  inline void adoptPos(::capnp::Orphan< ::fw::capnp::Vec3f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec3f> disownPos();
 
   inline bool hasRot();
-  inline  ::blood::capnp::Vec4f::Builder getRot();
-  inline void setRot( ::blood::capnp::Vec4f::Reader value);
-  inline  ::blood::capnp::Vec4f::Builder initRot();
-  inline void adoptRot(::capnp::Orphan< ::blood::capnp::Vec4f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec4f> disownRot();
+  inline  ::fw::capnp::Vec4f::Builder getRot();
+  inline void setRot( ::fw::capnp::Vec4f::Reader value);
+  inline  ::fw::capnp::Vec4f::Builder initRot();
+  inline void adoptRot(::capnp::Orphan< ::fw::capnp::Vec4f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec4f> disownRot();
 
   inline bool hasScale();
-  inline  ::blood::capnp::Vec3f::Builder getScale();
-  inline void setScale( ::blood::capnp::Vec3f::Reader value);
-  inline  ::blood::capnp::Vec3f::Builder initScale();
-  inline void adoptScale(::capnp::Orphan< ::blood::capnp::Vec3f>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::Vec3f> disownScale();
+  inline  ::fw::capnp::Vec3f::Builder getScale();
+  inline void setScale( ::fw::capnp::Vec3f::Reader value);
+  inline  ::fw::capnp::Vec3f::Builder initScale();
+  inline void adoptScale(::capnp::Orphan< ::fw::capnp::Vec3f>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::Vec3f> disownScale();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -359,9 +359,9 @@ public:
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
       : _typeless(kj::mv(typeless)) {}
 
-  inline  ::blood::capnp::Vec3f::Pipeline getPos();
-  inline  ::blood::capnp::Vec4f::Pipeline getRot();
-  inline  ::blood::capnp::Vec3f::Pipeline getScale();
+  inline  ::fw::capnp::Vec3f::Pipeline getPos();
+  inline  ::fw::capnp::Vec4f::Pipeline getRot();
+  inline  ::fw::capnp::Vec3f::Pipeline getScale();
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -393,13 +393,13 @@ public:
   inline  ::uint32_t getId() const;
 
   inline bool hasCamera() const;
-  inline  ::blood::capnp::ComponentCamera::Reader getCamera() const;
+  inline  ::fw::capnp::ComponentCamera::Reader getCamera() const;
 
   inline bool hasMesh() const;
-  inline  ::blood::capnp::ComponentMesh::Reader getMesh() const;
+  inline  ::fw::capnp::ComponentMesh::Reader getMesh() const;
 
   inline bool hasTransform() const;
-  inline  ::blood::capnp::ComponentTransform::Reader getTransform() const;
+  inline  ::fw::capnp::ComponentTransform::Reader getTransform() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -440,25 +440,25 @@ public:
   inline void setId( ::uint32_t value);
 
   inline bool hasCamera();
-  inline  ::blood::capnp::ComponentCamera::Builder getCamera();
-  inline void setCamera( ::blood::capnp::ComponentCamera::Reader value);
-  inline  ::blood::capnp::ComponentCamera::Builder initCamera();
-  inline void adoptCamera(::capnp::Orphan< ::blood::capnp::ComponentCamera>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::ComponentCamera> disownCamera();
+  inline  ::fw::capnp::ComponentCamera::Builder getCamera();
+  inline void setCamera( ::fw::capnp::ComponentCamera::Reader value);
+  inline  ::fw::capnp::ComponentCamera::Builder initCamera();
+  inline void adoptCamera(::capnp::Orphan< ::fw::capnp::ComponentCamera>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::ComponentCamera> disownCamera();
 
   inline bool hasMesh();
-  inline  ::blood::capnp::ComponentMesh::Builder getMesh();
-  inline void setMesh( ::blood::capnp::ComponentMesh::Reader value);
-  inline  ::blood::capnp::ComponentMesh::Builder initMesh();
-  inline void adoptMesh(::capnp::Orphan< ::blood::capnp::ComponentMesh>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::ComponentMesh> disownMesh();
+  inline  ::fw::capnp::ComponentMesh::Builder getMesh();
+  inline void setMesh( ::fw::capnp::ComponentMesh::Reader value);
+  inline  ::fw::capnp::ComponentMesh::Builder initMesh();
+  inline void adoptMesh(::capnp::Orphan< ::fw::capnp::ComponentMesh>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::ComponentMesh> disownMesh();
 
   inline bool hasTransform();
-  inline  ::blood::capnp::ComponentTransform::Builder getTransform();
-  inline void setTransform( ::blood::capnp::ComponentTransform::Reader value);
-  inline  ::blood::capnp::ComponentTransform::Builder initTransform();
-  inline void adoptTransform(::capnp::Orphan< ::blood::capnp::ComponentTransform>&& value);
-  inline ::capnp::Orphan< ::blood::capnp::ComponentTransform> disownTransform();
+  inline  ::fw::capnp::ComponentTransform::Builder getTransform();
+  inline void setTransform( ::fw::capnp::ComponentTransform::Reader value);
+  inline  ::fw::capnp::ComponentTransform::Builder initTransform();
+  inline void adoptTransform(::capnp::Orphan< ::fw::capnp::ComponentTransform>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> disownTransform();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -478,9 +478,9 @@ public:
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
       : _typeless(kj::mv(typeless)) {}
 
-  inline  ::blood::capnp::ComponentCamera::Pipeline getCamera();
-  inline  ::blood::capnp::ComponentMesh::Pipeline getMesh();
-  inline  ::blood::capnp::ComponentTransform::Pipeline getTransform();
+  inline  ::fw::capnp::ComponentCamera::Pipeline getCamera();
+  inline  ::fw::capnp::ComponentMesh::Pipeline getMesh();
+  inline  ::fw::capnp::ComponentTransform::Pipeline getTransform();
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -541,29 +541,29 @@ inline bool ComponentMesh::Builder::hasVerticies() {
   return !_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader ComponentMesh::Reader::getVerticies() const {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_reader.getPointerField(
+inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader ComponentMesh::Reader::getVerticies() const {
+  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::getVerticies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_builder.getPointerField(
+inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::getVerticies() {
+  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline void ComponentMesh::Builder::setVerticies( ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::set(_builder.getPointerField(
+inline void ComponentMesh::Builder::setVerticies( ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::set(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), value);
 }
-inline  ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::initVerticies(unsigned int size) {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::init(_builder.getPointerField(
+inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::initVerticies(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::init(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), size);
 }
 inline void ComponentMesh::Builder::adoptVerticies(
-    ::capnp::Orphan< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::adopt(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>> ComponentMesh::Builder::disownVerticies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::blood::capnp::Vertex,  ::capnp::Kind::STRUCT>>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>> ComponentMesh::Builder::disownVerticies() {
+  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
@@ -613,34 +613,34 @@ inline bool ComponentTransform::Builder::hasPos() {
   return !_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec3f::Reader ComponentTransform::Reader::getPos() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec3f::Reader ComponentTransform::Reader::getPos() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec3f::Builder ComponentTransform::Builder::getPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder ComponentTransform::Builder::getPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec3f::Pipeline ComponentTransform::Pipeline::getPos() {
-  return  ::blood::capnp::Vec3f::Pipeline(_typeless.getPointerField(0));
+inline  ::fw::capnp::Vec3f::Pipeline ComponentTransform::Pipeline::getPos() {
+  return  ::fw::capnp::Vec3f::Pipeline(_typeless.getPointerField(0));
 }
 #endif  // !CAPNP_LITE
-inline void ComponentTransform::Builder::setPos( ::blood::capnp::Vec3f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::set(_builder.getPointerField(
+inline void ComponentTransform::Builder::setPos( ::fw::capnp::Vec3f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec3f::Builder ComponentTransform::Builder::initPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder ComponentTransform::Builder::initPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 inline void ComponentTransform::Builder::adoptPos(
-    ::capnp::Orphan< ::blood::capnp::Vec3f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec3f> ComponentTransform::Builder::disownPos() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec3f> ComponentTransform::Builder::disownPos() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
@@ -652,34 +652,34 @@ inline bool ComponentTransform::Builder::hasRot() {
   return !_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec4f::Reader ComponentTransform::Reader::getRot() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec4f::Reader ComponentTransform::Reader::getRot() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::get(_reader.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec4f::Builder ComponentTransform::Builder::getRot() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec4f::Builder ComponentTransform::Builder::getRot() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::get(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec4f::Pipeline ComponentTransform::Pipeline::getRot() {
-  return  ::blood::capnp::Vec4f::Pipeline(_typeless.getPointerField(1));
+inline  ::fw::capnp::Vec4f::Pipeline ComponentTransform::Pipeline::getRot() {
+  return  ::fw::capnp::Vec4f::Pipeline(_typeless.getPointerField(1));
 }
 #endif  // !CAPNP_LITE
-inline void ComponentTransform::Builder::setRot( ::blood::capnp::Vec4f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::set(_builder.getPointerField(
+inline void ComponentTransform::Builder::setRot( ::fw::capnp::Vec4f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::set(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec4f::Builder ComponentTransform::Builder::initRot() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec4f::Builder ComponentTransform::Builder::initRot() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::init(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void ComponentTransform::Builder::adoptRot(
-    ::capnp::Orphan< ::blood::capnp::Vec4f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec4f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::adopt(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec4f> ComponentTransform::Builder::disownRot() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec4f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec4f> ComponentTransform::Builder::disownRot() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::disown(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
@@ -691,34 +691,34 @@ inline bool ComponentTransform::Builder::hasScale() {
   return !_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::Vec3f::Reader ComponentTransform::Reader::getScale() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_reader.getPointerField(
+inline  ::fw::capnp::Vec3f::Reader ComponentTransform::Reader::getScale() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::Vec3f::Builder ComponentTransform::Builder::getScale() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::get(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder ComponentTransform::Builder::getScale() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::Vec3f::Pipeline ComponentTransform::Pipeline::getScale() {
-  return  ::blood::capnp::Vec3f::Pipeline(_typeless.getPointerField(2));
+inline  ::fw::capnp::Vec3f::Pipeline ComponentTransform::Pipeline::getScale() {
+  return  ::fw::capnp::Vec3f::Pipeline(_typeless.getPointerField(2));
 }
 #endif  // !CAPNP_LITE
-inline void ComponentTransform::Builder::setScale( ::blood::capnp::Vec3f::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::set(_builder.getPointerField(
+inline void ComponentTransform::Builder::setScale( ::fw::capnp::Vec3f::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::Vec3f::Builder ComponentTransform::Builder::initScale() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::init(_builder.getPointerField(
+inline  ::fw::capnp::Vec3f::Builder ComponentTransform::Builder::initScale() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 inline void ComponentTransform::Builder::adoptScale(
-    ::capnp::Orphan< ::blood::capnp::Vec3f>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::Vec3f> ComponentTransform::Builder::disownScale() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::Vec3f>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::Vec3f> ComponentTransform::Builder::disownScale() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
@@ -778,34 +778,34 @@ inline bool Entity::Builder::hasCamera() {
   return !_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::ComponentCamera::Reader Entity::Reader::getCamera() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::get(_reader.getPointerField(
+inline  ::fw::capnp::ComponentCamera::Reader Entity::Reader::getCamera() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::get(_reader.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::ComponentCamera::Builder Entity::Builder::getCamera() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::get(_builder.getPointerField(
+inline  ::fw::capnp::ComponentCamera::Builder Entity::Builder::getCamera() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::get(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::ComponentCamera::Pipeline Entity::Pipeline::getCamera() {
-  return  ::blood::capnp::ComponentCamera::Pipeline(_typeless.getPointerField(1));
+inline  ::fw::capnp::ComponentCamera::Pipeline Entity::Pipeline::getCamera() {
+  return  ::fw::capnp::ComponentCamera::Pipeline(_typeless.getPointerField(1));
 }
 #endif  // !CAPNP_LITE
-inline void Entity::Builder::setCamera( ::blood::capnp::ComponentCamera::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::set(_builder.getPointerField(
+inline void Entity::Builder::setCamera( ::fw::capnp::ComponentCamera::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::set(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::ComponentCamera::Builder Entity::Builder::initCamera() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::init(_builder.getPointerField(
+inline  ::fw::capnp::ComponentCamera::Builder Entity::Builder::initCamera() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::init(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Entity::Builder::adoptCamera(
-    ::capnp::Orphan< ::blood::capnp::ComponentCamera>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::ComponentCamera>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::adopt(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::ComponentCamera> Entity::Builder::disownCamera() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentCamera>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::ComponentCamera> Entity::Builder::disownCamera() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentCamera>::disown(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
@@ -817,34 +817,34 @@ inline bool Entity::Builder::hasMesh() {
   return !_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::ComponentMesh::Reader Entity::Reader::getMesh() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::get(_reader.getPointerField(
+inline  ::fw::capnp::ComponentMesh::Reader Entity::Reader::getMesh() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::get(_reader.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::ComponentMesh::Builder Entity::Builder::getMesh() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::get(_builder.getPointerField(
+inline  ::fw::capnp::ComponentMesh::Builder Entity::Builder::getMesh() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::get(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::ComponentMesh::Pipeline Entity::Pipeline::getMesh() {
-  return  ::blood::capnp::ComponentMesh::Pipeline(_typeless.getPointerField(2));
+inline  ::fw::capnp::ComponentMesh::Pipeline Entity::Pipeline::getMesh() {
+  return  ::fw::capnp::ComponentMesh::Pipeline(_typeless.getPointerField(2));
 }
 #endif  // !CAPNP_LITE
-inline void Entity::Builder::setMesh( ::blood::capnp::ComponentMesh::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::set(_builder.getPointerField(
+inline void Entity::Builder::setMesh( ::fw::capnp::ComponentMesh::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::set(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::ComponentMesh::Builder Entity::Builder::initMesh() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::init(_builder.getPointerField(
+inline  ::fw::capnp::ComponentMesh::Builder Entity::Builder::initMesh() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::init(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 inline void Entity::Builder::adoptMesh(
-    ::capnp::Orphan< ::blood::capnp::ComponentMesh>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::ComponentMesh>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::adopt(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::ComponentMesh> Entity::Builder::disownMesh() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentMesh>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::ComponentMesh> Entity::Builder::disownMesh() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::disown(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
@@ -856,34 +856,34 @@ inline bool Entity::Builder::hasTransform() {
   return !_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
 }
-inline  ::blood::capnp::ComponentTransform::Reader Entity::Reader::getTransform() const {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::get(_reader.getPointerField(
+inline  ::fw::capnp::ComponentTransform::Reader Entity::Reader::getTransform() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::get(_reader.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
-inline  ::blood::capnp::ComponentTransform::Builder Entity::Builder::getTransform() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::get(_builder.getPointerField(
+inline  ::fw::capnp::ComponentTransform::Builder Entity::Builder::getTransform() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::get(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::blood::capnp::ComponentTransform::Pipeline Entity::Pipeline::getTransform() {
-  return  ::blood::capnp::ComponentTransform::Pipeline(_typeless.getPointerField(3));
+inline  ::fw::capnp::ComponentTransform::Pipeline Entity::Pipeline::getTransform() {
+  return  ::fw::capnp::ComponentTransform::Pipeline(_typeless.getPointerField(3));
 }
 #endif  // !CAPNP_LITE
-inline void Entity::Builder::setTransform( ::blood::capnp::ComponentTransform::Reader value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::set(_builder.getPointerField(
+inline void Entity::Builder::setTransform( ::fw::capnp::ComponentTransform::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::set(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS), value);
 }
-inline  ::blood::capnp::ComponentTransform::Builder Entity::Builder::initTransform() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::init(_builder.getPointerField(
+inline  ::fw::capnp::ComponentTransform::Builder Entity::Builder::initTransform() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::init(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 inline void Entity::Builder::adoptTransform(
-    ::capnp::Orphan< ::blood::capnp::ComponentTransform>&& value) {
-  ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::adopt(_builder.getPointerField(
+    ::capnp::Orphan< ::fw::capnp::ComponentTransform>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::adopt(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::blood::capnp::ComponentTransform> Entity::Builder::disownTransform() {
-  return ::capnp::_::PointerHelpers< ::blood::capnp::ComponentTransform>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> Entity::Builder::disownTransform() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::disown(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 

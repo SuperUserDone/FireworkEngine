@@ -10,9 +10,9 @@
 
 #include <Tracy.hpp>
 
-#define rapi blood::render_api_impl::get_api()
+#define rapi fw::render_api_impl::get_api()
 
-namespace blood {
+namespace fw {
 
 renderer::renderer(render_settings &p_render_settings)
     : m_settings(p_render_settings), m_camera(128, nullptr, MODE_DYNAMIC), m_fbo({800, 600})
@@ -138,4 +138,4 @@ void renderer::renderpass_postfx(texture2d &src, framebuffer_id dest, shader_pro
 
 renderer::~renderer() {}
 
-} // namespace blood
+} // namespace fw

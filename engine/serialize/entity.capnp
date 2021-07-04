@@ -1,7 +1,7 @@
 @0x9e882892f14803b6;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("blood::capnp");
+$Cxx.namespace("fw::capnp");
 
 using Vec = import "vector.capnp";
 

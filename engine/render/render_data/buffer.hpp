@@ -2,7 +2,7 @@
 
 #include "render/render_api/render_api.hpp"
 
-namespace blood {
+namespace fw {
 
 class buffer
 {
@@ -50,4 +50,4 @@ private:
     buffer &operator=(const buffer &other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

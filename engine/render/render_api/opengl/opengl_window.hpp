@@ -13,7 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
-namespace blood {
+namespace fw {
 class opengl_window
 {
 public:
@@ -21,7 +21,7 @@ public:
     {
         m_window = nullptr;
 
-        BLOODENGINE_ASSERT(SDL_Init(SDL_INIT_VIDEO) == 0, "COULD NOT INIT SDL");
+        FIREWORK_ASSERT(SDL_Init(SDL_INIT_VIDEO) == 0, "COULD NOT INIT SDL");
 
         LOG_IF("Creating window with resolution {}x{} maximized on monitor {}, with vsync = {}",
                m_settings.width,
@@ -170,4 +170,4 @@ private:
     render_settings m_settings;
     mutable bool m_close = false;
 };
-} // namespace blood
+} // namespace fw

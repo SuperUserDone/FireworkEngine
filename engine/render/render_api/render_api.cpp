@@ -2,7 +2,7 @@
 #include "render_api.hpp"
 #include "render_api_none.hpp"
 
-namespace blood {
+namespace fw {
 
 render_api *render_api_impl::m_api = nullptr;
 
@@ -22,13 +22,13 @@ render_api *render_api_impl::init(render_settings &settings)
 
 render_api *render_api_impl::get_api()
 {
-    BLOODENGINE_ASSERT(m_api, "API does not exist");
+    FIREWORK_ASSERT(m_api, "API does not exist");
     return m_api;
 }
 
 void render_api_impl::delete_api()
 {
-    BLOODENGINE_ASSERT(m_api, "API does not exist");
+    FIREWORK_ASSERT(m_api, "API does not exist");
     switch (m_api->get_impl()) {
     case RENDERER_NONE:
         delete (render_api *)m_api;
@@ -39,4 +39,4 @@ void render_api_impl::delete_api()
     }
 }
 
-} // namespace blood
+} // namespace fw

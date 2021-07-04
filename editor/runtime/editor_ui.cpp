@@ -6,11 +6,11 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
-static bool shortcut_wrapper(blood::input::mod_keys mod, blood::input::key key, bool *clicked)
+static bool shortcut_wrapper(fw::input::mod_keys mod, fw::input::key key, bool *clicked)
 {
     static bool save_pressed = false;
 
-    bool pressed = blood::input::check_shotcut(mod, key);
+    bool pressed = fw::input::check_shotcut(mod, key);
 
     if (pressed && !save_pressed) {
         *clicked = true;
@@ -96,13 +96,13 @@ static void style_editor()
 }
 
 static uint32_t curr = 0;
-static void draw_scene_info(blood::scene *scene)
+static void draw_scene_info(fw::scene *scene)
 {
     ImGui::Begin("Scene View");
 
     entt::registry &reg = scene->get_registry();
 
-    auto view = reg.view<blood::component_tag>();
+    auto view = reg.view<fw::component_tag>();
 
     int i = view.size();
 
@@ -111,7 +111,7 @@ static void draw_scene_info(blood::scene *scene)
             "##sceneview", ImVec2(-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing()))) {
         for (auto entity : view) {
 
-            auto &tag = view.get<blood::component_tag>(entity);
+            auto &tag = view.get<fw::component_tag>(entity);
 
             const bool is_selected = (curr == (uint64_t)entity);
             if (ImGui::Selectable(tag.name.c_str(), is_selected)) curr = (uint64_t)entity;
@@ -127,7 +127,7 @@ static void draw_scene_info(blood::scene *scene)
     ImGui::End();
 }
 
-static void draw_transform(blood::component_transform &comp)
+static void draw_transform(fw::component_transform &comp)
 {
     ImGui::DragFloat3("Position", &comp.pos.x, 0.01);
 
@@ -143,7 +143,7 @@ static void draw_transform(blood::component_transform &comp)
     ImGui::DragFloat3("Scale", &comp.scale.x, 0.1);
 }
 
-static void draw_camera(blood::component_camera &cam)
+static void draw_camera(fw::component_camera &cam)
 {
     ImGui::DragFloat("FOV", &cam.fov);
 
@@ -153,42 +153,42 @@ static void draw_camera(blood::component_camera &cam)
     if (preview) ImGui::Text("Not Implemented");
 }
 
-static void draw_mesh(blood::component_mesh &mesh)
+static void draw_mesh(fw::component_mesh &mesh)
 {
     // TODO
     ImGui::Text("Not Implemented");
 }
 
-static void draw_components(blood::scene *scene)
+static void draw_components(fw::scene *scene)
 {
     ImGui::Begin("Components");
 
     if (curr != 0) {
-        if (scene->get_registry().any_of<blood::component_tag>((entt::entity)curr)) {
-            auto &tag = scene->get_registry().get<blood::component_tag>((entt::entity)curr);
+        if (scene->get_registry().any_of<fw::component_tag>((entt::entity)curr)) {
+            auto &tag = scene->get_registry().get<fw::component_tag>((entt::entity)curr);
 
             ImGui::InputText("Name", &tag.name);
             ImGui::Text("ID: %X", curr);
         }
 
-        if (scene->get_registry().any_of<blood::component_camera>((entt::entity)curr)) {
+        if (scene->get_registry().any_of<fw::component_camera>((entt::entity)curr)) {
             if (ImGui::CollapsingHeader("Camera")) {
-                auto &cam = scene->get_registry().get<blood::component_camera>((entt::entity)curr);
+                auto &cam = scene->get_registry().get<fw::component_camera>((entt::entity)curr);
                 draw_camera(cam);
             }
         }
 
-        if (scene->get_registry().any_of<blood::component_transform>((entt::entity)curr)) {
+        if (scene->get_registry().any_of<fw::component_transform>((entt::entity)curr)) {
             if (ImGui::CollapsingHeader("Transform")) {
                 auto &trans =
-                    scene->get_registry().get<blood::component_transform>((entt::entity)curr);
+                    scene->get_registry().get<fw::component_transform>((entt::entity)curr);
                 draw_transform(trans);
             }
         }
 
-        if (scene->get_registry().any_of<blood::component_mesh>((entt::entity)curr)) {
+        if (scene->get_registry().any_of<fw::component_mesh>((entt::entity)curr)) {
             if (ImGui::CollapsingHeader("Mesh")) {
-                auto &mesh = scene->get_registry().get<blood::component_mesh>((entt::entity)curr);
+                auto &mesh = scene->get_registry().get<fw::component_mesh>((entt::entity)curr);
                 draw_mesh(mesh);
             }
         }
@@ -210,11 +210,11 @@ static void draw_scene(glm::uvec2 &size, size_t id)
     ImGui::End();
 }
 
-editor_ui::editor_ui(blood::scene_manager *man) : m_scene_man(man) {}
+editor_ui::editor_ui(fw::scene_manager *man) : m_scene_man(man) {}
 
 bool editor_ui::draw()
 {
-    blood::scene *scene = m_scene_man->get_active_scene();
+    fw::scene *scene = m_scene_man->get_active_scene();
     static bool styled = false;
 
     bool close = false;
@@ -230,7 +230,7 @@ bool editor_ui::draw()
     static bool show_window_components = true;
     static bool show_window_scene = true;
 
-    shortcut_wrapper(blood::input::MODKEY_CTRL, blood::input::KEY_s, &save);
+    shortcut_wrapper(fw::input::MODKEY_CTRL, fw::input::KEY_s, &save);
 
     bool load = false;
 
@@ -274,9 +274,9 @@ bool editor_ui::draw()
 
             ImGui::SameLine();
             if (ImGui::Button("Open") || entered) {
-                blood::scene *new_scene = new blood::scene();
+                fw::scene *new_scene = new fw::scene();
 
-                if (blood::scene_serializer::deserialize(
+                if (fw::scene_serializer::deserialize(
                         new_scene, "root://" + std::string(name) + ".bscn")) {
                     m_scene_man->stage_scene(new_scene);
                     m_scene_man->swap();
@@ -296,7 +296,7 @@ bool editor_ui::draw()
     if (show_window_scene) draw_scene(size, tex_id);
 
     if (save) {
-        blood::scene_serializer::serialize(scene, "root://" + scene->get_name() + ".bscn");
+        fw::scene_serializer::serialize(scene, "root://" + scene->get_name() + ".bscn");
         save = false;
     }
     return close;

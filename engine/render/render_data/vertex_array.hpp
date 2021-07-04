@@ -3,7 +3,7 @@
 #include "buffer.hpp"
 #include "render/render_api/render_api.hpp"
 
-namespace blood {
+namespace fw {
 
 class vertex_array
 {
@@ -41,4 +41,4 @@ private:
     vertex_array &operator=(const vertex_array &other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

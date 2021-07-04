@@ -2,10 +2,7 @@
 
 #include <SDL_keycode.h>
 
-namespace blood
-{
-namespace input
-{
+namespace fw { namespace input {
 
 enum key
 {
@@ -272,5 +269,4 @@ enum mod_keys
     MODKEY_GUI = KMOD_GUI,
 };
 
-} // namespace input
-} // namespace blood
+}} // namespace fw::input

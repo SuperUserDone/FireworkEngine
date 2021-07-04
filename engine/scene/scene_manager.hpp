@@ -1,15 +1,14 @@
 #pragma once
 
+#include "components.hpp"
+#include "scene.hpp"
+
 #include <atomic>
 #include <memory>
 #include <mutex>
 #include <string>
 
-#include "components.hpp"
-#include "scene.hpp"
-
-namespace blood
-{
+namespace fw {
 
 class scene_manager
 {
@@ -23,8 +22,7 @@ public:
 
     scene *get_active_scene()
     {
-        if (m_swap)
-            do_swap();
+        if (m_swap) do_swap();
         return m_active;
     }
     scene *get_staging_scene() { return m_staging; }
@@ -46,4 +44,4 @@ private:
     scene_manager &operator=(scene_manager other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

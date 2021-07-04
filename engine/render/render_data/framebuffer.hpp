@@ -6,7 +6,7 @@
 
 #include <cstring>
 
-namespace blood {
+namespace fw {
 
 static inline int DEFAULT_FRAMEBUFFER = 0;
 
@@ -44,4 +44,4 @@ private:
     framebuffer &operator=(framebuffer other) = delete;
 };
 
-} // namespace blood
+} // namespace fw

@@ -7,151 +7,151 @@
 #include <TracyOpenGL.hpp>
 #include <glad/gl.h>
 
-static GLuint to_gl_type(blood::alloc_mode mode)
+static GLuint to_gl_type(fw::alloc_mode mode)
 {
     switch (mode) {
-    case blood::MODE_DYNAMIC:
+    case fw::MODE_DYNAMIC:
         return GL_DYNAMIC_DRAW;
         break;
-    case blood::MODE_STATIC:
+    case fw::MODE_STATIC:
         return GL_STATIC_DRAW;
         break;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::shader_type type)
+static GLuint to_gl_type(fw::shader_type type)
 {
     switch (type) {
-    case blood::SHADER_VERTEX:
+    case fw::SHADER_VERTEX:
         return GL_VERTEX_SHADER;
         break;
-    case blood::SHADER_FRAGMENT:
+    case fw::SHADER_FRAGMENT:
         return GL_FRAGMENT_SHADER;
         break;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::layout_types type)
+static GLuint to_gl_type(fw::layout_types type)
 {
     switch (type) {
-    case blood::LAYOUT_FLOAT:
-    case blood::LAYOUT_FLOAT2:
-    case blood::LAYOUT_FLOAT3:
-    case blood::LAYOUT_FLOAT4:
-    case blood::LAYOUT_FLOAT_MAT4:
+    case fw::LAYOUT_FLOAT:
+    case fw::LAYOUT_FLOAT2:
+    case fw::LAYOUT_FLOAT3:
+    case fw::LAYOUT_FLOAT4:
+    case fw::LAYOUT_FLOAT_MAT4:
         return GL_FLOAT;
         break;
-    case blood::LAYOUT_INT:
-    case blood::LAYOUT_INT2:
-    case blood::LAYOUT_INT3:
-    case blood::LAYOUT_INT4:
+    case fw::LAYOUT_INT:
+    case fw::LAYOUT_INT2:
+    case fw::LAYOUT_INT3:
+    case fw::LAYOUT_INT4:
         return GL_INT;
         break;
-    case blood::LAYOUT_UINT:
-    case blood::LAYOUT_UINT2:
-    case blood::LAYOUT_UINT3:
-    case blood::LAYOUT_UINT4:
+    case fw::LAYOUT_UINT:
+    case fw::LAYOUT_UINT2:
+    case fw::LAYOUT_UINT3:
+    case fw::LAYOUT_UINT4:
         GL_UNSIGNED_INT;
         break;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::color_format fil)
+static GLuint to_gl_type(fw::color_format fil)
 {
     switch (fil) {
-    case blood::FORMAT_R:
+    case fw::FORMAT_R:
         return GL_RED;
         break;
-    case blood::FORMAT_RG:
+    case fw::FORMAT_RG:
         return GL_RG;
         break;
-    case blood::FORMAT_RGB:
+    case fw::FORMAT_RGB:
         return GL_RGB;
         break;
-    case blood::FORMAT_RGBA:
+    case fw::FORMAT_RGBA:
         return GL_RGBA;
-    case blood::FORMAT_DEPTH24_STENCIL8:
+    case fw::FORMAT_DEPTH24_STENCIL8:
         return GL_DEPTH24_STENCIL8;
         break;
-    case blood::FORMAT_DEPTH24:
+    case fw::FORMAT_DEPTH24:
         return GL_DEPTH_COMPONENT24;
         break;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::renderbuffer_format format)
+static GLuint to_gl_type(fw::renderbuffer_format format)
 {
     switch (format) {
-    case blood::RENDERBUFFER_DEPTH24_STENCIL8:
+    case fw::RENDERBUFFER_DEPTH24_STENCIL8:
         return GL_DEPTH24_STENCIL8;
         break;
-    case blood::RENDERBUFFER_DEPTH24:
+    case fw::RENDERBUFFER_DEPTH24:
         return GL_DEPTH_COMPONENT24;
         break;
     }
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::texture_filter filter, bool mipmap = false)
+static GLuint to_gl_type(fw::texture_filter filter, bool mipmap = false)
 {
     switch (filter) {
-    case blood::FILTER_LINEAR:
+    case fw::FILTER_LINEAR:
         return mipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR;
-    case blood::FILTER_NEAREST:
+    case fw::FILTER_NEAREST:
         return mipmap ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-static GLuint to_gl_type(blood::depth_test_mode mode)
+static GLuint to_gl_type(fw::depth_test_mode mode)
 {
     switch (mode) {
-    case blood::TEST_ALWAYS:
+    case fw::TEST_ALWAYS:
         return GL_ALWAYS;
         break;
-    case blood::TEST_LESS:
+    case fw::TEST_LESS:
         return GL_LESS;
         break;
-    case blood::TEST_GREATER:
+    case fw::TEST_GREATER:
         return GL_GREATER;
         break;
-    case blood::TEST_EQUAL:
+    case fw::TEST_EQUAL:
         return GL_EQUAL;
         break;
-    case blood::TEST_GEQUAL:
+    case fw::TEST_GEQUAL:
         return GL_GEQUAL;
         break;
-    case blood::TEST_LEQUAL:
+    case fw::TEST_LEQUAL:
         return GL_LEQUAL;
         break;
-    case blood::TEST_NEVER:
+    case fw::TEST_NEVER:
         return GL_NEVER;
         break;
-    case blood::TEST_NOTEQUAL:
+    case fw::TEST_NOTEQUAL:
         return GL_NOTEQUAL;
         break;
     }
 
-    BLOODENGINE_ASSERT(false, "Not implemented");
+    FIREWORK_ASSERT(false, "Not implemented");
     return 0;
 }
 
-namespace blood {
+namespace fw {
 render_api_opengl::render_api_opengl(render_settings &settings)
     : m_settings(settings), m_win(settings)
 {
@@ -558,4 +558,4 @@ glm::uvec2 render_api_opengl::getsize() { return m_win.getsize(); }
 
 render_api_opengl::~render_api_opengl() { delete_shader_program(m_error_shader); }
 
-} // namespace blood
+} // namespace fw

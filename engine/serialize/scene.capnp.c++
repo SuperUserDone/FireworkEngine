@@ -172,7 +172,7 @@ static const ::capnp::_::RawSchema* const d_e94cea6b10cd563c[] = {
 static const uint16_t m_e94cea6b10cd563c[] = {0};
 static const uint16_t i_e94cea6b10cd563c[] = {0};
 KJ_CONSTEXPR(const) ::capnp::_::RawBrandedSchema::Dependency bd_e94cea6b10cd563c[] = {
-  { 16777216,  ::blood::capnp::Map< ::capnp::AnyPointer,  ::capnp::AnyPointer>::Entry::_capnpPrivate::brand() },
+  { 16777216,  ::fw::capnp::Map< ::capnp::AnyPointer,  ::capnp::AnyPointer>::Entry::_capnpPrivate::brand() },
 };
 const ::capnp::_::RawSchema s_e94cea6b10cd563c = {
   0xe94cea6b10cd563c, b_e94cea6b10cd563c.words, 48, d_e94cea6b10cd563c, m_e94cea6b10cd563c,
@@ -368,8 +368,8 @@ static const ::capnp::_::RawSchema* const d_b1bef838f3080e38[] = {
 static const uint16_t m_b1bef838f3080e38[] = {3, 1, 0, 2};
 static const uint16_t i_b1bef838f3080e38[] = {0, 1, 2, 3};
 KJ_CONSTEXPR(const) ::capnp::_::RawBrandedSchema::Dependency bd_b1bef838f3080e38[] = {
-  { 16777217,  ::blood::capnp::Map< ::capnp::Text,  ::blood::capnp::Material>::_capnpPrivate::brand() },
-  { 16777218,  ::blood::capnp::Map< ::capnp::Text,  ::blood::capnp::Texture>::_capnpPrivate::brand() },
+  { 16777217,  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::_capnpPrivate::brand() },
+  { 16777218,  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::_capnpPrivate::brand() },
 };
 const ::capnp::_::RawSchema s_b1bef838f3080e38 = {
   0xb1bef838f3080e38, b_b1bef838f3080e38.words, 120, d_b1bef838f3080e38, m_b1bef838f3080e38,
@@ -381,7 +381,7 @@ const ::capnp::_::RawSchema s_b1bef838f3080e38 = {
 
 // =======================================================================================
 
-namespace blood {
+namespace fw {
 namespace capnp {
 
 // Texture

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string>
 
-namespace blood {
+namespace fw {
 
 enum renderer_impl
 {
@@ -34,7 +34,7 @@ struct render_settings
      * \brief
      *
      */
-    std::string name = "Blood";
+    std::string name = "Firework";
 
     /**
      * \brief Enable vsync
@@ -53,4 +53,4 @@ struct settings
 {
     render_settings renderer;
 };
-} // namespace blood
+} // namespace fw

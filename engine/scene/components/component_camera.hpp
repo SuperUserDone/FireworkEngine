@@ -3,8 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-namespace blood
-{
+namespace fw {
 
 struct component_camera
 {
@@ -19,4 +18,4 @@ struct component_camera
     }
 };
 
-} // namespace blood
+} // namespace fw

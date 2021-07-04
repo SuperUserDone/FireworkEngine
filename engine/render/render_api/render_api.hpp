@@ -7,7 +7,7 @@
 
 // class render_api;
 
-namespace blood {
+namespace fw {
 
 class render_api_impl
 {
@@ -20,4 +20,4 @@ private:
     static render_api *m_api;
 };
 
-} // namespace blood
+} // namespace fw

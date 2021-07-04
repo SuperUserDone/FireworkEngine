@@ -759,7 +759,7 @@ const ::capnp::_::RawSchema s_94d30ae2ebd3aec0 = {
 
 // =======================================================================================
 
-namespace blood {
+namespace fw {
 namespace capnp {
 
 // Vec2f

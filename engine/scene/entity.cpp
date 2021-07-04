@@ -1,10 +1,8 @@
-#include "entity.hpp"
-
 #include "components.hpp"
 #include "core/util.hpp"
+#include "entity.hpp"
 
-namespace blood
-{
+namespace fw {
 entity::entity(entt::registry *reg, const std::string &name) : entity(reg, name, get_uuid()) {}
 
 entity::entity(entt::registry *reg, const std::string &name, uint32_t id) : m_reg(reg)
@@ -17,4 +15,4 @@ entity::~entity()
 { // TODO
 }
 
-} // namespace blood
+} // namespace fw

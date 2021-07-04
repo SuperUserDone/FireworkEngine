@@ -2,8 +2,7 @@
 
 #include "util.hpp"
 
-namespace blood
-{
+namespace fw {
 class rate_limiter
 {
 public:
@@ -11,8 +10,7 @@ public:
     {
         m_time = time;
         m_time_begin = get_precise_time_us();
-        if (fps != 0)
-            m_time_target = 1000000 / fps;
+        if (fps != 0) m_time_target = 1000000 / fps;
     }
     ~rate_limiter()
     {
@@ -36,4 +34,4 @@ private:
     int m_time_target = 0;
 };
 
-} // namespace blood
+} // namespace fw

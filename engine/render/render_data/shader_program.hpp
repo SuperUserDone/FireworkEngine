@@ -2,7 +2,7 @@
 
 #include "render/render_api/render_api.hpp"
 
-namespace blood {
+namespace fw {
 
 class shader_program
 {
@@ -44,4 +44,4 @@ private:
     std::string m_vert_shader_src;
     std::string m_frag_shader_src;
 };
-} // namespace blood
+} // namespace fw

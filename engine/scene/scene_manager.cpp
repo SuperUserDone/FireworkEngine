@@ -1,18 +1,15 @@
+#include "core/logger.hpp"
 #include "scene_manager.hpp"
 
 #include <mutex>
 
-#include "core/logger.hpp"
-
-namespace blood
-{
+namespace fw {
 
 scene_manager::scene_manager() : m_active(new scene()) {}
 
 void scene_manager::stage_scene(scene *p_scene)
 {
-    if (m_staging)
-    {
+    if (m_staging) {
         delete m_staging;
     }
     m_staging = p_scene;
@@ -20,14 +17,11 @@ void scene_manager::stage_scene(scene *p_scene)
 
 void scene_manager::do_swap()
 {
-    if (m_staging != nullptr)
-    {
+    if (m_staging != nullptr) {
         scene *temp = m_active;
         m_active = m_staging;
         m_staging = temp;
-    }
-    else
-    {
+    } else {
         LOG_W("Trying to swap scene without initialising staging");
     }
 
@@ -36,11 +30,9 @@ void scene_manager::do_swap()
 
 scene_manager::~scene_manager()
 {
-    if (m_staging)
-        delete m_staging;
+    if (m_staging) delete m_staging;
 
-    if (m_active)
-        delete m_active;
+    if (m_active) delete m_active;
 }
 
-} // namespace blood
+} // namespace fw

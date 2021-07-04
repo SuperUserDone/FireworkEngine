@@ -2,12 +2,11 @@
 
 #include <string>
 
-namespace blood
-{
+namespace fw {
 
 struct component_tag
 {
     std::string name;
 };
 
-} // namespace blood
+} // namespace fw

@@ -1,8 +1,7 @@
 #include "scene.hpp"
 #include "scene/components.hpp"
 
-namespace blood
-{
+namespace fw {
 scene::scene()
 {
     // TODO
@@ -12,8 +11,7 @@ scene::scene(scene &&other) : m_back_color(other.m_back_color), m_entt(std::move
 
 scene &scene::operator=(scene &&other)
 {
-    if (this != &other)
-    {
+    if (this != &other) {
         m_entt = std::move(other.m_entt);
         m_back_color = other.m_back_color;
     }
@@ -34,4 +32,4 @@ entity scene::create_entity(const std::string &name, uint32_t id)
 {
     return entity(&m_entt, name, id);
 }
-} // namespace blood
+} // namespace fw

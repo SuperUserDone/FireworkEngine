@@ -19,7 +19,7 @@ int main(int argc, const char *argv[])
         return 0;
     }
 
-    blood::vfs::vfs_register(args.project_location, "root");
+    fw::vfs::vfs_register(args.project_location, "root");
 
     editor_loop loop;
 
@@ -30,13 +30,13 @@ int main(int argc, const char *argv[])
     auto entity = scene->create_entity("Test");
     auto cam = scene->create_entity("Cam");
 
-    blood::component_camera &camera = cam.add_component<blood::component_camera>();
-    blood::component_transform &camera_transform = cam.add_component<blood::component_transform>();
+    fw::component_camera &camera = cam.add_component<fw::component_camera>();
+    fw::component_transform &camera_transform = cam.add_component<fw::component_transform>();
 
     camera_transform.pos = {0, 0, 3};
 
-    blood::component_transform &transform = entity.add_component<blood::component_transform>();
-    blood::component_mesh &mesh = entity.add_component<blood::component_mesh>();
+    fw::component_transform &transform = entity.add_component<fw::component_transform>();
+    fw::component_mesh &mesh = entity.add_component<fw::component_mesh>();
 
     mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
     mesh.indicies = {0, 1, 2};

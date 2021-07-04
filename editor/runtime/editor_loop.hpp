@@ -5,7 +5,7 @@
 
 class editor_ui;
 
-class editor_loop : public blood::loop
+class editor_loop : public fw::loop
 {
 public:
     /**

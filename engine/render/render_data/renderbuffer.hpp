@@ -2,7 +2,7 @@
 
 #include "render/render_api/render_api.hpp"
 
-namespace blood {
+namespace fw {
 
 class renderbuffer
 {
@@ -31,4 +31,4 @@ private:
     renderbuffer &operator=(renderbuffer other) = delete;
 };
 
-}; // namespace blood
+}; // namespace fw

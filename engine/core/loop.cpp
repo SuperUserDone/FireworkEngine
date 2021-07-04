@@ -2,8 +2,8 @@
 #include "loop.hpp"
 #include "rate_limiter.hpp"
 
-namespace blood {
-loop::loop() : loop("bloodlog.txt", "Starting bloodengine Player") {}
+namespace fw {
+loop::loop() : loop("firelog.txt", "Starting firework engine Player") {}
 
 loop::loop(const std::string &logname, const std::string &name)
 {
@@ -110,4 +110,4 @@ void loop::render(double frametime)
     }
 }
 
-} // namespace blood
+} // namespace fw

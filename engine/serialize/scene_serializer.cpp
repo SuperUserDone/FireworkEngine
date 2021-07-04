@@ -4,7 +4,7 @@
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
 
-namespace blood {
+namespace fw {
 
 template <typename T, typename B>
 static void write_vec3(const T &vec3, B &target)
@@ -214,7 +214,7 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
                 }
 
                 for (auto n_vertex : verticies) {
-                    blood::vertex vertex_a;
+                    fw::vertex vertex_a;
                     read_vertex(vertex_a, n_vertex);
                     comp.verticies.push_back(vertex_a);
                 }
@@ -227,4 +227,4 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
     fclose(fp);
     return true;
 }
-} // namespace blood
+} // namespace fw

@@ -1,7 +1,7 @@
 #pragma once
 #include "scene/components.hpp"
 
-static const inline std::vector<blood::vertex> quad_vertex_data = {{{
+static const inline std::vector<fw::vertex> quad_vertex_data = {{{
                                                                         1.f,
                                                                         1.f,
                                                                         0.0f,

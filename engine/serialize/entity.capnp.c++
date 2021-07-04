@@ -344,7 +344,7 @@ const ::capnp::_::RawSchema s_be87ccb5daae5404 = {
 
 // =======================================================================================
 
-namespace blood {
+namespace fw {
 namespace capnp {
 
 // ComponentCamera

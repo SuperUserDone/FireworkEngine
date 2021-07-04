@@ -80,18 +80,18 @@
     }
 
 #ifndef NDEBUG
-#define BLOODENGINE_ASSERT(c, s)                                                                   \
+#define FIREWORK_ASSERT(c, s)                                                                      \
     if (!(c)) LOG_F(s);                                                                            \
     assert(c);
 
-#define BLOODENGINE_ASSERTF(c, s, ...)                                                             \
+#define FIREWORK_ASSERTF(c, s, ...)                                                                \
     if (!(c)) LOG_FF(s, __VA_ARGS__);                                                              \
     assert(c);
 
 #else
-#define BLOODENGINE_ASSERT(c, s) ;
+#define FIREWORK_ASSERT(c, s) ;
 
-#define BLOODENGINE_ASSERTF(c, s, ...) ;
+#define FIREWORK_ASSERTF(c, s, ...) ;
 
 #endif
 

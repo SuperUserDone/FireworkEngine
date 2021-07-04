@@ -2,7 +2,7 @@
 
 #include "framebuffer.hpp"
 
-namespace blood {
+namespace fw {
 
 class framebuffer_screen
 {
@@ -41,4 +41,4 @@ private:
     framebuffer m_draw_fbo;
 };
 
-} // namespace blood
+} // namespace fw

@@ -7,7 +7,7 @@
 class editor_ui
 {
 public:
-    editor_ui(blood::scene_manager *man);
+    editor_ui(fw::scene_manager *man);
 
     glm::uvec2 get_size() { return size; }
 
@@ -22,5 +22,5 @@ private:
 
     size_t tex_id;
 
-    blood::scene_manager *m_scene_man;
+    fw::scene_manager *m_scene_man;
 };

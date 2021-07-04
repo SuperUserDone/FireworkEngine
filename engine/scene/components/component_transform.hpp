@@ -4,8 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-namespace blood
-{
+namespace fw {
 
 struct component_transform
 {
@@ -24,4 +23,4 @@ struct component_transform
     }
 };
 
-} // namespace blood
+} // namespace fw

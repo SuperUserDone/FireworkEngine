@@ -2,16 +2,16 @@
 
 #include <string>
 
-struct marrow_arguments
+struct program_args
 {
     std::string project_location;
 };
 
 inline void print_usage() { puts("Usage:\nmarrow-editor -p/--project <project>\n"); }
 
-inline marrow_arguments parse_args(int argc, const char **argv)
+inline program_args parse_args(int argc, const char **argv)
 {
-    marrow_arguments args;
+    program_args args;
 
     for (size_t i = 1; i < argc; i++)
     {

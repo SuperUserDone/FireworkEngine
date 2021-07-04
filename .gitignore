@@ -1,8 +1,8 @@
 build
 .vscode
 .cache
-bloodlog.txt
-marrowlog.txt
+firelog.txt
+fireeditlog.txt
 imgui.ini
 .ccls-cache
 compile_commands.json

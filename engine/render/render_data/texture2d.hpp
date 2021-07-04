@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-namespace blood {
+namespace fw {
 
 class texture2d
 {
@@ -20,7 +20,7 @@ public:
     texture2d(const texture2d &other) { *this = other; }
     ~texture2d()
     {
-        if (m_id != nullptr) blood::render_api_impl::get_api()->delete_texture2d(m_id);
+        if (m_id != nullptr) fw::render_api_impl::get_api()->delete_texture2d(m_id);
     }
 
     texture2d &operator=(texture2d &&other)
@@ -40,7 +40,7 @@ public:
     texture2d &operator=(const texture2d &other)
     {
         if (this != &other) {
-            m_id = blood::render_api_impl::get_api()->alloc_texture2d();
+            m_id = fw::render_api_impl::get_api()->alloc_texture2d();
 
             m_x = other.m_x;
             m_y = other.m_y;
@@ -99,4 +99,4 @@ private:
     uint32_t m_y;
 };
 
-}; // namespace blood
+}; // namespace fw

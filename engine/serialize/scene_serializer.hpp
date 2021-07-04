@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <string>
 
-namespace blood {
+namespace fw {
 
 class scene_serializer
 {
@@ -18,4 +18,4 @@ public:
 
 private:
 };
-} // namespace blood
+} // namespace fw
