@@ -2,7 +2,7 @@
 #include "editor_loop.hpp"
 #include "editor_ui.hpp"
 
-editor_loop::editor_loop() : loop("marrowlog.txt", "starting Marrow Editor")
+editor_loop::editor_loop() : loop("fireeditlog.txt", "starting firework Editor")
 {
     m_ui = std::make_shared<editor_ui>(m_scene_manager.get());
 }
@@ -42,8 +42,7 @@ void editor_loop::render(double frametime)
 
     // Update scripts
     {
-        auto view =
-            m_scene_manager->get_active_scene()->m_entt.view<fw::component_nativescript>();
+        auto view = m_scene_manager->get_active_scene()->m_entt.view<fw::component_nativescript>();
 
         for (auto ent : view) {
             auto &script = view.get<fw::component_nativescript>(ent);
