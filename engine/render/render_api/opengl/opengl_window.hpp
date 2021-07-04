@@ -3,6 +3,7 @@
 #include "core/logger.hpp"
 #include "core/settings.hpp"
 #include "glad/gl.h"
+#include "render/fonts/NotoSans-Regular.hpp"
 
 #include <SDL.h>
 #include <Tracy.hpp>
@@ -106,9 +107,8 @@ public:
         // Style
         ImGui::StyleColorsDark();
 
-        LOG_I("Loading font NotoSans-Regular.ttf")
-
-        io.Fonts->AddFontFromFileTTF("./font/NotoSans-Regular.ttf", 18.594061258312f);
+        io.Fonts->AddFontFromMemoryCompressedTTF(
+            NotoSans_compressed_data, NotoSans_compressed_size, 18.594061258312f);
 
         // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look
         // identical to regular ones.
