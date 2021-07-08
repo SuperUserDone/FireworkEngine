@@ -36,11 +36,18 @@ int main(int argc, const char *argv[])
     camera_transform.pos = {0, 0, 3};
 
     fw::component_transform &transform = entity.add_component<fw::component_transform>();
-    fw::component_mesh &mesh = entity.add_component<fw::component_mesh>();
+    fw::component_mesh &comp_mesh = entity.add_component<fw::component_mesh>();
 
-    mesh.verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
-    mesh.indicies = {0, 1, 2};
-    mesh.update();
+    scene->get_meshes()["Mesh1"] = fw::make_ref<fw::mesh>();
+
+    auto mesh = scene->get_meshes()["Mesh1"];
+
+    mesh->verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
+    mesh->indicies = {0, 1, 2};
+    mesh->update();
+
+    comp_mesh.mesh_ref = mesh;
+    comp_mesh.named_ref = "Mesh1";
 
     transform.pos = {0, 0, 2};
 

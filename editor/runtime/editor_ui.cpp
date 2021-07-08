@@ -210,6 +210,21 @@ static void draw_scene(glm::uvec2 &size, size_t id)
     ImGui::End();
 }
 
+static void draw_window_meshes(fw::scene *scene, bool *close)
+{
+    ImGui::Begin("Meshes", close);
+
+    for (auto &&mesh : scene->get_meshes()) {
+        auto [ref, a] = mesh;
+
+        if (a == nullptr) continue;
+
+        ImGui::Text("%s || %s", ref.c_str(), a->m_path.c_str());
+    }
+
+    ImGui::End();
+}
+
 editor_ui::editor_ui(fw::scene_manager *man) : m_scene_man(man) {}
 
 bool editor_ui::draw()
@@ -229,6 +244,7 @@ bool editor_ui::draw()
     static bool show_window_scene_view = true;
     static bool show_window_components = true;
     static bool show_window_scene = true;
+    static bool show_window_meshes = true;
 
     shortcut_wrapper(fw::input::MODKEY_CTRL, fw::input::KEY_s, &save);
 
@@ -250,6 +266,7 @@ bool editor_ui::draw()
             ImGui::MenuItem("Scene", nullptr, &show_window_scene);
             ImGui::MenuItem("Scene View", nullptr, &show_window_scene_view);
             ImGui::MenuItem("Components", nullptr, &show_window_components);
+            ImGui::MenuItem("Meshes", nullptr, &show_window_meshes);
 
             ImGui::EndMenu();
         }
@@ -294,6 +311,7 @@ bool editor_ui::draw()
     if (show_window_scene_view) draw_scene_info(scene);
     if (show_window_components) draw_components(scene);
     if (show_window_scene) draw_scene(size, tex_id);
+    if (show_window_meshes) draw_window_meshes(scene, &show_window_meshes);
 
     if (save) {
         fw::scene_serializer::serialize(scene, "root://" + scene->get_name() + ".bscn");

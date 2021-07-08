@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/loop.hpp"
+#include "core/util.hpp"
 #include "editor_camera.hpp"
 
 class editor_ui;
@@ -32,7 +33,7 @@ public:
 private:
     editor_camera m_edit_cam;
 
-    std::shared_ptr<editor_ui> m_ui;
+    fw::ref<editor_ui> m_ui;
 
 protected:
     virtual void render(double frametime) override;

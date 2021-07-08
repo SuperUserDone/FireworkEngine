@@ -3,6 +3,7 @@
 #include "core/logger.hpp"
 #include "core/settings.hpp"
 #include "glad/gl.h"
+#include "render/fonts/JetBrains-Mono-Regular-Nerd.hpp"
 #include "render/fonts/NotoSans-Regular.hpp"
 
 #include <SDL.h>
@@ -62,10 +63,10 @@ public:
             LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL");
         }
 
-        if (!GLAD_GL_VERSION_4_2) {
+        if (!GLAD_GL_VERSION_4_5) {
             SDL_ShowSimpleMessageBox(
-                SDL_MESSAGEBOX_ERROR, "COULD NOT LOAD OPENGL >= 4.2", "ERROR", m_window);
-            LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL >= 4.2");
+                SDL_MESSAGEBOX_ERROR, "COULD NOT LOAD OPENGL >= 4.5", "ERROR", m_window);
+            LOG_RUNTIME_ERROR("COULD NOT LOAD OPENGL >= 4.5");
         }
 
         SDL_GL_MakeCurrent(m_window, m_context);
@@ -110,6 +111,10 @@ public:
         io.Fonts->AddFontFromMemoryCompressedTTF(
             NotoSans_compressed_data, NotoSans_compressed_size, 18.594061258312f);
 
+        io.Fonts->AddFontFromMemoryCompressedTTF(JetBrains_Mono_Regular_Nerd_compressed_data,
+                                                 JetBrains_Mono_Regular_Nerd_compressed_size,
+                                                 18.594061258312f);
+
         // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look
         // identical to regular ones.
         ImGuiStyle &style = ImGui::GetStyle();
@@ -120,7 +125,7 @@ public:
 
         // Setup Platform/Renderer backends
         ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
-        ImGui_ImplOpenGL3_Init("#version 400");
+        ImGui_ImplOpenGL3_Init("#version 450");
     }
 
     glm::uvec2 getsize()

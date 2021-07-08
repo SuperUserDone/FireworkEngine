@@ -4,7 +4,7 @@
 
 editor_loop::editor_loop() : loop("fireeditlog.txt", "starting firework Editor")
 {
-    m_ui = std::make_shared<editor_ui>(m_scene_manager.get());
+    m_ui = fw::make_ref<editor_ui>(m_scene_manager.get());
 }
 
 editor_loop::~editor_loop() { m_stop = true; }

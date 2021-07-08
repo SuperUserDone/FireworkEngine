@@ -6,6 +6,7 @@
 #include "render/renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene_manager.hpp"
+#include "util.hpp"
 
 #include <atomic>
 #include <condition_variable>
@@ -92,7 +93,7 @@ protected:
     float m_tps_strech = 1.0f;
 
     renderer *m_renderer = nullptr;
-    std::shared_ptr<scene_manager> m_scene_manager = nullptr;
+    ref<scene_manager> m_scene_manager = nullptr;
 
     bool m_stop = false;
     bool m_pause = false;

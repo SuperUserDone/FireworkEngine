@@ -49,7 +49,7 @@ struct ComponentMesh {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(90853abb41461dcd, 0, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(90853abb41461dcd, 0, 1)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -191,11 +191,8 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  inline bool hasVerticies() const;
-  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader getVerticies() const;
-
-  inline bool hasIndicies() const;
-  inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Reader getIndicies() const;
+  inline bool hasRefrence() const;
+  inline  ::capnp::Text::Reader getRefrence() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -225,20 +222,12 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  inline bool hasVerticies();
-  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder getVerticies();
-  inline void setVerticies( ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value);
-  inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder initVerticies(unsigned int size);
-  inline void adoptVerticies(::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value);
-  inline ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>> disownVerticies();
-
-  inline bool hasIndicies();
-  inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Builder getIndicies();
-  inline void setIndicies( ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Reader value);
-  inline void setIndicies(::kj::ArrayPtr<const  ::uint32_t> value);
-  inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Builder initIndicies(unsigned int size);
-  inline void adoptIndicies(::capnp::Orphan< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>&& value);
-  inline ::capnp::Orphan< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>> disownIndicies();
+  inline bool hasRefrence();
+  inline  ::capnp::Text::Builder getRefrence();
+  inline void setRefrence( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initRefrence(unsigned int size);
+  inline void adoptRefrence(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownRefrence();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -533,76 +522,38 @@ inline void ComponentCamera::Builder::setFov(float value) {
       ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
 }
 
-inline bool ComponentMesh::Reader::hasVerticies() const {
+inline bool ComponentMesh::Reader::hasRefrence() const {
   return !_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline bool ComponentMesh::Builder::hasVerticies() {
+inline bool ComponentMesh::Builder::hasRefrence() {
   return !_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader ComponentMesh::Reader::getVerticies() const {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_reader.getPointerField(
+inline  ::capnp::Text::Reader ComponentMesh::Reader::getRefrence() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::getVerticies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::get(_builder.getPointerField(
+inline  ::capnp::Text::Builder ComponentMesh::Builder::getRefrence() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline void ComponentMesh::Builder::setVerticies( ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Reader value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::set(_builder.getPointerField(
+inline void ComponentMesh::Builder::setRefrence( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), value);
 }
-inline  ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>::Builder ComponentMesh::Builder::initVerticies(unsigned int size) {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::init(_builder.getPointerField(
+inline  ::capnp::Text::Builder ComponentMesh::Builder::initRefrence(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), size);
 }
-inline void ComponentMesh::Builder::adoptVerticies(
-    ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>&& value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::adopt(_builder.getPointerField(
+inline void ComponentMesh::Builder::adoptRefrence(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>> ComponentMesh::Builder::disownVerticies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Vertex,  ::capnp::Kind::STRUCT>>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::capnp::Text> ComponentMesh::Builder::disownRefrence() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
-}
-
-inline bool ComponentMesh::Reader::hasIndicies() const {
-  return !_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline bool ComponentMesh::Builder::hasIndicies() {
-  return !_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Reader ComponentMesh::Reader::getIndicies() const {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::get(_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Builder ComponentMesh::Builder::getIndicies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::get(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline void ComponentMesh::Builder::setIndicies( ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Reader value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::set(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
-}
-inline void ComponentMesh::Builder::setIndicies(::kj::ArrayPtr<const  ::uint32_t> value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::set(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
-}
-inline  ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>::Builder ComponentMesh::Builder::initIndicies(unsigned int size) {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::init(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), size);
-}
-inline void ComponentMesh::Builder::adoptIndicies(
-    ::capnp::Orphan< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>&& value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
-}
-inline ::capnp::Orphan< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>> ComponentMesh::Builder::disownIndicies() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::uint32_t,  ::capnp::Kind::PRIMITIVE>>::disown(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool ComponentTransform::Reader::hasPos() const {

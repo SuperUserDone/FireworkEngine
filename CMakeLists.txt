@@ -8,6 +8,25 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(BUILD_SHARED_LIBS
+    OFF
+    CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSIMP_TOOLS
+    OFF
+    CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS
+    OFF
+    CACHE BOOL "" FORCE)
+set(INJECT_DEBUG_POSTFIX
+    OFF
+    CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL_PDB
+    OFF
+    CACHE BOOL "" FORCE)
+set(BUILD_TESTING
+    OFF
+    CACHE BOOL "" FORCE)
+
 include_directories(
   "extern/capnp/c++"
   "engine"
@@ -21,11 +40,9 @@ include_directories(
 
 # add_definitions(-DTRACY_ENABLE)
 
-set(BUILD_TESTING
-    OFF
-    CACHE BOOL "" FORCE)
 add_subdirectory(extern/capnp)
 
+add_subdirectory(extern/assimp)
 add_subdirectory(extern/fmt)
 add_subdirectory(extern/sdl)
 add_subdirectory(extern/freetype)
@@ -33,6 +50,7 @@ add_subdirectory(extern/freetype)
 add_subdirectory(engine)
 add_subdirectory(player)
 add_subdirectory(editor)
+add_subdirectory(converter)
 
 if(UNIX)
   add_library(tracy SHARED "extern/tracy/TracyClient.cpp")

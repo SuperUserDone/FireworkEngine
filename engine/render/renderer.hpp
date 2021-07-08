@@ -39,7 +39,7 @@ private:
 
     buffer m_camera;
 
-    component_mesh m_quad_mesh;
+    mesh m_quad_mesh;
 
     shader_program m_fullscreen_shader;
     shader_program m_outline_shader;

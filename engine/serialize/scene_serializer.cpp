@@ -1,86 +1,12 @@
 #include "scene.capnp.h"
 #include "scene_serializer.hpp"
+#include "vec_readers.hpp"
+#include "vfs/loader.hpp"
 
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
 
 namespace fw {
-
-template <typename T, typename B>
-static void write_vec3(const T &vec3, B &target)
-{
-    target.setX(vec3.x);
-    target.setY(vec3.y);
-    target.setZ(vec3.z);
-}
-
-template <typename T, typename B>
-static void write_vec4(const T &vec3, B &target)
-{
-    target.setX(vec3.x);
-    target.setY(vec3.y);
-    target.setZ(vec3.z);
-    target.setW(vec3.w);
-}
-
-template <typename T, typename B>
-static void write_vec2(const T &vec3, B &target)
-{
-    target.setX(vec3.x);
-    target.setY(vec3.y);
-}
-
-template <typename T, typename B>
-static void read_vec3(T &vec3, const B &target)
-{
-    vec3.x = target.getX();
-    vec3.y = target.getY();
-    vec3.z = target.getZ();
-}
-
-template <typename T, typename B>
-static void read_vec4(T &vec3, const B &target)
-{
-    vec3.x = target.getX();
-    vec3.y = target.getY();
-    vec3.z = target.getZ();
-    vec3.w = target.getW();
-}
-
-template <typename T, typename B>
-static void read_vec2(T &vec2, const B &target)
-{
-    vec2.x = target.getX();
-    vec2.y = target.getY();
-}
-
-template <typename T, typename B>
-static void write_vertex(const T &vert, B &target)
-{
-    auto pos = target.getPos();
-    auto norm = target.getNorm();
-    auto tan = target.getTan();
-    auto uvs = target.getUv();
-
-    write_vec3(vert.pos, pos);
-    write_vec3(vert.norm, norm);
-    write_vec3(vert.tan, tan);
-    write_vec2(vert.uvs, uvs);
-}
-
-template <typename T, typename B>
-static void read_vertex(T &vert, const B &target)
-{
-    auto pos = target.getPos();
-    auto norm = target.getNorm();
-    auto tan = target.getTan();
-    auto uvs = target.getUv();
-
-    read_vec3(vert.pos, pos);
-    read_vec3(vert.norm, norm);
-    read_vec3(vert.tan, tan);
-    read_vec2(vert.uvs, uvs);
-}
 
 bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 {
@@ -96,6 +22,26 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
     auto entities = scene_ser.initEntities(reg.alive());
 
     int entities_count = 0;
+
+    // TODO save textures
+
+    auto &meshes = ptr->get_meshes();
+    auto smeshes = scene_ser.initMeshes().initEntries(ptr->get_meshes().size());
+
+    int i = 0;
+    for (auto &&mesh_data : meshes) {
+        auto mesh_ser = smeshes[i];
+
+        auto &[key, value] = mesh_data;
+
+        if (!value->save_to_file()) {
+            value->m_path = "root://" + key + ".fwmesh";
+            value->save_to_file();
+        }
+
+        mesh_ser.setKey(key);
+        mesh_ser.getValue().setPath(value->m_path);
+    }
 
     reg.each([&](auto entity) {
         if (reg.all_of<component_tag>(entity)) {
@@ -132,25 +78,7 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
                 component_mesh &mesh = reg.get<component_mesh>(entity);
 
                 auto mesh_ser = entities[entities_count].initMesh();
-
-                auto vert = mesh_ser.initVerticies(mesh.verticies.size());
-                auto ind = mesh_ser.initIndicies(mesh.indicies.size());
-
-                int i = 0;
-
-                for (auto &a : mesh.verticies) {
-                    auto vertex = vert[i];
-
-                    write_vertex(a, vertex);
-                    i++;
-                }
-
-                i = 0;
-                for (auto &a : mesh.indicies) {
-                    ind.set(i, a);
-
-                    i++;
-                }
+                mesh_ser.setRefrence(mesh.named_ref);
             }
         }
         entities_count++;
@@ -172,6 +100,26 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
     capnp::Scene::Reader scene_ser = msg.getRoot<capnp::Scene>();
 
     auto &reg = ptr->get_registry();
+
+    // TODO load textures
+
+    auto meshes = scene_ser.getMeshes().getEntries();
+
+    for (auto m : meshes) {
+        std::string key = m.getKey().cStr();
+        std::string path = m.getValue().getPath().cStr();
+
+        action act;
+
+        auto n_mesh = make_ref<mesh>();
+
+        ptr->get_meshes()[key] = n_mesh;
+
+        act.async_action = [n_mesh, path]() { n_mesh->load_from_file(path); };
+        act.post_sync_action = [n_mesh]() { n_mesh->update(); };
+
+        loader::get_instance().queue_action(act);
+    }
 
     if (scene_ser.hasName()) ptr->set_name(scene_ser.getName());
     if (scene_ser.hasEntities()) {
@@ -203,23 +151,10 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
                 auto mesh = a.getMesh();
                 auto &comp = entity_new.add_component<component_mesh>();
 
-                auto indicies = mesh.getIndicies();
-                auto verticies = mesh.getVerticies();
+                comp.named_ref = mesh.getRefrence().cStr();
+                comp.mesh_ref = ptr->meshes[comp.named_ref];
 
-                comp.indicies.reserve(indicies.size());
-                comp.verticies.reserve(verticies.size());
-
-                for (uint32_t ind : indicies) {
-                    comp.indicies.push_back(ind);
-                }
-
-                for (auto n_vertex : verticies) {
-                    fw::vertex vertex_a;
-                    read_vertex(vertex_a, n_vertex);
-                    comp.verticies.push_back(vertex_a);
-                }
-
-                comp.update();
+                int a = 1 + 1;
             }
         }
     }

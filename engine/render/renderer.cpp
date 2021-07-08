@@ -7,6 +7,7 @@
 #include "renderer.hpp"
 #include "scene/components.hpp"
 #include "scene/scene.hpp"
+#include "vfs/loader.hpp"
 
 #include <Tracy.hpp>
 
@@ -99,6 +100,8 @@ void renderer::render_editor(const scene *scene,
 
 void renderer::renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj)
 {
+    loader::get_instance().update();
+
     ZoneScopedN("Geometry pass");
     rapi->clear(glm::vec4(scene->m_back_color, 1.f));
 
@@ -114,9 +117,11 @@ void renderer::renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::m
     for (auto c : meshes) {
         auto [trans, mesh] = meshes.get(c);
 
-        rapi->draw_elements(mesh.m_vao.get_id(),
-                            mesh.m_index_buf.get_id(),
-                            mesh.indicies.size(),
+        if (mesh.mesh_ref == nullptr) continue;
+
+        rapi->draw_elements(mesh.mesh_ref->m_vao.get_id(),
+                            mesh.mesh_ref->m_index_buf.get_id(),
+                            mesh.mesh_ref->indicies.size(),
                             trans,
                             nullptr,
                             {});

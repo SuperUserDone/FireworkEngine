@@ -15,6 +15,15 @@
 
 namespace fw {
 
+template <typename T>
+using ref = std::shared_ptr<T>;
+
+template <typename T, typename... Args>
+constexpr ref<T> make_ref(Args &&...args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
 #ifdef __linux__
 
 inline void sleep_precise(uint64_t time_us)

@@ -14,8 +14,7 @@ struct ComponentCamera
 
 struct ComponentMesh
 {
-    verticies @0 :List(Vec.Vertex);
-    indicies @1 :List(UInt32);
+    refrence @0 :Text;
 }
 
 struct ComponentTransform

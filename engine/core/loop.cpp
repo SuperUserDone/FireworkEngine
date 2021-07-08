@@ -1,6 +1,7 @@
 #include "imgui.h"
 #include "loop.hpp"
 #include "rate_limiter.hpp"
+#include "vfs/loader.hpp"
 
 namespace fw {
 loop::loop() : loop("firelog.txt", "Starting firework engine Player") {}
@@ -11,11 +12,14 @@ loop::loop(const std::string &logname, const std::string &name)
     Logger::init_logger(0, logname);
     LOG_I(name)
 
+    // Init Loader
+    loader::get_instance();
+
     // init renderer
     render_api_impl::init(m_settings.renderer);
     m_renderer = new renderer(m_settings.renderer);
 
-    m_scene_manager = std::make_shared<scene_manager>();
+    m_scene_manager = make_ref<scene_manager>();
 }
 
 loop::~loop()
