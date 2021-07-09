@@ -42,9 +42,9 @@ endif(MSVC)
 
 target_link_libraries(
   firework-engine
-  SDL2-static
+  SDL2::SDL2
   ${ENGINE_LINK}
   freetype
   fmt::fmt
-  capnp
-  kj)
+  CapnProto::kj
+  CapnProto::capnp)

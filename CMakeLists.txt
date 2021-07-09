@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.20.0)
 
+set(CMAKE_TOOLCHAIN_FILE
+    ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
+    CACHE STRING "Vcpkg toolchain file")
+
 project(
   FireworkEngine
   LANGUAGES CXX
@@ -7,25 +11,6 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(BUILD_SHARED_LIBS
-    OFF
-    CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_ASSIMP_TOOLS
-    OFF
-    CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_TESTS
-    OFF
-    CACHE BOOL "" FORCE)
-set(INJECT_DEBUG_POSTFIX
-    OFF
-    CACHE BOOL "" FORCE)
-set(ASSIMP_INSTALL_PDB
-    OFF
-    CACHE BOOL "" FORCE)
-set(BUILD_TESTING
-    OFF
-    CACHE BOOL "" FORCE)
 
 include_directories(
   "extern/capnp/c++"
@@ -40,12 +25,11 @@ include_directories(
 
 # add_definitions(-DTRACY_ENABLE)
 
-add_subdirectory(extern/capnp)
-
-add_subdirectory(extern/assimp)
-add_subdirectory(extern/fmt)
-add_subdirectory(extern/sdl)
-add_subdirectory(extern/freetype)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(fmt CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
+find_package(CapnProto CONFIG REQUIRED)
+find_package(freetype CONFIG REQUIRED)
 
 add_subdirectory(engine)
 add_subdirectory(player)

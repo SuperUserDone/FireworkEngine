@@ -1,117 +1,69 @@
-name: CMake
+# Copyright (c) 2021 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
 
-# Controls when the action will run. Triggers the workflow on push
-on:
-    push:
-    pull_request:
-    release:
-        # tags:
-        # - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+# A GitHub workflow using CMake, Ninja and vcpkg.
+# It is called "pure" because it is an example which minimizes the usage of custom GitHub actions, but leverages directly the tools that could be easily run on your development machines (i.e. CMake, vcpkg, Ninja).
+name: hosted-pure-workflow
+on: [push]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    # This workflow contains a single job called "build"
-    build:
-        # The type of runner that the job will run on
-        name: ${{ matrix.config.name }}
-        runs-on: ${{ matrix.config.os }}
+    job:
+        name: ${{ matrix.os }}-hosted-pure
+        runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
             matrix:
-                config:
-                    - {
-                          name: "Windows Latest MSVC",
-                          os: windows-latest,
-                          artifact: "windows_msvc.7z",
-                          build_type: "Release",
-                          cc: "cl",
-                          cxx: "cl",
-                          environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
-                          archiver: "7z a",
-                          generators: "Visual Studio 16 2019",
-                      }
-                    - {
-                          name: "Windows Latest Clang",
-                          os: windows-latest,
-                          artifact: "windows_clang.7z",
-                          build_type: "Release",
-                          cc: "clang",
-                          cxx: "clang",
-                          environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
-                          archiver: "7z a",
-                          generators: "Ninja",
-                      }
-                    - {
-                          name: "Ubuntu_Latest_GCC",
-                          os: ubuntu-latest,
-                          artifact: "ubuntu_gcc.7z",
-                          build_type: "Release",
-                          cc: "gcc",
-                          cxx: "g++",
-                          archiver: "7z a",
-                          generators: "Ninja",
-                      }
+                os: [ubuntu-latest, windows-latest]
+                include:
+                    - os: windows-latest
+                      triplet: x64-windows
+                    - os: ubuntu-latest
+                      triplet: x64-linux
+        env:
+            # Indicates the CMake build directory where project files and binaries are being produced.
+            CMAKE_BUILD_DIR: ${{ github.workspace }}/build/
+            # Indicates the location of the vcpkg as a Git submodule of the project repository.
+            VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
         steps:
-            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
               with:
-                  submodules: recursive
+                  submodules: true
 
-            - name: Print env
-              shell: bash
-              run: |
-                  echo github.event.action: ${{ github.event.action }}
-                  echo github.event_name: ${{ github.event_name }}
-            - name: set clang env path
-              if: runner.os == 'Windows'
-              shell: bash
-              run: |
-                  echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
-            - name: Install dependencies on windows
-              if: startsWith(matrix.config.os, 'windows')
-              shell: bash
-              run: |
-                  clang --version
-                  choco install ninja cmake
-                  ninja --version
-                  cmake --version
-
-            - name: Install dependencies on ubuntu
-              if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install ninja-build cmake
-                  ninja --version
-                  cmake --version
-
-            - name: Configure
-              shell: bash
-              run: |
-                  mkdir build
-                  mkdir instdir
-                  cmake \
-                    -S . \
-                    -B ./build \
-                    -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-                    -G "${{ matrix.config.generators }}" \
-                    -DCMAKE_INSTALL_PREFIX:PATH=instdir
-            - name: Build
-              shell: bash
-              run: cmake --build ./build --config ${{ matrix.config.build_type }} -j4
-
-            # - name: Install Strip
-            #   shell: bash
-            #   run: cmake --install . --strip
-
-            - name: Pack
-              shell: bash
-              working-directory: build
-              run: |
-                  ls -laR
-                  ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }} .
-            - name: Upload
-              uses: actions/upload-artifact@v1
+            # Setup the build machine with the most recent versions of CMake and Ninja. Both are cached if not already: on subsequent runs both will be quickly restored from GitHub cache service.
+            - uses: lukka/get-cmake@latest
+            # Restore both vcpkg and its artifacts from the GitHub cache service.
+            - name: Restore vcpkg and its artifacts.
+              uses: actions/cache@v2
               with:
-                  path: ./${{ matrix.config.artifact }}
-                  name: ${{ matrix.config.artifact }}
+                  # The first path is where vcpkg generates artifacts while consuming the vcpkg.json manifest file.
+                  # The second path is the location of vcpkg (it contains the vcpkg executable and data files).
+                  # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
+                  path: |
+                      ${{ env.CMAKE_BUILD_DIR }}/vcpkg_installed/
+                      ${{ env.VCPKG_ROOT }}
+                      !${{ env.VCPKG_ROOT }}/buildtrees
+                      !${{ env.VCPKG_ROOT }}/packages
+                      !${{ env.VCPKG_ROOT }}/downloads
+                  # The key is composed in a way that it gets properly invalidated: this must happen whenever vcpkg's Git commit id changes, or the list of packages changes. In this case a cache miss must happen and a new entry with a new key with be pushed to GitHub the cache service.
+                  # The key includes: hash of the vcpkg.json file, the hash of the vcpkg Git commit id, and the used vcpkg's triplet. The vcpkg's commit id would suffice, but computing an hash out it does not harm.
+                  # Note: given a key, the cache content is immutable. If a cache entry has been created improperly, in order the recreate the right content the key must be changed as well, and it must be brand new (i.e. not existing already).
+                  key: |
+                      ${{ hashFiles( 'vcpkg.json' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}-${{ matrix.triplet }}-invalidate
+            - name: Show content of workspace after cache has been restored
+              run: find $RUNNER_WORKSPACE
+              shell: bash
+            # On Windows runners, let's ensure to have the Developer Command Prompt environment setup correctly. As used here the Developer Command Prompt created is targeting x64 and using the default the Windows SDK.
+            - uses: ilammy/msvc-dev-cmd@v1
+            # Run CMake to generate Ninja project files, using the vcpkg's toolchain file to resolve and install the dependencies as specified in vcpkg.json.
+            - name: Install dependencies and generate project files
+              run: |
+                  cmake -DCMAKE_BUILD_TYPE=Release -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja
+            # Build the whole project with Ninja (which is spawn by CMake).
+            - name: Build
+              run: |
+                  cmake --build "${{ env.CMAKE_BUILD_DIR }}"
+            - name: Show content of workspace at its completion
+              run: find $RUNNER_WORKSPACE
+              shell: bash
