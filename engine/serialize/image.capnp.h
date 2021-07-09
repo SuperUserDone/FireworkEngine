@@ -27,7 +27,7 @@ CAPNP_DECLARE_ENUM(ColorFormat, ce0031a1836c83f5);
 CAPNP_DECLARE_SCHEMA(b7c399a7cbffe56a);
 enum class Compression_b7c399a7cbffe56a: uint16_t {
   COMP_NONE,
-  COMP_LZ4,
+  COMP_ZSTD,
 };
 CAPNP_DECLARE_ENUM(Compression, b7c399a7cbffe56a);
 
@@ -49,7 +49,7 @@ struct Image {
 
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(99493c8593497f2c, 1, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(99493c8593497f2c, 1, 3)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -84,6 +84,9 @@ public:
   inline  ::fw::capnp::Image::ColorFormat getColorFormat() const;
 
   inline  ::fw::capnp::Image::Compression getCompression() const;
+
+  inline bool hasCompressedDataDict() const;
+  inline  ::capnp::Data::Reader getCompressedDataDict() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -132,6 +135,13 @@ public:
 
   inline  ::fw::capnp::Image::Compression getCompression();
   inline void setCompression( ::fw::capnp::Image::Compression value);
+
+  inline bool hasCompressedDataDict();
+  inline  ::capnp::Data::Builder getCompressedDataDict();
+  inline void setCompressedDataDict( ::capnp::Data::Reader value);
+  inline  ::capnp::Data::Builder initCompressedDataDict(unsigned int size);
+  inline void adoptCompressedDataDict(::capnp::Orphan< ::capnp::Data>&& value);
+  inline ::capnp::Orphan< ::capnp::Data> disownCompressedDataDict();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -261,6 +271,40 @@ inline  ::fw::capnp::Image::Compression Image::Builder::getCompression() {
 inline void Image::Builder::setCompression( ::fw::capnp::Image::Compression value) {
   _builder.setDataField< ::fw::capnp::Image::Compression>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool Image::Reader::hasCompressedDataDict() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
+}
+inline bool Image::Builder::hasCompressedDataDict() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Data::Reader Image::Reader::getCompressedDataDict() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Data>::get(_reader.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Data::Builder Image::Builder::getCompressedDataDict() {
+  return ::capnp::_::PointerHelpers< ::capnp::Data>::get(_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
+}
+inline void Image::Builder::setCompressedDataDict( ::capnp::Data::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Data>::set(_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Data::Builder Image::Builder::initCompressedDataDict(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Data>::init(_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS), size);
+}
+inline void Image::Builder::adoptCompressedDataDict(
+    ::capnp::Orphan< ::capnp::Data>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Data>::adopt(_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Data> Image::Builder::disownCompressedDataDict() {
+  return ::capnp::_::PointerHelpers< ::capnp::Data>::disown(_builder.getPointerField(
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
 }  // namespace

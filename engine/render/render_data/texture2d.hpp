@@ -32,11 +32,14 @@ public:
             m_mag = other.m_mag;
             m_min = other.m_min;
             m_mipmap = other.m_mipmap;
+            m_has_data = other.m_has_data;
+            m_immutable = other.m_immutable;
 
             other.m_id = nullptr;
         }
         return *this;
     }
+
     texture2d &operator=(const texture2d &other)
     {
         if (this != &other) {
@@ -47,6 +50,10 @@ public:
             m_mag = other.m_mag;
             m_min = other.m_min;
             m_mipmap = other.m_mipmap;
+            m_has_data = other.m_has_data;
+            m_immutable = other.m_immutable;
+
+            // TODO copy texture
         }
         return *this;
     }
@@ -64,6 +71,7 @@ public:
 
     void set_data(int x, int y, const void *data, color_format format)
     {
+        m_has_data = true;
         if (format == FORMAT_DEPTH24_STENCIL8 || m_immutable) {
             m_immutable = true;
             if (m_id != nullptr) render_api_impl::get_api()->delete_texture2d(m_id);
@@ -83,12 +91,15 @@ public:
         render_api_impl::get_api()->set_texture2d_data(m_id, m_x, m_y, m_format, data, props);
     }
 
+public:
+    std::string m_path = "";
+
 private:
     texture_filter m_min = FILTER_LINEAR;
     texture_filter m_mag = FILTER_LINEAR;
 
     bool m_mipmap = false;
-
+    bool m_has_data = false;
     bool m_immutable = false;
 
     color_format m_format;
@@ -97,6 +108,10 @@ private:
 
     uint32_t m_x;
     uint32_t m_y;
+
+private:
+    friend class image2d;
+    friend class scene_serializer;
 };
 
 }; // namespace fw

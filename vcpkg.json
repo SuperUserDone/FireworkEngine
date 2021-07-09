@@ -2,5 +2,5 @@
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
     "name": "firework-engine",
     "version": "0.0.1",
-    "dependencies": ["fmt", "assimp", "sdl2", "capnproto", "freetype"]
+    "dependencies": ["fmt", "assimp", "sdl2", "capnproto", "freetype", "zstd"]
 }

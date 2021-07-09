@@ -30,6 +30,7 @@ find_package(fmt CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 find_package(CapnProto CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
+find_package(zstd CONFIG REQUIRED)
 
 add_subdirectory(engine)
 add_subdirectory(player)

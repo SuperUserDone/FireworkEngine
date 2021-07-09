@@ -47,4 +47,5 @@ target_link_libraries(
   freetype
   fmt::fmt
   CapnProto::kj
-  CapnProto::capnp)
+  CapnProto::capnp
+  zstd)

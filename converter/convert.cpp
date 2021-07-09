@@ -139,6 +139,8 @@ void process_image(const char *in, const char *out)
 
     memcpy(img_data.begin(), data, x * y * n);
 
+    stbi_image_free(data);
+
     img_ser.initSize();
     auto size = img_ser.getSize();
     size.setX(x);

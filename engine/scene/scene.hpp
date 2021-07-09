@@ -9,9 +9,19 @@
 
 #include <entt/entt.hpp>
 #include <mutex>
+#include <unordered_map>
 #include <vector>
 
 class editor_loop;
+
+#ifdef NDEBUG
+#define storage_type phmap::parallel_flat_hash_map storage
+
+#else
+
+#define storage_type std::unordered_map
+
+#endif
 
 namespace fw {
 
@@ -26,8 +36,8 @@ public:
     void set_name(const std::string &name) { m_name = name; }
     std::string get_name() { return m_name; }
 
-    phmap::parallel_flat_hash_map<std::string, ref<texture2d>> &get_textures() { return textures; }
-    phmap::parallel_flat_hash_map<std::string, ref<mesh>> &get_meshes() { return meshes; }
+    storage_type<std::string, ref<texture2d>> &get_textures() { return textures; }
+    storage_type<std::string, ref<mesh>> &get_meshes() { return meshes; }
 
     void rebuild_refs();
 
@@ -44,8 +54,8 @@ private:
     std::string m_name = "Scene";
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 
-    phmap::parallel_flat_hash_map<std::string, ref<texture2d>> textures;
-    phmap::parallel_flat_hash_map<std::string, ref<mesh>> meshes;
+    storage_type<std::string, ref<texture2d>> textures;
+    storage_type<std::string, ref<mesh>> meshes;
     // TODO materials
 
 private:

@@ -1,3 +1,4 @@
+#include "core/types/image2d.hpp"
 #include "scene.capnp.h"
 #include "scene_serializer.hpp"
 #include "vec_readers.hpp"
@@ -23,10 +24,10 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
     int entities_count = 0;
 
-    // TODO save textures
-
+    auto &textures = ptr->get_textures();
     auto &meshes = ptr->get_meshes();
     auto smeshes = scene_ser.initMeshes().initEntries(ptr->get_meshes().size());
+    auto stextures = scene_ser.initTextures().initEntries(meshes.size());
 
     int i = 0;
     for (auto &&mesh_data : meshes) {
@@ -41,6 +42,20 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
         mesh_ser.setKey(key);
         mesh_ser.getValue().setPath(value->m_path);
+    }
+
+    for (auto &&tex : textures) {
+        auto tex_ser = stextures[i];
+        auto &[key, value] = tex;
+
+        tex_ser.setKey(key);
+
+        if (value->m_path == "") {
+            auto size = tex_ser.getValue().getSize();
+            write_vec2(glm::uvec2{value->m_x, value->m_y}, size);
+        } else {
+            tex_ser.getValue().setPath(value->m_path);
+        }
     }
 
     reg.each([&](auto entity) {
@@ -101,24 +116,50 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 
     auto &reg = ptr->get_registry();
 
-    // TODO load textures
-
     auto meshes = scene_ser.getMeshes().getEntries();
+    auto textures = scene_ser.getTextures().getEntries();
 
     for (auto m : meshes) {
         std::string key = m.getKey().cStr();
         std::string path = m.getValue().getPath().cStr();
 
-        action act;
-
         auto n_mesh = make_ref<mesh>();
 
         ptr->get_meshes()[key] = n_mesh;
 
+        action act;
         act.async_action = [n_mesh, path]() { n_mesh->load_from_file(path); };
         act.post_sync_action = [n_mesh]() { n_mesh->update(); };
 
         loader::get_instance().queue_action(act);
+    }
+
+    for (auto t : textures) {
+        std::string key = t.getKey().cStr();
+        auto tex = t.getValue();
+
+        if (tex.isPath()) {
+            action act;
+            std::string path = tex.getPath().cStr();
+
+            ref<image2d> img = make_ref<image2d>();
+
+            act.async_action = [path, img]() { img->load_from_file(path); };
+            act.post_sync_action = [ptr, key, img, path]() {
+                auto tex = img->get_as_texture();
+                tex->m_path = path;
+                ptr->get_textures()[key] = tex;
+            };
+
+            loader::get_instance().queue_action(act);
+
+        } else {
+            auto size_ser = tex.getSize();
+
+            glm::uvec2 size;
+            read_vec2(size, size_ser);
+            ptr->get_textures()[key] = make_ref<texture2d>();
+        }
     }
 
     if (scene_ser.hasName()) ptr->set_name(scene_ser.getName());

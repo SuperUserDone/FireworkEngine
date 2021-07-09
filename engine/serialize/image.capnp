@@ -13,6 +13,8 @@ struct Image
     colorFormat @2: ColorFormat;
     compression @3: Compression;
 
+    compressedDataDict @4: Data;
+
     enum ColorFormat
     {
         formatR @0;
@@ -24,7 +26,7 @@ struct Image
     enum Compression
     {
         compNone @0;
-        compLz4 @1;
+        compZstd @1;
     }
 
 }
