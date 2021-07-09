@@ -67,3 +67,8 @@ jobs:
             - name: Show content of workspace at its completion
               run: find $RUNNER_WORKSPACE
               shell: bash
+            - name: Upload
+              uses: actions/upload-artifact@v1
+              with:
+                  path: ./${{ github.workspace }}/build
+                  name: ${{ matrix.os }}-build
