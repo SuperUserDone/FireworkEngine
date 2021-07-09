@@ -54,8 +54,8 @@ private:
     std::string m_name = "Scene";
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 
-    storage_type<std::string, ref<texture2d>> textures;
-    storage_type<std::string, ref<mesh>> meshes;
+    mutable storage_type<std::string, ref<texture2d>> textures;
+    mutable storage_type<std::string, ref<mesh>> meshes;
     // TODO materials
 
 private:

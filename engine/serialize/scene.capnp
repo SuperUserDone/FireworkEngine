@@ -14,11 +14,6 @@ struct Texture
     }
 }
 
-struct Material
-{
-    textures @0 :List(Text);
-}
-
 struct MeshEntry
 {
     path @0 :Text;
@@ -35,9 +30,8 @@ struct Map(Key, Value) {
 struct Scene {
     name @0 :Text;
 
-    materials @1 :Map(Text, Material);
-    textures @2 :Map(Text, Texture);
-    meshes @3 :Map(Text, MeshEntry);
+    textures @1 :Map(Text, Texture);
+    meshes @2 :Map(Text, MeshEntry);
 
-    entities @4 :List(Entity.Entity);
+    entities @3 :List(Entity.Entity);
 }

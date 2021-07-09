@@ -17,7 +17,6 @@ namespace capnp {
 namespace schemas {
 
 CAPNP_DECLARE_SCHEMA(a161f2ef428ad8f3);
-CAPNP_DECLARE_SCHEMA(84ec7d47da394ec1);
 CAPNP_DECLARE_SCHEMA(bfafab64585db378);
 CAPNP_DECLARE_SCHEMA(e94cea6b10cd563c);
 CAPNP_DECLARE_SCHEMA(aa55a7dbd61d63e8);
@@ -42,21 +41,6 @@ struct Texture {
 
   struct _capnpPrivate {
     CAPNP_DECLARE_STRUCT_HEADER(a161f2ef428ad8f3, 1, 1)
-    #if !CAPNP_LITE
-    static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
-    #endif  // !CAPNP_LITE
-  };
-};
-
-struct Material {
-  Material() = delete;
-
-  class Reader;
-  class Builder;
-  class Pipeline;
-
-  struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(84ec7d47da394ec1, 0, 1)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -126,7 +110,7 @@ struct Scene {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(b1bef838f3080e38, 0, 5)
+    CAPNP_DECLARE_STRUCT_HEADER(b1bef838f3080e38, 0, 4)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -219,88 +203,6 @@ private:
 class Texture::Pipeline {
 public:
   typedef Texture Pipelines;
-
-  inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
-  inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
-      : _typeless(kj::mv(typeless)) {}
-
-private:
-  ::capnp::AnyPointer::Pipeline _typeless;
-  friend class ::capnp::PipelineHook;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-};
-#endif  // !CAPNP_LITE
-
-class Material::Reader {
-public:
-  typedef Material Reads;
-
-  Reader() = default;
-  inline explicit Reader(::capnp::_::StructReader base): _reader(base) {}
-
-  inline ::capnp::MessageSize totalSize() const {
-    return _reader.totalSize().asPublic();
-  }
-
-#if !CAPNP_LITE
-  inline ::kj::StringTree toString() const {
-    return ::capnp::_::structString(_reader, *_capnpPrivate::brand());
-  }
-#endif  // !CAPNP_LITE
-
-  inline bool hasTextures() const;
-  inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Reader getTextures() const;
-
-private:
-  ::capnp::_::StructReader _reader;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::_::PointerHelpers;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::List;
-  friend class ::capnp::MessageBuilder;
-  friend class ::capnp::Orphanage;
-};
-
-class Material::Builder {
-public:
-  typedef Material Builds;
-
-  Builder() = delete;  // Deleted to discourage incorrect usage.
-                       // You can explicitly initialize to nullptr instead.
-  inline Builder(decltype(nullptr)) {}
-  inline explicit Builder(::capnp::_::StructBuilder base): _builder(base) {}
-  inline operator Reader() const { return Reader(_builder.asReader()); }
-  inline Reader asReader() const { return *this; }
-
-  inline ::capnp::MessageSize totalSize() const { return asReader().totalSize(); }
-#if !CAPNP_LITE
-  inline ::kj::StringTree toString() const { return asReader().toString(); }
-#endif  // !CAPNP_LITE
-
-  inline bool hasTextures();
-  inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Builder getTextures();
-  inline void setTextures( ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Reader value);
-  inline void setTextures(::kj::ArrayPtr<const  ::capnp::Text::Reader> value);
-  inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Builder initTextures(unsigned int size);
-  inline void adoptTextures(::capnp::Orphan< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>&& value);
-  inline ::capnp::Orphan< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>> disownTextures();
-
-private:
-  ::capnp::_::StructBuilder _builder;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-  friend class ::capnp::Orphanage;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::_::PointerHelpers;
-};
-
-#if !CAPNP_LITE
-class Material::Pipeline {
-public:
-  typedef Material Pipelines;
 
   inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
@@ -617,9 +519,6 @@ public:
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
 
-  inline bool hasMaterials() const;
-  inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Reader getMaterials() const;
-
   inline bool hasTextures() const;
   inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Reader getTextures() const;
 
@@ -664,13 +563,6 @@ public:
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
 
-  inline bool hasMaterials();
-  inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Builder getMaterials();
-  inline void setMaterials( ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Reader value);
-  inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Builder initMaterials();
-  inline void adoptMaterials(::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>&& value);
-  inline ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>> disownMaterials();
-
   inline bool hasTextures();
   inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Builder getTextures();
   inline void setTextures( ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Reader value);
@@ -710,7 +602,6 @@ public:
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
       : _typeless(kj::mv(typeless)) {}
 
-  inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Pipeline getMaterials();
   inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Pipeline getTextures();
   inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Pipeline getMeshes();
 private:
@@ -837,44 +728,6 @@ inline ::capnp::Orphan< ::fw::capnp::Vec2u> Texture::Builder::disownSize() {
   KJ_IREQUIRE((which() == Texture::SIZE),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
-}
-
-inline bool Material::Reader::hasTextures() const {
-  return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
-}
-inline bool Material::Builder::hasTextures() {
-  return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
-}
-inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Reader Material::Reader::getTextures() const {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
-}
-inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Builder Material::Builder::getTextures() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
-}
-inline void Material::Builder::setTextures( ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Reader value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
-}
-inline void Material::Builder::setTextures(::kj::ArrayPtr<const  ::capnp::Text::Reader> value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
-}
-inline  ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>::Builder Material::Builder::initTextures(unsigned int size) {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), size);
-}
-inline void Material::Builder::adoptTextures(
-    ::capnp::Orphan< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>&& value) {
-  ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
-}
-inline ::capnp::Orphan< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>> Material::Builder::disownTextures() {
-  return ::capnp::_::PointerHelpers< ::capnp::List< ::capnp::Text,  ::capnp::Kind::BLOB>>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
@@ -1150,155 +1003,116 @@ inline ::capnp::Orphan< ::capnp::Text> Scene::Builder::disownName() {
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
-inline bool Scene::Reader::hasMaterials() const {
-  return !_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline bool Scene::Builder::hasMaterials() {
-  return !_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Reader Scene::Reader::getMaterials() const {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::get(_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Builder Scene::Builder::getMaterials() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::get(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-#if !CAPNP_LITE
-inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Pipeline Scene::Pipeline::getMaterials() {
-  return  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Pipeline(_typeless.getPointerField(1));
-}
-#endif  // !CAPNP_LITE
-inline void Scene::Builder::setMaterials( ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Reader value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::set(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
-}
-inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>::Builder Scene::Builder::initMaterials() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::init(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline void Scene::Builder::adoptMaterials(
-    ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>&& value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
-}
-inline ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>> Scene::Builder::disownMaterials() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Material>>::disown(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-
 inline bool Scene::Reader::hasTextures() const {
   return !_reader.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Scene::Builder::hasTextures() {
   return !_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Reader Scene::Reader::getTextures() const {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::get(_reader.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Builder Scene::Builder::getTextures() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::get(_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Pipeline Scene::Pipeline::getTextures() {
-  return  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Pipeline(_typeless.getPointerField(2));
+  return  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Pipeline(_typeless.getPointerField(1));
 }
 #endif  // !CAPNP_LITE
 inline void Scene::Builder::setTextures( ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Reader value) {
   ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::set(_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>::Builder Scene::Builder::initTextures() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::init(_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Scene::Builder::adoptTextures(
     ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>&& value) {
   ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>> Scene::Builder::disownTextures() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::Texture>>::disown(_builder.getPointerField(
-      ::capnp::bounded<2>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Scene::Reader::hasMeshes() const {
   return !_reader.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
 inline bool Scene::Builder::hasMeshes() {
   return !_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Reader Scene::Reader::getMeshes() const {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::get(_reader.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS));
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Builder Scene::Builder::getMeshes() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::get(_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS));
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Pipeline Scene::Pipeline::getMeshes() {
-  return  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Pipeline(_typeless.getPointerField(3));
+  return  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Pipeline(_typeless.getPointerField(2));
 }
 #endif  // !CAPNP_LITE
 inline void Scene::Builder::setMeshes( ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Reader value) {
   ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::set(_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<2>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>::Builder Scene::Builder::initMeshes() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::init(_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS));
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 inline void Scene::Builder::adoptMeshes(
     ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>&& value) {
   ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>> Scene::Builder::disownMeshes() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::Map< ::capnp::Text,  ::fw::capnp::MeshEntry>>::disown(_builder.getPointerField(
-      ::capnp::bounded<3>() * ::capnp::POINTERS));
+      ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
 inline bool Scene::Reader::hasEntities() const {
   return !_reader.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
 }
 inline bool Scene::Builder::hasEntities() {
   return !_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<3>() * ::capnp::POINTERS).isNull();
 }
 inline  ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>::Reader Scene::Reader::getEntities() const {
   return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::get(_reader.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
+      ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 inline  ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>::Builder Scene::Builder::getEntities() {
   return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::get(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
+      ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 inline void Scene::Builder::setEntities( ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>::Reader value) {
   ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::set(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<3>() * ::capnp::POINTERS), value);
 }
 inline  ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>::Builder Scene::Builder::initEntities(unsigned int size) {
   return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::init(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS), size);
+      ::capnp::bounded<3>() * ::capnp::POINTERS), size);
 }
 inline void Scene::Builder::adoptEntities(
     ::capnp::Orphan< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>&& value) {
   ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::adopt(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<3>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>> Scene::Builder::disownEntities() {
   return ::capnp::_::PointerHelpers< ::capnp::List< ::fw::capnp::Entity,  ::capnp::Kind::STRUCT>>::disown(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
+      ::capnp::bounded<3>() * ::capnp::POINTERS));
 }
 
 }  // namespace

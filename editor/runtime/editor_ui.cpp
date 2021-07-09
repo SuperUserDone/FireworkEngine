@@ -101,7 +101,7 @@ static void style_editor()
 static uint32_t curr = 0;
 static void draw_scene_info(fw::scene *scene)
 {
-    ImGui::Begin("Scene View", nullptr, Imguiw);
+    ImGui::Begin("Scene View");
 
     entt::registry &reg = scene->get_registry();
 
@@ -162,6 +162,13 @@ static void draw_mesh(fw::component_mesh &mesh)
     ImGui::Text("Not Implemented");
 }
 
+static void draw_material(fw::scene *scene, fw::component_material &mat)
+{
+    auto &texture = scene->get_textures()[mat.texture_named_ref];
+
+    ImGui::Image(*(ImTextureID *)texture->get_id(), {128, 128});
+}
+
 static void draw_components(fw::scene *scene)
 {
     ImGui::Begin("Components");
@@ -193,6 +200,12 @@ static void draw_components(fw::scene *scene)
             if (ImGui::CollapsingHeader("Mesh")) {
                 auto &mesh = scene->get_registry().get<fw::component_mesh>((entt::entity)curr);
                 draw_mesh(mesh);
+            }
+        }
+        if (scene->get_registry().any_of<fw::component_material>((entt::entity)curr)) {
+            if (ImGui::CollapsingHeader("Material")) {
+                auto &mesh = scene->get_registry().get<fw::component_material>((entt::entity)curr);
+                draw_material(scene, mesh);
             }
         }
     }

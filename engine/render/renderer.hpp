@@ -42,7 +42,7 @@ private:
     mesh m_quad_mesh;
 
     shader_program m_fullscreen_shader;
-    shader_program m_outline_shader;
+    shader_program m_flat_shader;
 
     framebuffer_screen m_fbo;
 

@@ -17,6 +17,7 @@ namespace schemas {
 
 CAPNP_DECLARE_SCHEMA(94b6d250c3adc4e1);
 CAPNP_DECLARE_SCHEMA(90853abb41461dcd);
+CAPNP_DECLARE_SCHEMA(9aed93409b9d19c7);
 CAPNP_DECLARE_SCHEMA(cb075bca875e54a2);
 CAPNP_DECLARE_SCHEMA(be87ccb5daae5404);
 
@@ -56,6 +57,21 @@ struct ComponentMesh {
   };
 };
 
+struct ComponentMaterial {
+  ComponentMaterial() = delete;
+
+  class Reader;
+  class Builder;
+  class Pipeline;
+
+  struct _capnpPrivate {
+    CAPNP_DECLARE_STRUCT_HEADER(9aed93409b9d19c7, 0, 1)
+    #if !CAPNP_LITE
+    static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
+    #endif  // !CAPNP_LITE
+  };
+};
+
 struct ComponentTransform {
   ComponentTransform() = delete;
 
@@ -79,7 +95,7 @@ struct Entity {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(be87ccb5daae5404, 1, 4)
+    CAPNP_DECLARE_STRUCT_HEADER(be87ccb5daae5404, 1, 5)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -255,6 +271,87 @@ private:
 };
 #endif  // !CAPNP_LITE
 
+class ComponentMaterial::Reader {
+public:
+  typedef ComponentMaterial Reads;
+
+  Reader() = default;
+  inline explicit Reader(::capnp::_::StructReader base): _reader(base) {}
+
+  inline ::capnp::MessageSize totalSize() const {
+    return _reader.totalSize().asPublic();
+  }
+
+#if !CAPNP_LITE
+  inline ::kj::StringTree toString() const {
+    return ::capnp::_::structString(_reader, *_capnpPrivate::brand());
+  }
+#endif  // !CAPNP_LITE
+
+  inline bool hasRefrence() const;
+  inline  ::capnp::Text::Reader getRefrence() const;
+
+private:
+  ::capnp::_::StructReader _reader;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::_::PointerHelpers;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::List;
+  friend class ::capnp::MessageBuilder;
+  friend class ::capnp::Orphanage;
+};
+
+class ComponentMaterial::Builder {
+public:
+  typedef ComponentMaterial Builds;
+
+  Builder() = delete;  // Deleted to discourage incorrect usage.
+                       // You can explicitly initialize to nullptr instead.
+  inline Builder(decltype(nullptr)) {}
+  inline explicit Builder(::capnp::_::StructBuilder base): _builder(base) {}
+  inline operator Reader() const { return Reader(_builder.asReader()); }
+  inline Reader asReader() const { return *this; }
+
+  inline ::capnp::MessageSize totalSize() const { return asReader().totalSize(); }
+#if !CAPNP_LITE
+  inline ::kj::StringTree toString() const { return asReader().toString(); }
+#endif  // !CAPNP_LITE
+
+  inline bool hasRefrence();
+  inline  ::capnp::Text::Builder getRefrence();
+  inline void setRefrence( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initRefrence(unsigned int size);
+  inline void adoptRefrence(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownRefrence();
+
+private:
+  ::capnp::_::StructBuilder _builder;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+  friend class ::capnp::Orphanage;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::_::PointerHelpers;
+};
+
+#if !CAPNP_LITE
+class ComponentMaterial::Pipeline {
+public:
+  typedef ComponentMaterial Pipelines;
+
+  inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
+  inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
+      : _typeless(kj::mv(typeless)) {}
+
+private:
+  ::capnp::AnyPointer::Pipeline _typeless;
+  friend class ::capnp::PipelineHook;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+};
+#endif  // !CAPNP_LITE
+
 class ComponentTransform::Reader {
 public:
   typedef ComponentTransform Reads;
@@ -390,6 +487,9 @@ public:
   inline bool hasTransform() const;
   inline  ::fw::capnp::ComponentTransform::Reader getTransform() const;
 
+  inline bool hasMaterial() const;
+  inline  ::fw::capnp::ComponentMaterial::Reader getMaterial() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -449,6 +549,13 @@ public:
   inline void adoptTransform(::capnp::Orphan< ::fw::capnp::ComponentTransform>&& value);
   inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> disownTransform();
 
+  inline bool hasMaterial();
+  inline  ::fw::capnp::ComponentMaterial::Builder getMaterial();
+  inline void setMaterial( ::fw::capnp::ComponentMaterial::Reader value);
+  inline  ::fw::capnp::ComponentMaterial::Builder initMaterial();
+  inline void adoptMaterial(::capnp::Orphan< ::fw::capnp::ComponentMaterial>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::ComponentMaterial> disownMaterial();
+
 private:
   ::capnp::_::StructBuilder _builder;
   template <typename, ::capnp::Kind>
@@ -470,6 +577,7 @@ public:
   inline  ::fw::capnp::ComponentCamera::Pipeline getCamera();
   inline  ::fw::capnp::ComponentMesh::Pipeline getMesh();
   inline  ::fw::capnp::ComponentTransform::Pipeline getTransform();
+  inline  ::fw::capnp::ComponentMaterial::Pipeline getMaterial();
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -552,6 +660,40 @@ inline void ComponentMesh::Builder::adoptRefrence(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::capnp::Text> ComponentMesh::Builder::disownRefrence() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+
+inline bool ComponentMaterial::Reader::hasRefrence() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+}
+inline bool ComponentMaterial::Builder::hasRefrence() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Text::Reader ComponentMaterial::Reader::getRefrence() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Text::Builder ComponentMaterial::Builder::getRefrence() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+inline void ComponentMaterial::Builder::setRefrence( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Text::Builder ComponentMaterial::Builder::initRefrence(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), size);
+}
+inline void ComponentMaterial::Builder::adoptRefrence(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Text> ComponentMaterial::Builder::disownRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
@@ -836,6 +978,45 @@ inline void Entity::Builder::adoptTransform(
 inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> Entity::Builder::disownTransform() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::disown(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
+}
+
+inline bool Entity::Reader::hasMaterial() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+}
+inline bool Entity::Builder::hasMaterial() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+}
+inline  ::fw::capnp::ComponentMaterial::Reader Entity::Reader::getMaterial() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::get(_reader.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+inline  ::fw::capnp::ComponentMaterial::Builder Entity::Builder::getMaterial() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::get(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+#if !CAPNP_LITE
+inline  ::fw::capnp::ComponentMaterial::Pipeline Entity::Pipeline::getMaterial() {
+  return  ::fw::capnp::ComponentMaterial::Pipeline(_typeless.getPointerField(4));
+}
+#endif  // !CAPNP_LITE
+inline void Entity::Builder::setMaterial( ::fw::capnp::ComponentMaterial::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::set(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS), value);
+}
+inline  ::fw::capnp::ComponentMaterial::Builder Entity::Builder::initMaterial() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::init(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+inline void Entity::Builder::adoptMaterial(
+    ::capnp::Orphan< ::fw::capnp::ComponentMaterial>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::adopt(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::fw::capnp::ComponentMaterial> Entity::Builder::disownMaterial() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::disown(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
 }
 
 }  // namespace

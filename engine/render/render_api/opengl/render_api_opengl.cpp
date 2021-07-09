@@ -511,7 +511,7 @@ void render_api_opengl::draw_elements(vao_id varr,
         TracyGpuZone("Bind Textures");
         for (int i = 0; i < textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i);
-            glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
+            if (textures[i]) glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
         }
     }
 

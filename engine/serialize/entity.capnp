@@ -17,6 +17,11 @@ struct ComponentMesh
     refrence @0 :Text;
 }
 
+struct ComponentMaterial
+{
+    refrence @0 :Text;
+}
+
 struct ComponentTransform
 {
     pos @0 :Vec.Vec3f;
@@ -32,4 +37,5 @@ struct Entity
     camera @2 :ComponentCamera;
     mesh @3 :ComponentMesh;
     transform @4 :ComponentTransform;
+    material @5 :ComponentMaterial;
 }

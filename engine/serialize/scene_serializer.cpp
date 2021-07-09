@@ -95,6 +95,13 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
                 auto mesh_ser = entities[entities_count].initMesh();
                 mesh_ser.setRefrence(mesh.named_ref);
             }
+
+            if (reg.all_of<component_material>(entity)) {
+                component_material &mat = reg.get<component_material>(entity);
+
+                auto mat_ser = entities[entities_count].initMaterial();
+                mat_ser.setRefrence(mat.texture_named_ref);
+            }
         }
         entities_count++;
     });
@@ -194,8 +201,13 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 
                 comp.named_ref = mesh.getRefrence().cStr();
                 comp.mesh_ref = ptr->meshes[comp.named_ref];
+            }
 
-                int a = 1 + 1;
+            if (a.hasMaterial()) {
+                auto mat = a.getMaterial();
+                auto &comp = entity_new.add_component<component_material>();
+
+                comp.texture_named_ref = mat.getRefrence().cStr();
             }
         }
     }

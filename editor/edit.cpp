@@ -37,12 +37,19 @@ int main(int argc, const char *argv[])
 
     fw::component_transform &transform = entity.add_component<fw::component_transform>();
     fw::component_mesh &comp_mesh = entity.add_component<fw::component_mesh>();
+    fw::component_material &mat = entity.add_component<fw::component_material>();
+
+    mat.texture_named_ref = "test";
 
     scene->get_meshes()["Mesh1"] = fw::make_ref<fw::mesh>();
 
     auto mesh = scene->get_meshes()["Mesh1"];
 
     mesh->verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
+    mesh->verticies[0].uvs = {0, 0};
+    mesh->verticies[1].uvs = {1, 1};
+    mesh->verticies[2].uvs = {1, 0};
+
     mesh->indicies = {0, 1, 2};
     mesh->update();
 

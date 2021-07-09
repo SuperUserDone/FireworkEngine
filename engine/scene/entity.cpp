@@ -11,8 +11,6 @@ entity::entity(entt::registry *reg, const std::string &name, uint32_t id) : m_re
 
     m_reg->emplace<component_tag>(m_id, component_tag{name});
 }
-entity::~entity()
-{ // TODO
-}
+entity::~entity() {}
 
 } // namespace fw

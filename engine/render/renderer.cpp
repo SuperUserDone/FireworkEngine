@@ -25,13 +25,11 @@ renderer::renderer(render_settings &p_render_settings)
 
     m_fullscreen_shader.set_source_vertex(vertex_screen);
     m_fullscreen_shader.set_source_fragment(fragment_screen);
-
     m_fullscreen_shader.compile();
 
-    m_outline_shader.set_source_vertex(vertex_std);
-    m_outline_shader.set_source_fragment(fragment_outline);
-
-    m_outline_shader.compile();
+    m_flat_shader.set_source_vertex(vertex_std);
+    m_flat_shader.set_source_fragment(fragment_texmap);
+    m_flat_shader.compile();
 
     m_camera.bind_uniform(0);
 }
@@ -112,19 +110,31 @@ void renderer::renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::m
 
     m_camera.set_data(128, arr, MODE_DYNAMIC);
 
-    auto meshes = scene->m_entt.view<component_transform, component_mesh>();
+    auto meshes = scene->m_entt.view<component_transform, component_mesh, component_material>();
 
     for (auto c : meshes) {
-        auto [trans, mesh] = meshes.get(c);
+        auto [trans, mesh, mat] = meshes.get(c);
 
         if (mesh.mesh_ref == nullptr) continue;
+
+        if (mat.texture_ref == nullptr && scene->textures.count(mat.texture_named_ref))
+            mat.texture_ref = scene->textures[mat.texture_named_ref];
+
+        void *id;
+        if (mat.texture_ref)
+            id = mat.texture_ref->get_id();
+        else
+            id = nullptr;
+
+        // TODO select material
+        auto material_ref = m_flat_shader.get_id();
 
         rapi->draw_elements(mesh.mesh_ref->m_vao.get_id(),
                             mesh.mesh_ref->m_index_buf.get_id(),
                             mesh.mesh_ref->indicies.size(),
                             trans,
-                            nullptr,
-                            {});
+                            material_ref,
+                            {id});
     }
 }
 
