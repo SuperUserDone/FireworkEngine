@@ -33,6 +33,13 @@ jobs:
 
             # Setup the build machine with the most recent versions of CMake and Ninja. Both are cached if not already: on subsequent runs both will be quickly restored from GitHub cache service.
             - uses: lukka/get-cmake@latest
+            - name: Install dependencies on ubuntu
+              if: startsWith(matrix.config.name, 'ubuntu')
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install ninja-build cmake
+                  ninja --version
+                  cmake --version
             # Restore both vcpkg and its artifacts from the GitHub cache service.
             - name: Restore vcpkg and its artifacts.
               uses: actions/cache@v2
