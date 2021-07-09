@@ -4,6 +4,7 @@ set(ENGINE_SRC
     "core/loop.cpp"
     "core/input.cpp"
     "core/types/image2d.cpp"
+    "core/types/mesh.cpp"
     "render/renderer.cpp"
     "render/render_api/render_api.cpp"
     "render/render_api/opengl/render_api_opengl.cpp"
