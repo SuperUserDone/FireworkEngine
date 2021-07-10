@@ -37,7 +37,7 @@ jobs:
               if: startsWith(matrix.os, 'ubuntu')
               run: |
                   sudo apt-get update
-                  sudo apt-get install ninja-build cmake curl libgl-dev libxxf86vm-dev -y
+                  sudo apt-get install ninja-build cmake curl libgl-dev libxext-dev libxxf86vm-dev -y
                   ninja --version
                   cmake --version
                   curl --version
