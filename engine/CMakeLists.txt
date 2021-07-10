@@ -48,4 +48,4 @@ target_link_libraries(
   fmt::fmt
   CapnProto::kj
   CapnProto::capnp
-  zstd)
+  zstd::libzstd_static)
