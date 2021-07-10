@@ -37,9 +37,10 @@ jobs:
               if: startsWith(matrix.os, 'ubuntu')
               run: |
                   sudo apt-get update
-                  sudo apt-get install ninja-build cmake
+                  sudo apt-get install ninja-build cmake curl -y
                   ninja --version
                   cmake --version
+                  curl --version
             # Restore both vcpkg and its artifacts from the GitHub cache service.
             - name: Restore vcpkg and its artifacts.
               uses: actions/cache@v2
