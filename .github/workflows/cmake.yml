@@ -80,5 +80,5 @@ jobs:
             - name: Upload
               uses: actions/upload-artifact@v2
               with:
-                  path: {{ github.workspace }}/build-artifact/
+                  path: ${{ github.workspace }}/build-artifact
                   name: ${{ matrix.os }}-build
