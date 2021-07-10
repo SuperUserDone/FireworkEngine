@@ -15,7 +15,7 @@
 class editor_loop;
 
 #ifdef NDEBUG
-#define storage_type phmap::parallel_flat_hash_map storage
+#define storage_type phmap::parallel_flat_hash_map
 
 #else
 
