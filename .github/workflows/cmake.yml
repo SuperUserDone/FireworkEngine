@@ -74,10 +74,10 @@ jobs:
             - name: Show content of workspace at its completion
               run: find $RUNNER_WORKSPACE
               shell: bash
+            - name: move
+              run: cp {{ github.workspace }}/build {{ github.workspace }}/build-artifact/ && rm -rf {{ github.workspace }}/build-artifact/vcpkg_install
             - name: Upload
               uses: actions/upload-artifact@v1
               with:
-                  path: |
-                      ${{ github.workspace }}/build
-                      !${{ github.workspace }}/build/vcpkg_install
+                  path: {{ github.workspace }}/build-artifact/
                   name: ${{ matrix.os }}-build
