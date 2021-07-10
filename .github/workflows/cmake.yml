@@ -76,7 +76,7 @@ jobs:
               run: find $RUNNER_WORKSPACE
               shell: bash
             - name: move
-              run: cp {{ github.workspace }}/build {{ github.workspace }}/build-artifact/ && rm -rf {{ github.workspace }}/build-artifact/vcpkg_install
+              run: mkdir "{{ github.workspace }}/build-artifact/" && rm -rf "{{ github.workspace }}/build-artifact/vcpkg_install" && cp "{{ github.workspace }}/build" "{{ github.workspace }}/build-artifact/" && rm -rf "{{ github.workspace }}/build-artifact/vcpkg_install"
               shell: bash
             - name: Upload
               uses: actions/upload-artifact@v2
