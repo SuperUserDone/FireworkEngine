@@ -4,6 +4,7 @@
 #include "serialize/vec_readers.hpp"
 #include "vfs/vfs.hpp"
 
+#include <Tracy.hpp>
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
 
@@ -12,6 +13,8 @@ namespace fw {
 bool mesh::save_to_file()
 {
     if (m_path == "") return false;
+
+    ZoneScopedN("Save mesh to file");
 
     FILE *fp = vfs::vfs_fopen(m_path.c_str(), "w");
 
@@ -37,6 +40,8 @@ bool mesh::save_to_file()
 
 bool mesh::load_from_file(const std::string &vfs_path)
 {
+    ZoneScopedN("Load mesh from file");
+
     FILE *fp = vfs::vfs_fopen(vfs_path, "r");
 
     if (!fp) return false;

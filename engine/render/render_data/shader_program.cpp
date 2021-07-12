@@ -168,18 +168,19 @@ void shader_program::preprocess(const std::string &src)
         if (text.substr(0, 9) == "// Export") {
             std::getline(ss, text);
 
-            char str[32];
-            char name[32];
-            char default_val[128];
+            char str[65];
+            char name[65];
+            char default_val[129];
             uint32_t id;
 
-            if (sscanf(text.c_str(), "layout(binding = %u) uniform %32s %32s", &id, str, name) ||
+            if (sscanf(text.c_str(), "layout(binding = %u) uniform %64s %64s", &id, str, name) ==
+                    3 ||
                 sscanf(text.c_str(),
-                       "layout(location = %u) uniform %32s %32s = %64[^;]s",
+                       "layout(location = %u) uniform %64s %64s = %128[^;]s",
                        &id,
                        str,
                        name,
-                       default_val)) {
+                       default_val) == 4) {
 
                 attribute attr;
                 attr.bind_id = id;

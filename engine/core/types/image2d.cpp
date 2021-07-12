@@ -3,6 +3,7 @@
 #include "serialize/vec_readers.hpp"
 #include "vfs/vfs.hpp"
 
+#include <Tracy.hpp>
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
 
@@ -10,6 +11,8 @@ namespace fw {
 
 bool image2d::load_from_file(const std::string &vfs_path)
 {
+    ZoneScopedN("Load Image from file");
+
     FILE *fp = vfs::vfs_fopen(vfs_path, "r");
     if (!fp) return false;
     ::capnp::PackedFdMessageReader msg(fileno(fp));
@@ -22,7 +25,7 @@ bool image2d::load_from_file(const std::string &vfs_path)
     read_vec2(m_size, size);
 
     auto fmt_capnp = image_ser.getCompression();
-    if (m_data != nullptr) delete m_data;
+    if (m_data != nullptr) delete[] m_data;
 
     m_data = new uint8_t[image_ser.getCompressedData().size()];
     memcpy(m_data,
@@ -63,7 +66,7 @@ ref<texture2d> &image2d::get_as_texture()
 image2d::~image2d()
 {
     if (m_data != nullptr) {
-        delete m_data;
+        delete[] m_data;
     }
 }
 

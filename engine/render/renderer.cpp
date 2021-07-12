@@ -165,6 +165,7 @@ void renderer::renderpass_postfx(texture2d &src, framebuffer_id dest, shader_pro
 void renderer::do_lookup(scene *scene, component_mesh &mesh)
 {
     if (mesh.lookup_count >= mesh.lookup_freq) {
+        ZoneScopedN("mesh lookup");
         if (scene->m_meshes.count(mesh.named_ref)) mesh.mesh_ref = scene->m_meshes[mesh.named_ref];
         mesh.lookup_count = 0;
     }
@@ -174,7 +175,7 @@ void renderer::do_lookup(scene *scene, component_mesh &mesh)
 void renderer::do_lookup(scene *scene, component_material &mat)
 {
     if (mat.lookup_count >= mat.lookup_freq) {
-
+        ZoneScopedN("Material lookup");
         if (scene->m_materials.count(mat.named_ref))
             mat.material_ref = scene->m_materials[mat.named_ref];
 
