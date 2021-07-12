@@ -34,6 +34,8 @@ public:
     void wait();
     void update();
 
+    void de_init();
+
     loader_stats get_statistics();
 
     ~loader();

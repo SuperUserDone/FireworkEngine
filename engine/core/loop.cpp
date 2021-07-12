@@ -30,6 +30,9 @@ loop::~loop()
     // Delete renderer
     delete m_renderer;
 
+    // Close loader
+    loader::get_instance().de_init();
+
     // Close loggger
     Logger::close_file();
 }

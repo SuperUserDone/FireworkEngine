@@ -42,6 +42,14 @@ void loader::update()
     }
 }
 
+void loader::de_init()
+{
+    m_running = false;
+    for (auto &thread : m_threads) {
+        thread.join();
+    }
+}
+
 loader_stats loader::get_statistics() { return m_stats; }
 
 void loader::worker(uint8_t id)
@@ -76,14 +84,6 @@ void loader::worker(uint8_t id)
     }
 }
 
-loader::~loader()
-{
-    m_running = false;
-    for (auto &thread : m_threads) {
-#ifndef __WIN32__ // WINDOWS joins singeton threads
-        thread.join();
-#endif
-    }
-}
+loader::~loader() {}
 
 } // namespace fw
