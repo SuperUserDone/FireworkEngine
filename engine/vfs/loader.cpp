@@ -46,10 +46,12 @@ loader_stats loader::get_statistics() { return m_stats; }
 
 void loader::worker(uint8_t id)
 {
+    int rate = 0;
+    double time = 0;
+
     // TODO stats
     while (m_running) {
-        static int rate = 0;
-        static double time = 0;
+        rate_limiter rate_limt(rate, &time);
 
         action act;
 
@@ -71,8 +73,6 @@ void loader::worker(uint8_t id)
             std::lock_guard<spinlock> lock(m_sync_queue_lock);
             m_sync_action_queue.push(act);
         }
-
-        rate_limiter(rate, &time);
     }
 }
 
