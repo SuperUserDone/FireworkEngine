@@ -11,7 +11,7 @@ namespace fw {
 
 bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 {
-    FILE *fp = vfs::vfs_fopen(vfs_path, "w");
+    FILE *fp = vfs::vfs_fopen(vfs_path, "wb");
 
     ::capnp::MallocMessageBuilder msg;
 
@@ -113,7 +113,7 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
 bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 {
-    FILE *fp = vfs::vfs_fopen(vfs_path, "r");
+    FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
 
     if (!fp) return false;
 

@@ -16,7 +16,7 @@ bool mesh::save_to_file()
 
     ZoneScopedN("Save mesh to file");
 
-    FILE *fp = vfs::vfs_fopen(m_path.c_str(), "w");
+    FILE *fp = vfs::vfs_fopen(m_path.c_str(), "wb");
 
     ::capnp::MallocMessageBuilder msg;
     fw::capnp::Mesh::Builder mesh_ser = msg.initRoot<fw::capnp::Mesh>();
@@ -42,7 +42,7 @@ bool mesh::load_from_file(const std::string &vfs_path)
 {
     ZoneScopedN("Load mesh from file");
 
-    FILE *fp = vfs::vfs_fopen(vfs_path, "r");
+    FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
 
     if (!fp) return false;
 

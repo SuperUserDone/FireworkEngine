@@ -13,7 +13,7 @@ bool image2d::load_from_file(const std::string &vfs_path)
 {
     ZoneScopedN("Load Image from file");
 
-    FILE *fp = vfs::vfs_fopen(vfs_path, "r");
+    FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
     if (!fp) return false;
     ::capnp::PackedFdMessageReader msg(fileno(fp));
     capnp::Image::Reader image_ser = msg.getRoot<capnp::Image>();
