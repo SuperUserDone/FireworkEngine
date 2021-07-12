@@ -492,7 +492,7 @@ void render_api_opengl::draw_elements(vao_id varr,
                                       uint32_t triangle_count,
                                       const glm::mat4 &transform,
                                       shader_program_id shader,
-                                      const std::vector<texture_id> &textures) const
+                                      const std::vector<attribute> &uniforms) const
 {
     {
         TracyGpuZone("Bind Shader");
@@ -503,16 +503,22 @@ void render_api_opengl::draw_elements(vao_id varr,
     }
 
     {
-        TracyGpuZone("Set Uniforms");
-        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
+        TracyGpuZone("Bind Textures");
+        for (auto &uniform : uniforms) {
+            if (uniform.type == ATTRIB_TYPE_TEXTURE) {
+                glActiveTexture(GL_TEXTURE0 + uniform.bind_id);
+
+                if (uniform.data.d_texture != nullptr)
+                    glBindTexture(GL_TEXTURE_2D, *(uint32_t *)uniform.data.d_texture);
+                else
+                    glUseProgram(*(uint32_t *)m_error_shader);
+            }
+        }
     }
 
     {
-        TracyGpuZone("Bind Textures");
-        for (int i = 0; i < textures.size(); i++) {
-            glActiveTexture(GL_TEXTURE0 + i);
-            if (textures[i]) glBindTexture(GL_TEXTURE_2D, *(uint32_t *)textures[i]);
-        }
+        TracyGpuZone("Set Uniforms");
+        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(transform));
     }
 
     {

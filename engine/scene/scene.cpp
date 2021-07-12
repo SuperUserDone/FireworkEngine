@@ -1,3 +1,4 @@
+#include "render/renderer.hpp"
 #include "scene.hpp"
 #include "scene/components.hpp"
 

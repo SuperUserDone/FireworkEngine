@@ -164,9 +164,13 @@ static void draw_mesh(fw::component_mesh &mesh)
 
 static void draw_material(fw::scene *scene, fw::component_material &mat)
 {
-    auto &texture = scene->get_textures()[mat.texture_named_ref];
-
-    ImGui::Image(*(ImTextureID *)texture->get_id(), {128, 128});
+    ImGui::Text("%s", mat.named_ref.c_str());
+    if (mat.material_ref) {
+        ImGui::Text("%s", mat.material_ref->m_shader_named_ref.c_str());
+        if (mat.material_ref->get_attribs().size() > 0) {
+            ImGui::InputText("Text", &mat.material_ref->get_attribs()[0].data_texture_name);
+        }
+    };
 }
 
 static void draw_components(fw::scene *scene)

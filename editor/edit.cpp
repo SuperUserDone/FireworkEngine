@@ -39,9 +39,10 @@ int main(int argc, const char *argv[])
     fw::component_mesh &comp_mesh = entity.add_component<fw::component_mesh>();
     fw::component_material &mat = entity.add_component<fw::component_material>();
 
-    mat.texture_named_ref = "test";
+    mat.named_ref = "Material1";
 
     scene->get_meshes()["Mesh1"] = fw::make_ref<fw::mesh>();
+    scene->get_materials()["Material1"] = fw::make_ref<fw::material>();
 
     auto mesh = scene->get_meshes()["Mesh1"];
 
@@ -53,7 +54,10 @@ int main(int argc, const char *argv[])
     mesh->indicies = {0, 1, 2};
     mesh->update();
 
-    comp_mesh.mesh_ref = mesh;
+    auto material = scene->get_materials()["Material1"];
+
+    material->m_shader_named_ref = "flat_texmap";
+
     comp_mesh.named_ref = "Mesh1";
 
     transform.pos = {0, 0, 2};

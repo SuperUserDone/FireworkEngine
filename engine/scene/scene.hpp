@@ -1,10 +1,12 @@
 #pragma once
 
 #include "components.hpp"
+#include "core/types/material.hpp"
 #include "core/util.hpp"
 #include "entity.hpp"
 #include "parallel_hashmap/phmap.h"
 #include "render/datatypes.hpp"
+#include "render/render_data/shader_program.hpp"
 #include "render/render_data/texture2d.hpp"
 
 #include <entt/entt.hpp>
@@ -36,8 +38,9 @@ public:
     void set_name(const std::string &name) { m_name = name; }
     std::string get_name() { return m_name; }
 
-    storage_type<std::string, ref<texture2d>> &get_textures() { return textures; }
-    storage_type<std::string, ref<mesh>> &get_meshes() { return meshes; }
+    storage_type<std::string, ref<texture2d>> &get_textures() { return m_textures; }
+    storage_type<std::string, ref<mesh>> &get_meshes() { return m_meshes; }
+    storage_type<std::string, ref<material>> &get_materials() { return m_materials; }
 
     void rebuild_refs();
 
@@ -49,14 +52,14 @@ public:
     entt::registry &get_registry() { return m_entt; }
 
 private:
-    mutable entt::registry m_entt;
+    entt::registry m_entt;
 
     std::string m_name = "Scene";
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};
 
-    mutable storage_type<std::string, ref<texture2d>> textures;
-    mutable storage_type<std::string, ref<mesh>> meshes;
-    // TODO materials
+    storage_type<std::string, ref<texture2d>> m_textures;
+    storage_type<std::string, ref<mesh>> m_meshes;
+    storage_type<std::string, ref<material>> m_materials;
 
 private:
     friend class renderer;

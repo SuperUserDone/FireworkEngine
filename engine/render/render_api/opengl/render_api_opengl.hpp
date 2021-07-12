@@ -69,7 +69,7 @@ public:
                        uint32_t triangle_count,
                        const glm::mat4 &transform,
                        shader_program_id shader,
-                       const std::vector<texture_id> &textures) const override;
+                       const std::vector<attribute> &uniforms) const override;
 
     void end() override;
 

@@ -23,8 +23,8 @@ public:
 
     bool check_close();
 
-    void render(const scene *scene);
-    void render_editor(const scene *scene,
+    void render(scene *scene);
+    void render_editor(scene *scene,
                        glm::mat4 camera_view,
                        glm::mat4 camera_proj,
                        std::function<bool(void)> draw_ui,
@@ -34,17 +34,21 @@ public:
     ~renderer();
 
 private:
-    void renderpass_geom(const scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj);
-    void renderpass_postfx(texture2d &src, framebuffer_id dest, shader_program &shader);
+    void renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj);
+    void renderpass_postfx(texture2d &src, framebuffer_id dest, shader_program_id shader);
+
+    void do_lookup(scene *scene, component_mesh &mesh);
+    void do_lookup(scene *scene, component_material &mat);
+
+private:
+    storage_type<std::string, ref<shader_program>> m_shaders;
 
     buffer m_camera;
 
     mesh m_quad_mesh;
 
-    shader_program m_fullscreen_shader;
-    shader_program m_flat_shader;
-
-    framebuffer_screen m_fbo;
+    framebuffer_screen m_edit_fbo;
+    framebuffer_screen m_fx_fbo;
 
     glm::uvec2 m_screen_size;
 

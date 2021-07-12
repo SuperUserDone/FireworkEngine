@@ -2,6 +2,7 @@
 
 #include "core/settings.hpp"
 #include "render/datatypes.hpp"
+#include "render/shader_attribs.hpp"
 
 #include <functional>
 #include <glm/glm.hpp>
@@ -88,7 +89,7 @@ public:
                                uint32_t triangle_count,
                                const glm::mat4 &transform,
                                shader_program_id shader,
-                               const std::vector<texture_id> &textures) const
+                               const std::vector<attribute> &uniforms) const
     {}
 
     virtual void set_depth_mode(depth_test_mode mode) const {}
