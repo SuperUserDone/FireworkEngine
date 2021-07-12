@@ -39,7 +39,8 @@ add_subdirectory(converter)
 
 if(UNIX)
   add_library(tracy SHARED "extern/tracy/TracyClient.cpp")
-  set(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=address")
+  add_compile_options("-fsanitize=address")
+  add_link_options("-fsanitize=address")
 endif()
 
 install(
