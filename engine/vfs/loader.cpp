@@ -80,7 +80,9 @@ loader::~loader()
 {
     m_running = false;
     for (auto &thread : m_threads) {
+#ifndef __WIN32__ // WINDOWS joins singeton threads
         thread.join();
+#endif
     }
 }
 
