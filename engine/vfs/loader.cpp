@@ -48,6 +48,8 @@ void loader::de_init()
     for (auto &thread : m_threads) {
         thread.join();
     }
+
+    m_threads.clear();
 }
 
 loader_stats loader::get_statistics() { return m_stats; }
