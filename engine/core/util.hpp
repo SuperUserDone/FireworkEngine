@@ -113,7 +113,6 @@ public:
             // Wait for lock to be released without generating cache misses
             while (lock_.load(std::memory_order_relaxed)) {
 #ifdef _MSC_VER
-                _mm_pause();
 #elif __clang__ || __GNUC__
                 __builtin_ia32_pause();
 #endif
