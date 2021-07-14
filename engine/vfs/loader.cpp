@@ -90,6 +90,8 @@ void loader::worker(uint8_t id)
             }
         }
     }
+
+    LOG_DF("Thread {} returning", id);
 }
 
 loader::~loader() {}
