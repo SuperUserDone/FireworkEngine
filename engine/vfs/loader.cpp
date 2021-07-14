@@ -51,7 +51,7 @@ void loader::de_init()
 
     for (auto &thread : m_threads) {
         LOG_DF("Thread number {} shutting down...", thread_n);
-        thread.detach();
+        thread.join();
         LOG_DF("Thread number {} shutdown done!", thread_n++);
     }
 
@@ -70,8 +70,6 @@ void loader::worker(uint8_t id)
     // TODO stats
     while (m_running) {
         rate_limiter rate_limt(rate, &time);
-
-        LOG_DF("Load rate thread {}: {}", id, time);
 
         action act;
 

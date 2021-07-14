@@ -1,6 +1,7 @@
 #include "core/native_script.hpp"
 #include "editor_loop.hpp"
 #include "editor_ui.hpp"
+#include "vfs/loader.hpp"
 
 editor_loop::editor_loop() : loop("fireeditlog.txt", "starting firework Editor")
 {
@@ -21,6 +22,9 @@ void editor_loop::tickloop()
         render(frametime);
     }
     destroy_scripts();
+
+    // Close loader
+    fw::loader::get_instance().de_init();
 }
 
 void editor_loop::render(double frametime)
