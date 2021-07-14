@@ -45,8 +45,13 @@ void loader::update()
 void loader::de_init()
 {
     m_running = false;
+
+    int thread_n = 0;
+
     for (auto &thread : m_threads) {
+        LOG_DF("Thread number {} shutting down...", thread_n);
         thread.join();
+        LOG_DF("Thread number {} shutdown done!", thread_n++);
     }
 
     m_threads.clear();
@@ -58,6 +63,8 @@ void loader::worker(uint8_t id)
 {
     int rate = 0;
     double time = 0;
+
+    LOG_DF("Starting thread {}", id);
 
     // TODO stats
     while (m_running) {
