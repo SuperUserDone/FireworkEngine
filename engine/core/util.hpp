@@ -47,7 +47,18 @@ inline void sleep_precise(uint64_t time_us)
 
 #else
 
-inline void sleep_precise(uint64_t time_us) { usleep(time_us); }
+inline void sleep_precise(uint64_t time_us) {
+    HANDLE timer;
+    LARGE_INTEGER ft;
+
+    ft.QuadPart =
+        -(10 * usec); // Convert to 100 nanosecond interval, negative value indicates relative time
+
+    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
 
 inline uint64_t get_precise_time_us()
 {
