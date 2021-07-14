@@ -3,9 +3,11 @@
 #include "logger.hpp"
 
 #include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <random>
 #include <stdint.h>
+#include <thread>
 
 #ifdef __linux__
 #include <time.h>
@@ -47,17 +49,9 @@ inline void sleep_precise(uint64_t time_us)
 
 #else
 
-inline void sleep_precise(uint64_t time_us) {
-    HANDLE timer;
-    LARGE_INTEGER ft;
-
-    ft.QuadPart =
-        -(10 * usec); // Convert to 100 nanosecond interval, negative value indicates relative time
-
-    timer = CreateWaitableTimer(NULL, TRUE, NULL);
-    SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
-    WaitForSingleObject(timer, INFINITE);
-    CloseHandle(timer);
+inline void sleep_precise(uint64_t time_us)
+{
+    std::this_thread::sleep_for(std::chrono::microseconds(time_us));
 }
 
 inline uint64_t get_precise_time_us()
