@@ -47,10 +47,10 @@ private:
 private:
     loader_stats m_stats;
 
-    spinlock m_queue_lock;
+    std::mutex m_queue_lock;
     std::queue<action> m_action_queue;
 
-    spinlock m_sync_queue_lock;
+    std::mutex m_sync_queue_lock;
     std::queue<action> m_sync_action_queue;
 
     std::atomic_bool m_running = {true};

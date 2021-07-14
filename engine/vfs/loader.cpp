@@ -3,7 +3,7 @@
 namespace fw {
 void loader::queue_action(const action &action)
 {
-    std::lock_guard<spinlock> lock(m_queue_lock);
+    std::lock_guard<std::mutex> lock(m_queue_lock);
     m_action_queue.push(action);
 }
 
@@ -20,7 +20,7 @@ void loader::wait()
 
     while (flag) {
         {
-            std::lock_guard<spinlock> lock(m_queue_lock);
+            std::lock_guard<std::mutex> lock(m_queue_lock);
             if (m_action_queue.size() == 0) flag = false;
         }
 
@@ -32,7 +32,7 @@ void loader::update()
 {
     action act;
     {
-        std::lock_guard<spinlock> lock(m_sync_queue_lock);
+        std::lock_guard<std::mutex> lock(m_sync_queue_lock);
 
         while (m_sync_action_queue.size() > 0) {
             act = m_sync_action_queue.front();
@@ -74,8 +74,8 @@ void loader::worker(uint8_t id)
         action act;
 
         {
-            std::lock_guard<spinlock> lock(m_queue_lock);
-            std::lock_guard<spinlock> lock_sync(m_sync_queue_lock);
+            std::lock_guard<std::mutex> lock(m_queue_lock);
+            std::lock_guard<std::mutex> lock_sync(m_sync_queue_lock);
 
             if (m_action_queue.size() > 0) {
                 rate = 0;
