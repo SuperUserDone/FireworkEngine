@@ -184,7 +184,11 @@ public:
 #endif
     }
 
-    static void close_file() { m_file.close(); }
+    static void close_file()
+    {
+        LOG_I("Shutting down logger");
+        m_file.close();
+    }
 
 private:
     static inline std::ofstream m_file;

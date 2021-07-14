@@ -44,6 +44,7 @@ void loader::update()
 
 void loader::de_init()
 {
+    LOG_I("Stopping loader");
     m_running = false;
 
     int thread_n = 0;
@@ -74,21 +75,17 @@ void loader::worker(uint8_t id)
 
         {
             std::lock_guard<spinlock> lock(m_queue_lock);
+            std::lock_guard<spinlock> lock_sync(m_sync_queue_lock);
 
             if (m_action_queue.size() > 0) {
                 rate = 0;
                 act = m_action_queue.front();
                 m_action_queue.pop();
+                act.async_action();
+                m_sync_action_queue.push(act);
             } else {
                 rate = 1;
             }
-        }
-
-        act.async_action();
-
-        {
-            std::lock_guard<spinlock> lock(m_sync_queue_lock);
-            m_sync_action_queue.push(act);
         }
     }
 }
