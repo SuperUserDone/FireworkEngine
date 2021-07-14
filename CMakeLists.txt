@@ -39,6 +39,10 @@ add_subdirectory(converter)
 
 if(UNIX)
   add_library(tracy SHARED "extern/tracy/TracyClient.cpp")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  message("Config ASAN")
   add_compile_options("-fsanitize=address")
   add_link_options("-fsanitize=address")
 endif()

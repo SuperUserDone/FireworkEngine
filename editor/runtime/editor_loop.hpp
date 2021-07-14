@@ -14,7 +14,6 @@ public:
      *
      */
     editor_loop();
-    ~editor_loop() override;
 
     /**
      * \brief Start the update loop

@@ -7,15 +7,12 @@ editor_loop::editor_loop() : loop("fireeditlog.txt", "starting firework Editor")
     m_ui = fw::make_ref<editor_ui>(m_scene_manager.get());
 }
 
-editor_loop::~editor_loop() { m_stop = true; }
-
 void editor_loop::start() { m_pause = false; }
 
 void editor_loop::stop() { m_pause = true; }
 
 void editor_loop::tickloop()
 {
-
     while (!m_stop) {
         static double frametime = 0;
         fw::rate_limiter limiter(m_fps_target, &frametime);
