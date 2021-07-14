@@ -45,7 +45,7 @@ void loader::update()
 void loader::de_init()
 {
     LOG_I("Stopping loader");
-    m_running = false;
+    m_running.exchange(false, std::memory_order_acquire);
 
     int thread_n = 0;
 
@@ -68,7 +68,7 @@ void loader::worker(uint8_t id)
     LOG_DF("Starting thread {}", id);
 
     // TODO stats
-    while (m_running) {
+    while (m_running.load(std::memory_order_acquire)) {
         rate_limiter rate_limt(rate, &time);
 
         LOG_DF("Load rate thread {}: {}", id, time);
