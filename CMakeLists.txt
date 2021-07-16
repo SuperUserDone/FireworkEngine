@@ -25,6 +25,17 @@ include_directories(
 
 # add_definitions(-DTRACY_ENABLE)
 
+if(UNIX)
+  add_library(tracy SHARED "extern/tracy/TracyClient.cpp")
+
+  if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    message("Config ASAN")
+    add_compile_options("-fsanitize=address")
+    add_link_options("-fsanitize=address")
+  endif()
+
+endif()
+
 find_package(SDL2 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
@@ -36,16 +47,6 @@ add_subdirectory(engine)
 add_subdirectory(player)
 add_subdirectory(editor)
 add_subdirectory(converter)
-
-if(UNIX)
-  add_library(tracy SHARED "extern/tracy/TracyClient.cpp")
-endif()
-
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-  message("Config ASAN")
-  add_compile_options("-fsanitize=address")
-  add_link_options("-fsanitize=address")
-endif()
 
 install(
   DIRECTORY engine/
