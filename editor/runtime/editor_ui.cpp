@@ -12,7 +12,7 @@
 
 #include <SDL_scancode.h>
 #include <imgui.h>
-#include <imgui_demo.cpp>
+//#include <imgui_demo.cpp>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -23,7 +23,7 @@ float SRGBToLinear(float in)
     if (in <= 0.04045f)
         return in / 12.92f;
     else
-        return std::pow((in + 0.055f) / 1.055f, 2.4f);
+        return std::pow((in) / 1.0f, 2.2f);
 }
 
 float LinearToSRGB(float in)
@@ -31,7 +31,7 @@ float LinearToSRGB(float in)
     if (in <= 0.0031308f)
         return in * 12.92f;
     else
-        return 1.055f * std::pow(in, 1.0f / 2.4f) - 0.055f;
+        return std::pow(in, 1.0f / 2.2f);
 }
 
 ImVec4 SRGBToLinear(ImVec4 col)
@@ -139,7 +139,7 @@ editor_ui::editor_ui(fw::scene_manager *man)
 
 bool editor_ui::draw()
 {
-    // ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     fw::scene *scene = m_scene_man->get_active_scene();
 
