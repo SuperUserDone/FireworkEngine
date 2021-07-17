@@ -48,6 +48,11 @@ bool image2d::load_from_file(const std::string &vfs_path)
         break;
     case capnp::Image::ColorFormat::FORMAT_RGBA:
         m_color_format = FORMAT_RGBA;
+    case capnp::Image::ColorFormat::FORMAT_SRGB:
+        m_color_format = FORMAT_RGB;
+        break;
+    case capnp::Image::ColorFormat::FORMAT_SRGBA:
+        m_color_format = FORMAT_RGBA;
         break;
     }
 

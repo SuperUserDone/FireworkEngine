@@ -20,6 +20,8 @@ public:
     virtual renderer_impl get_impl() { return RENDERER_NONE; }
     virtual bool check_close() { return m_close; }
 
+    virtual void set_srgb(bool mode) {}
+
     virtual framebuffer_id alloc_framebuffer() { return nullptr; }
     virtual void set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color) {}
     virtual void set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex) {}

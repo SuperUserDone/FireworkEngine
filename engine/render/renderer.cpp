@@ -57,7 +57,7 @@ void renderer::render(scene *scene)
 
     renderpass_geom(scene, view, proj);
     renderpass_postfx(
-        m_fx_fbo.get_texture(), &DEFAULT_FRAMEBUFFER, m_shaders["fullscreen"]->get_id());
+        m_fx_fbo.get_texture(), &DEFAULT_FRAMEBUFFER, m_shaders["fullscreen"]->get_id(), true);
 
     rapi->end();
     FrameMark;
@@ -84,14 +84,18 @@ void renderer::render_editor(scene *scene,
     m_fx_fbo.get_fbo().use();
 
     renderpass_geom(scene, camera_view, camera_proj);
-    renderpass_postfx(
-        m_fx_fbo.get_texture(), m_edit_fbo.get_fbo().get_id(), m_shaders["fullscreen"]->get_id());
+    renderpass_postfx(m_fx_fbo.get_texture(),
+                      m_edit_fbo.get_fbo().get_id(),
+                      m_shaders["fullscreen"]->get_id(),
+                      false);
 
     size = rapi->getsize();
 
     rapi->viewport(size);
     rapi->use_fbo(&DEFAULT_FRAMEBUFFER);
+    rapi->set_srgb(true);
     rapi->draw_imgui(draw_ui);
+    rapi->set_srgb(false);
 
     rapi->end();
     FrameMark;
@@ -136,7 +140,10 @@ void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 ca
     }
 }
 
-void renderer::renderpass_postfx(texture2d &src, framebuffer_id dest, shader_program_id shader)
+void renderer::renderpass_postfx(texture2d &src,
+                                 framebuffer_id dest,
+                                 shader_program_id shader,
+                                 bool srgb)
 {
     ZoneScopedN("FX Pass");
     rapi->use_fbo(dest);
@@ -154,12 +161,14 @@ void renderer::renderpass_postfx(texture2d &src, framebuffer_id dest, shader_pro
     attr.data.d_texture = src.get_id();
     attr.type = ATTRIB_TYPE_TEXTURE;
 
+    rapi->set_srgb(srgb);
     rapi->draw_elements(m_quad_mesh.m_vao.get_id(),
                         m_quad_mesh.m_index_buf.get_id(),
                         m_quad_mesh.indicies.size(),
                         glm::mat4(1.f),
                         shader,
                         {attr});
+    rapi->set_srgb(false);
 }
 
 void renderer::do_lookup(scene *scene, component_mesh &mesh)

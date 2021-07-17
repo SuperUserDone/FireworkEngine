@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     }
 
     if (cmdl[1] == "image") {
-        process_image(cmdl[2].c_str(), cmdl[3].c_str());
+        process_image(cmdl[2].c_str(), cmdl[3].c_str(), cmdl[{"--srgb"}]);
     } else if (cmdl[1] == "scene") {
         process_scene(cmdl[2].c_str(), cmdl[3].c_str());
     } else {

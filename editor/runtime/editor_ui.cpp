@@ -12,10 +12,47 @@
 
 #include <SDL_scancode.h>
 #include <imgui.h>
+#include <imgui_demo.cpp>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <utility>
+
+float SRGBToLinear(float in)
+{
+    if (in <= 0.04045f)
+        return in / 12.92f;
+    else
+        return std::pow((in + 0.055f) / 1.055f, 2.4f);
+}
+
+float LinearToSRGB(float in)
+{
+    if (in <= 0.0031308f)
+        return in * 12.92f;
+    else
+        return 1.055f * std::pow(in, 1.0f / 2.4f) - 0.055f;
+}
+
+ImVec4 SRGBToLinear(ImVec4 col)
+{
+    col.x = SRGBToLinear(col.x);
+    col.y = SRGBToLinear(col.y);
+    col.z = SRGBToLinear(col.z);
+    // Alpha component is already linear
+
+    return col;
+}
+
+ImVec4 LinearToSRGB(ImVec4 col)
+{
+    col.x = LinearToSRGB(col.x);
+    col.y = LinearToSRGB(col.y);
+    col.z = LinearToSRGB(col.z);
+    // Alpha component is already linear
+
+    return col;
+}
 
 static void style_editor()
 {
@@ -61,6 +98,12 @@ static void style_editor()
     colors[ImGuiCol_TextSelectedBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.35f);
     colors[ImGuiCol_NavHighlight] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
 
+    for (int i = 0; i < ImGuiCol_COUNT; i++) {
+        ImVec4 &col = colors[i];
+
+        col = SRGBToLinear(col);
+    }
+
     ImGuiStyle &style = ImGui::GetStyle();
 
     style.WindowPadding = ImVec2(8, 8);
@@ -96,6 +139,8 @@ editor_ui::editor_ui(fw::scene_manager *man)
 
 bool editor_ui::draw()
 {
+    // ImGui::ShowDemoWindow();
+
     fw::scene *scene = m_scene_man->get_active_scene();
 
     static bool styled = false;

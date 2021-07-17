@@ -11,6 +11,8 @@ public:
 
     renderer_impl get_impl() override { return RENDERER_OPENGL33; }
 
+    void set_srgb(bool mode) override;
+
     framebuffer_id alloc_framebuffer() override;
     void set_fbo_color(framebuffer_id id, const std::vector<texture_id> &color) override;
     void set_fbo_depth_stencil_texture(framebuffer_id id, texture_id tex) override;

@@ -18,7 +18,7 @@
 #define STBI_FAILURE_USERMSG
 #include "stb_image.h"
 
-static inline void process_image(const char *in, const char *out)
+static inline void process_image(const char *in, const char *out, bool srgb)
 {
     int x, y, n;
 
@@ -60,10 +60,16 @@ static inline void process_image(const char *in, const char *out)
         fmt = fw::capnp::Image::ColorFormat::FORMAT_RG;
         break;
     case 3:
-        fmt = fw::capnp::Image::ColorFormat::FORMAT_RGB;
+        if (srgb)
+            fmt = fw::capnp::Image::ColorFormat::FORMAT_SRGB;
+        else
+            fmt = fw::capnp::Image::ColorFormat::FORMAT_RGB;
         break;
     case 4:
-        fmt = fw::capnp::Image::ColorFormat::FORMAT_RGBA;
+        if (srgb)
+            fmt = fw::capnp::Image::ColorFormat::FORMAT_SRGBA;
+        else
+            fmt = fw::capnp::Image::ColorFormat::FORMAT_RGBA;
         break;
     }
 

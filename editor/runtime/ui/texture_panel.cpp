@@ -36,10 +36,8 @@ void texture_panel::update()
             ImGui::Text("%s", key.c_str());
             if (val->get_id()) ImGui::Image((ImTextureID)id, {128, 128});
             ImGui::TableNextColumn();
-            ImGui::SetCursorPosY((128.f / 2.f));
-            ImGui::InputText("Path", &val->m_path);
-            ImGui::SameLine();
-            ImGui::TextColored({0.7f, 0.3f, 0.3f, 1.f}, "%s", utf8chr(0xf06a).c_str());
+            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetTextLineHeightWithSpacing());
+            ImGui::Text("Path: %s", val->m_path.c_str());
         }
 
         ImGui::EndTable();

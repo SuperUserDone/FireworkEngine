@@ -21,6 +21,8 @@ struct Image
         formatRg @1;
         formatRgb @2;
         formatRgba @3;
+        formatSrgb @4;
+        formatSrgba @5;
     } 
 
     enum Compression

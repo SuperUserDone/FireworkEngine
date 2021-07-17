@@ -35,7 +35,10 @@ public:
 
 private:
     void renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj);
-    void renderpass_postfx(texture2d &src, framebuffer_id dest, shader_program_id shader);
+    void renderpass_postfx(texture2d &src,
+                           framebuffer_id dest,
+                           shader_program_id shader,
+                           bool srgb);
 
     void do_lookup(scene *scene, component_mesh &mesh);
     void do_lookup(scene *scene, component_material &mat);

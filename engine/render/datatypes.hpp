@@ -39,6 +39,8 @@ enum color_format
     FORMAT_RG,
     FORMAT_RGB,
     FORMAT_RGBA,
+    FORMAT_SRGB,
+    FORMAT_SRGBA,
     FORMAT_DEPTH24_STENCIL8,
     FORMAT_DEPTH24,
 };

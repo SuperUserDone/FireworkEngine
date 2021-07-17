@@ -79,6 +79,13 @@ static GLuint to_gl_type(fw::color_format fil)
         break;
     case fw::FORMAT_RGBA:
         return GL_RGBA;
+        break;
+    case fw::FORMAT_SRGB:
+        return GL_SRGB;
+        break;
+    case fw::FORMAT_SRGBA:
+        return GL_SRGB_ALPHA;
+        break;
     case fw::FORMAT_DEPTH24_STENCIL8:
         return GL_DEPTH24_STENCIL8;
         break;
@@ -169,6 +176,14 @@ render_api_opengl::render_api_opengl(render_settings &settings)
 
     delete_shader(vs);
     delete_shader(fs);
+}
+
+void render_api_opengl::set_srgb(bool mode)
+{
+    if (mode)
+        glEnable(GL_FRAMEBUFFER_SRGB);
+    else
+        glDisable(GL_FRAMEBUFFER_SRGB);
 }
 
 framebuffer_id render_api_opengl::alloc_framebuffer()
