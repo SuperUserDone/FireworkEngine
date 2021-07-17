@@ -13,6 +13,8 @@ bool image2d::load_from_file(const std::string &vfs_path)
 {
     ZoneScopedN("Load Image from file");
 
+    m_path = vfs_path;
+
     FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
     if (!fp) return false;
     ::capnp::PackedFdMessageReader msg(fileno(fp));
@@ -58,6 +60,7 @@ ref<texture2d> &image2d::get_as_texture()
     if (m_tex == nullptr) {
         FIREWORK_ASSERT(m_data, "Data cannot be null");
         m_tex = make_ref<texture2d>(m_size.x, m_size.y, m_data, m_color_format);
+        m_tex->m_path = m_path;
     }
 
     return m_tex;

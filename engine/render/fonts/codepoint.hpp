@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui.h"
+
 #include <string>
 
 static inline const std::string utf8chr(int cp)
@@ -25,22 +27,16 @@ static inline const std::string utf8chr(int cp)
     return std::string(c);
 }
 
-#define CODEPOINT_SETUI_BEGIN       0xe5fa
-#define CODEPOINT_SETUI_END         0xe62b
-#define CODEPOINT_DEVICONS_BEGIN    0xe700
-#define CODEPOINT_DEVICONS_END      0xe7c5
 #define CODEPOINT_FONTAWESOME_BEGIN 0xf000
 #define CODEPOINT_FONTAWESOME_END   0xf2e0
-#define CODEPOINT_FONTAWESOME_EX_BEGIN
-#define CODEPOINT_FONTAWESOME_EX_END
-#define CODEPOINT_MATERIAL_DESIGN_BEGIN
-#define CODEPOINT_MATERIAL_DESIGN_END
-#define CODEPOINT_WEATHER_BEGIN
-#define CODEPOINT_WEATHER_END
-#define CODEPOINT_OCTICONS_BEGIN
-#define CODEPOINT_OCTICONS_END
-#define CODEPOINT_OCTICONS_ADD_0
-#define CODEPOINT_OCTICONS_ADD_1
-#define CODEPOINT_OCTICONS_ADD_2
-#define CODEPOINT__BEGIN
-#define CODEPOINT__END
+static inline ImWchar range_fontawesome[] = {0xf000, 0xf2e0, 0};
+
+static inline ImVector<ImWchar> get_ranges()
+{
+    ImVector<ImWchar> ranges;
+    ImFontGlyphRangesBuilder builder;
+    builder.AddRanges(range_fontawesome);
+    builder.BuildRanges(&ranges);
+
+    return ranges;
+}

@@ -25,6 +25,8 @@ private:
     glm::uvec2 m_size = {0, 0};
     ref<texture2d> m_tex = nullptr;
 
+    std::string m_path = "";
+
     uint8_t *m_data = nullptr;
 
     color_format m_color_format = FORMAT_RGB;
