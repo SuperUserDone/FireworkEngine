@@ -51,8 +51,12 @@ public:
 
     entt::registry &get_registry() { return m_entt; }
 
+    void set_dirty() { m_dirty = true; }
+
 private:
     entt::registry m_entt;
+
+    bool m_dirty = false;
 
     std::string m_name = "Scene";
     glm::vec3 m_back_color = {0.4, 0.6, 0.8};

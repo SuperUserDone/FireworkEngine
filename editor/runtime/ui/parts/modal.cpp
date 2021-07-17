@@ -13,10 +13,19 @@ bool modal::update()
 {
     bool flag = false;
 
-    if (m_show) ImGui::OpenPopup(m_title.c_str());
+    if (m_show) {
+        ImGui::OpenPopup(m_title.c_str());
+        if (m_input) *m_input = "";
+    }
     m_show = false;
 
-    if (ImGui::BeginPopupModal(m_title.c_str())) {
+    auto disp = ImGui::GetIO().DisplaySize;
+
+    ImGui::SetNextWindowSize(ImVec2{ImGui::CalcTextSize(m_text.c_str()).x + 128.f, 128.f});
+    ImGui::SetNextWindowPos(
+        ImVec2(disp.x * 0.5f, disp.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal(
+            m_title.c_str(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
         ImGui::Text("%s", m_text.c_str());
 
         if (m_input) flag = ImGui::InputText("", m_input, ImGuiInputTextFlags_EnterReturnsTrue);

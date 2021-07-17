@@ -15,6 +15,8 @@ public:
     ~texture_panel();
 
 private:
+    float m_size = 128.f;
+
     fw::scene_manager *m_man;
 
     std::string m_name;

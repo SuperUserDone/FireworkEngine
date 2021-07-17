@@ -40,8 +40,8 @@ private:
                            shader_program_id shader,
                            bool srgb);
 
-    void do_lookup(scene *scene, component_mesh &mesh);
-    void do_lookup(scene *scene, component_material &mat);
+    void do_lookup(scene *scene, component_mesh &mesh, bool dirty);
+    void do_lookup(scene *scene, component_material &mat, bool dirty);
 
 private:
     storage_type<std::string, ref<shader_program>> m_shaders;

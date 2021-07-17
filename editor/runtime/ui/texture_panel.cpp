@@ -16,13 +16,15 @@ void texture_panel::update()
 
     ImGui::Begin("Textures", &m_show);
 
+    static ImVector<std::string> m_selections;
+
     if (ImGui::BeginTable(
             "Texture Table",
             2,
             ImGuiTableFlags_ScrollY,
             ImVec2{-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing() - 8.f})) {
 
-        ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthFixed, 132.f);
+        ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthFixed, m_size + 4.f);
         ImGui::TableSetupColumn("Texture Properties");
         ImGui::TableHeadersRow();
 
@@ -31,12 +33,33 @@ void texture_panel::update()
 
             uint64_t id = *(uint32_t *)val->get_id();
 
-            ImGui::TableNextRow();
+            ImGui::TableNextRow(ImGuiTableRowFlags_None, m_size);
+            ImGui::TableNextColumn();
+            auto pos = ImGui::GetCursorPos();
+
+            bool contains_selection = m_selections.contains(key);
+
+            if (ImGui::Selectable(
+                    ("##Selectable" + key).c_str(),
+                    contains_selection,
+                    ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap,
+                    ImVec2(0, m_size))) {
+
+                if (ImGui::GetIO().KeyCtrl) {
+                    if (contains_selection)
+                        m_selections.find_erase_unsorted(key);
+                    else
+                        m_selections.push_back(key);
+                } else {
+                    m_selections.clear();
+                    m_selections.push_back(key);
+                }
+            }
+
+            ImGui::SetCursorPos(pos);
+            if (val->get_id()) ImGui::Image((ImTextureID)id, {m_size, m_size});
             ImGui::TableNextColumn();
             ImGui::Text("%s", key.c_str());
-            if (val->get_id()) ImGui::Image((ImTextureID)id, {128, 128});
-            ImGui::TableNextColumn();
-            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetTextLineHeightWithSpacing());
             ImGui::Text("Path: %s", val->m_path.c_str());
         }
 
@@ -46,6 +69,18 @@ void texture_panel::update()
     ImGui::Separator();
 
     if (ImGui::Button("Add")) m_open.show();
+    ImGui::SameLine();
+    if (ImGui::Button("Delete")) {
+        for (auto &a : m_selections) {
+            scene->get_textures().erase(a);
+            scene->set_dirty();
+        }
+        m_selections.clear();
+    }
+
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(256.f);
+    ImGui::SliderFloat("##Size", &m_size, 64.f, 256.f, "Thumb size: %.0f");
 
     ImGui::End();
 
