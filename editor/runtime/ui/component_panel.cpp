@@ -50,6 +50,8 @@ component_panel::component_panel(fw::scene_manager *man) : m_manager(man) {}
 
 void component_panel::update(const uint32_t &curr)
 {
+    if (!m_show) return;
+
     ImGui::Begin("Components", &m_show);
 
     fw::scene *scene = m_manager->get_active_scene();

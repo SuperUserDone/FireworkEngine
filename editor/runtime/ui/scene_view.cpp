@@ -4,7 +4,9 @@
 
 void scene_view::update(glm::uvec2 &size, size_t id)
 {
-    ImGui::Begin("Scene");
+    if (!m_show) return;
+
+    ImGui::Begin("Scene", &m_show);
 
     ImVec2 wsize{(ImGui::GetWindowSize().x - 15), (ImGui::GetWindowSize().y - 40)};
 

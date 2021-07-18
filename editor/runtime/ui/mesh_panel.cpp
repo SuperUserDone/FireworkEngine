@@ -6,6 +6,7 @@ mesh_panel::mesh_panel(fw::scene_manager *man) : m_man(man) {}
 
 void mesh_panel::update()
 {
+    if (!m_show) return;
     ImGui::Begin("Meshes", &m_show);
 
     ImGui::End();

@@ -12,10 +12,11 @@ texture_panel::texture_panel(fw::scene_manager *man)
 
 void texture_panel::update()
 {
-    fw::scene *scene = m_man->get_active_scene();
+    if (!m_show) return;
 
     ImGui::Begin("Textures", &m_show);
 
+    fw::scene *scene = m_man->get_active_scene();
     static ImVector<std::string> m_selections;
 
     if (ImGui::BeginTable(

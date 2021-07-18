@@ -7,7 +7,7 @@ class scene_tree
 public:
     scene_tree(fw::scene_manager *man);
 
-    bool m_show = false;
+    bool m_show = true;
 
     void update(uint32_t &curr);
 

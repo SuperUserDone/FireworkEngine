@@ -4,9 +4,11 @@
 
 void scene_tree::update(uint32_t &curr)
 {
+    if (!m_show) return;
+
     fw::scene *scene = m_man->get_active_scene();
 
-    ImGui::Begin("Scene View");
+    ImGui::Begin("Scene View", &m_show);
 
     entt::registry &reg = scene->get_registry();
 

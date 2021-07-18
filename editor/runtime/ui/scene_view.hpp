@@ -7,7 +7,7 @@ class scene_view
 public:
     scene_view();
 
-    bool m_show = false;
+    bool m_show = true;
 
     void update(glm::uvec2 &size, size_t id);
 
