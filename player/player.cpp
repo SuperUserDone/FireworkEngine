@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <memory>
 #include <scene/components.hpp>
+#include <serialize/scene_serializer.hpp>
+#include <vfs/vfs.hpp>
 
 class test_script : public fw::native_script
 {
@@ -45,36 +47,17 @@ int main(int argc, char const *argv[])
 {
     fw::loop loop;
 
+    fw::vfs::vfs_register("./", "root");
+
     auto smr = loop.get_scenemanager().lock();
 
-    auto &&scene = smr->get_active_scene();
+    fw::scene *new_scene = new fw::scene();
 
-    auto entity = scene->create_entity("Test");
-    auto cam = scene->create_entity("Cam");
-
-    fw::component_camera &camera = cam.add_component<fw::component_camera>();
-    fw::component_transform &camera_transform = cam.add_component<fw::component_transform>();
-
-    camera_transform.pos = {0, 0, 3};
-
-    fw::component_transform &transform = entity.add_component<fw::component_transform>();
-    fw::component_mesh &comp_mesh = entity.add_component<fw::component_mesh>();
-    fw::component_nativescript &script = entity.add_component<fw::component_nativescript>();
-
-    script.bind<test_script>();
-
-    scene->get_meshes()["Mesh1"] = fw::make_ref<fw::mesh>();
-
-    auto mesh = scene->get_meshes()["Mesh1"];
-
-    mesh->verticies = {{{0, 0, 0}}, {{1, 1, 0}}, {{1, 0, 0}}};
-    mesh->indicies = {0, 1, 2};
-    mesh->update();
-
-    comp_mesh.mesh_ref = mesh;
-    comp_mesh.named_ref = "Mesh1";
-
-    transform.pos = {0, 0, 2};
+    if (fw::scene_serializer::deserialize(new_scene, "root://boot.fwscn")) {
+        new_scene->set_dirty();
+        smr->stage_scene(new_scene);
+        smr->swap();
+    }
 
     loop.tickloop();
 
