@@ -139,7 +139,7 @@ editor_ui::editor_ui(fw::scene_manager *man)
 
 bool editor_ui::draw()
 {
-    //ImGui::ShowDemoWindow();
+    // ImGui::ShowDemoWindow();
 
     fw::scene *scene = m_scene_man->get_active_scene();
 
@@ -180,17 +180,18 @@ bool editor_ui::draw()
         ImGui::EndMainMenuBar();
     }
 
-    // m_curr = 0;
-    // fw::scene *new_scene = new fw::scene();
+    if (load) {
 
-    // if (fw::scene_serializer::deserialize(
-    // new_scene, "root://" + std::string(name) + ".bscn")) {
-    // m_scene_man->stage_scene(new_scene);
-    // m_scene_man->swap();
-    // ImGui::CloseCurrentPopup();
-    //
-    // } else
-    // show_error = true;
+        m_curr = 0;
+        fw::scene *new_scene = new fw::scene();
+
+        // TODO name
+        if (fw::scene_serializer::deserialize(new_scene, "root://Scene.fwscn")) {
+            m_scene_man->stage_scene(new_scene);
+            m_scene_man->swap();
+            ImGui::CloseCurrentPopup();
+        }
+    }
 
     ImGui::DockSpaceOverViewport();
 

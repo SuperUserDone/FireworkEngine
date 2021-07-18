@@ -15,7 +15,7 @@ class material
 public:
     material();
 
-    bool save();
+    bool save_to_file();
     bool load_from_file(const std::string &vfs_path);
 
     std::vector<attribute> &get_attribs() { return m_attribs; }
@@ -33,6 +33,7 @@ private:
 
 private:
     friend class renderer;
+    friend class scene_serializer;
 };
 
 } // namespace fw

@@ -35,6 +35,14 @@ static void write_vec3(const T &vec3, B &target)
 }
 
 template <typename T, typename B>
+static void write_vec3_direct(const T &vec3, B target)
+{
+    target.setX(vec3.x);
+    target.setY(vec3.y);
+    target.setZ(vec3.z);
+}
+
+template <typename T, typename B>
 static void write_vec4(const T &vec3, B &target)
 {
     target.setX(vec3.x);
@@ -44,7 +52,23 @@ static void write_vec4(const T &vec3, B &target)
 }
 
 template <typename T, typename B>
+static void write_vec4_direct(const T &vec3, B target)
+{
+    target.setX(vec3.x);
+    target.setY(vec3.y);
+    target.setZ(vec3.z);
+    target.setW(vec3.w);
+}
+
+template <typename T, typename B>
 static void write_vec2(const T &vec3, B &target)
+{
+    target.setX(vec3.x);
+    target.setY(vec3.y);
+}
+
+template <typename T, typename B>
+static void write_vec2_direct(const T &vec3, B target)
 {
     target.setX(vec3.x);
     target.setY(vec3.y);

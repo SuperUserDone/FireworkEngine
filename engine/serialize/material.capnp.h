@@ -34,7 +34,7 @@ struct Attribute {
   struct Data;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(bd8c8b89aec5a9bf, 2, 1)
+    CAPNP_DECLARE_STRUCT_HEADER(bd8c8b89aec5a9bf, 2, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -72,7 +72,7 @@ struct Attribute::Data {
   };
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(88e9de0ec0a47845, 2, 1)
+    CAPNP_DECLARE_STRUCT_HEADER(88e9de0ec0a47845, 2, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -117,6 +117,9 @@ public:
 
   inline typename Data::Reader getData() const;
 
+  inline bool hasName() const;
+  inline  ::capnp::Text::Reader getName() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -150,6 +153,13 @@ public:
 
   inline typename Data::Builder getData();
   inline typename Data::Builder initData();
+
+  inline bool hasName();
+  inline  ::capnp::Text::Builder getName();
+  inline void setName( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initName(unsigned int size);
+  inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownName();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -573,6 +583,40 @@ inline typename Attribute::Data::Builder Attribute::Builder::initData() {
   _builder.getPointerField(::capnp::bounded<0>() * ::capnp::POINTERS).clear();
   return typename Attribute::Data::Builder(_builder);
 }
+inline bool Attribute::Reader::hasName() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
+}
+inline bool Attribute::Builder::hasName() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Text::Reader Attribute::Reader::getName() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Text::Builder Attribute::Builder::getName() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
+}
+inline void Attribute::Builder::setName( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Text::Builder Attribute::Builder::initName(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS), size);
+}
+inline void Attribute::Builder::adoptName(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Text> Attribute::Builder::disownName() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
+}
+
 inline  ::fw::capnp::Attribute::Data::Which Attribute::Data::Reader::which() const {
   return _reader.getDataField<Which>(
       ::capnp::bounded<3>() * ::capnp::ELEMENTS);

@@ -8,6 +8,7 @@ using Vec = import "vector.capnp";
 struct Attribute
 {
     bindId @0 :UInt32;
+    name @22: Text;
 
     data :union 
     {

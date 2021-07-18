@@ -26,10 +26,29 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
     auto &textures = ptr->get_textures();
     auto &meshes = ptr->get_meshes();
-    auto smeshes = scene_ser.initMeshes().initEntries(ptr->get_meshes().size());
-    auto stextures = scene_ser.initTextures().initEntries(meshes.size());
+    auto &materials = ptr->get_materials();
+
+    auto smeshes = scene_ser.initMeshes().initEntries(meshes.size());
+    auto stextures = scene_ser.initTextures().initEntries(textures.size());
+    auto smaterials = scene_ser.initMaterials().initEntries(materials.size());
 
     int i = 0;
+    for (auto &&mat : materials) {
+        auto mat_ser = smaterials[i];
+
+        auto &[key, value] = mat;
+
+        if (!value->save_to_file()) {
+            value->m_path = "root://" + key + ".fwmat";
+            value->save_to_file();
+        }
+
+        mat_ser.setKey(key);
+        mat_ser.getValue().setPath(value->m_path);
+        i++;
+    }
+
+    i = 0;
     for (auto &&mesh_data : meshes) {
         auto mesh_ser = smeshes[i];
 
@@ -42,8 +61,10 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
         mesh_ser.setKey(key);
         mesh_ser.getValue().setPath(value->m_path);
+        i++;
     }
 
+    i = 0;
     for (auto &&tex : textures) {
         auto tex_ser = stextures[i];
         auto &[key, value] = tex;
@@ -56,6 +77,7 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
         } else {
             tex_ser.getValue().setPath(value->m_path);
         }
+        i++;
     }
 
     reg.each([&](auto entity) {
@@ -125,6 +147,18 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 
     auto meshes = scene_ser.getMeshes().getEntries();
     auto textures = scene_ser.getTextures().getEntries();
+    auto materials = scene_ser.getMaterials().getEntries();
+
+    for (auto m : materials) {
+        std::string key = m.getKey().cStr();
+        std::string path = m.getValue().getPath().cStr();
+
+        auto n_mat = make_ref<material>();
+
+        ptr->get_materials()[key] = n_mat;
+
+        n_mat->load_from_file(path);
+    }
 
     for (auto m : meshes) {
         std::string key = m.getKey().cStr();
@@ -211,6 +245,8 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
             }
         }
     }
+
+    ptr->set_dirty();
 
     fclose(fp);
     return true;

@@ -103,6 +103,7 @@ void renderer::render_editor(scene *scene,
 
 void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj)
 {
+    // TODO move elsewhere
     loader::get_instance().update();
 
     ZoneScopedN("Geometry pass");
@@ -128,17 +129,23 @@ void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 ca
         shader_program_id m_shader;
 
         if (mesh.mesh_ref == nullptr) continue;
-        if (mat.material_ref == nullptr || mat.material_ref->m_shader_ref == nullptr)
+
+        std::vector<attribute> attrs;
+
+        if (mat.material_ref == nullptr || mat.material_ref->m_shader_ref == nullptr) {
             m_shader = nullptr;
-        else
+            attrs = {};
+        } else {
             m_shader = mat.material_ref->m_shader_ref->get_id();
+            attrs = mat.material_ref->m_attribs;
+        }
 
         rapi->draw_elements(mesh.mesh_ref->m_vao.get_id(),
                             mesh.mesh_ref->m_index_buf.get_id(),
                             mesh.mesh_ref->indicies.size(),
                             trans,
                             m_shader,
-                            mat.material_ref->m_attribs);
+                            attrs);
     }
 }
 
@@ -189,8 +196,10 @@ void renderer::do_lookup(scene *scene, component_material &mat, bool dirty)
         ZoneScopedN("Material lookup");
         if (scene->m_materials.count(mat.named_ref))
             mat.material_ref = scene->m_materials[mat.named_ref];
-        else
+        else {
             mat.material_ref = nullptr;
+            return;
+        }
 
         if (m_shaders.count(mat.material_ref->m_shader_named_ref)) {
             mat.material_ref->m_shader_ref = m_shaders[mat.material_ref->m_shader_named_ref];
