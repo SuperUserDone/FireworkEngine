@@ -103,9 +103,6 @@ void renderer::render_editor(scene *scene,
 
 void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 camera_proj)
 {
-    // TODO move elsewhere
-    loader::get_instance().update();
-
     ZoneScopedN("Geometry pass");
     rapi->clear(glm::vec4(scene->m_back_color, 1.f));
 

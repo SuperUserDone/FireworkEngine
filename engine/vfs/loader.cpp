@@ -5,6 +5,7 @@ void loader::queue_action(const action &action)
 {
     std::lock_guard<std::mutex> lock(m_queue_lock);
     m_action_queue.push(action);
+    m_queued_count++;
 }
 
 loader::loader(uint8_t nthreads)
@@ -14,19 +15,7 @@ loader::loader(uint8_t nthreads)
     }
 }
 
-void loader::wait()
-{
-    bool flag = true;
-
-    while (flag) {
-        {
-            std::lock_guard<std::mutex> lock(m_queue_lock);
-            if (m_action_queue.size() == 0) flag = false;
-        }
-
-        sleep_precise(100 * 1000);
-    }
-}
+bool loader::is_empty() { return m_queued_count > m_loaded_count; }
 
 void loader::update()
 {
@@ -38,6 +27,8 @@ void loader::update()
             act = m_sync_action_queue.front();
             m_sync_action_queue.pop();
             act.post_sync_action();
+            m_loaded_count++;
+            LOG_DF("Loaded: {}/{}", m_loaded_count, m_queued_count);
         }
     }
 }
@@ -58,8 +49,6 @@ void loader::de_init()
     m_threads.clear();
 }
 
-loader_stats loader::get_statistics() { return m_stats; }
-
 void loader::worker(uint8_t id)
 {
     int rate = 0;
@@ -71,21 +60,34 @@ void loader::worker(uint8_t id)
     while (m_running) {
         rate_limiter rate_limt(rate, &time);
 
+        bool flag = false;
         action act;
+
+        rate = 1;
 
         {
             std::lock_guard<std::mutex> lock(m_queue_lock);
-            std::lock_guard<std::mutex> lock_sync(m_sync_queue_lock);
+            while (m_action_queue.size() > 0) {
 
-            if (m_action_queue.size() > 0) {
                 rate = 0;
+
                 act = m_action_queue.front();
                 m_action_queue.pop();
-                act.async_action();
-                m_sync_action_queue.push(act);
-            } else {
-                rate = 1;
+                if (act.load_priority > 0) {
+                    act.load_priority--;
+                    m_action_queue.push(act);
+                } else {
+                    flag = true;
+                    break;
+                }
             }
+        }
+
+        act.async_action();
+
+        if (flag) {
+            std::lock_guard<std::mutex> lock_sync(m_sync_queue_lock);
+            m_sync_action_queue.push(act);
         }
     }
 

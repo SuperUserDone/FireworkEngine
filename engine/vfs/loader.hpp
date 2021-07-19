@@ -14,13 +14,9 @@ struct action
 {
     std::function<void(void)> async_action = []() {};
     std::function<void(void)> post_sync_action = []() {};
-};
 
-struct loader_stats
-{
-    std::vector<uint32_t> thread_rates;
+    uint8_t load_priority = 0;
 };
-
 class loader
 {
 public:
@@ -31,12 +27,13 @@ public:
     }
 
     void queue_action(const action &action);
-    void wait();
+    bool is_empty();
     void update();
 
-    void de_init();
+    uint64_t get_queued() { return m_queued_count; }
+    uint64_t get_loaded() { return m_loaded_count; }
 
-    loader_stats get_statistics();
+    void de_init();
 
     ~loader();
 
@@ -45,8 +42,6 @@ private:
     void worker(uint8_t id);
 
 private:
-    loader_stats m_stats;
-
     std::mutex m_queue_lock;
     std::queue<action> m_action_queue;
 
@@ -54,6 +49,8 @@ private:
     std::queue<action> m_sync_action_queue;
 
     std::atomic_bool m_running = {true};
+    std::atomic_uint64_t m_loaded_count = 0;
+    std::atomic_uint64_t m_queued_count = 0;
 
     std::vector<std::thread> m_threads;
 

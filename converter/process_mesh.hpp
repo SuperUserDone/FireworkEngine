@@ -174,7 +174,7 @@ static inline void process_scene(const char *in, const char *out)
         j["meshes"][i]["name"] = name;
     }
 
-    if (scene->mNumLights >= 0) {
+    if (scene->mNumLights > 0) {
         j["warnings"].push_back(
             "This scene appears to contain lights, this will cause some empty objects to be added "
             "with no componenets, please specify lighting manualy. Besides that lighting in assimp "

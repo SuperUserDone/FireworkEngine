@@ -18,6 +18,9 @@ void editor_loop::tickloop()
         static double frametime = 0;
         fw::rate_limiter limiter(m_fps_target, &frametime);
 
+        // Update loader
+        fw::loader::get_instance().update();
+
         update(frametime);
         render(frametime);
     }
