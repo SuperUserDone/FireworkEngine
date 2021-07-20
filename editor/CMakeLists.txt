@@ -10,7 +10,8 @@ set(EDITOR_SRC
     "runtime/ui/scene_view.cpp"
     "runtime/ui/material_panel.cpp"
     "runtime/ui/mesh_panel.cpp"
-    "runtime/ui/texture_panel.cpp")
+    "runtime/ui/texture_panel.cpp"
+    "runtime/ui/parts/imgui_utils.cpp")
 
 add_executable(firework-editor ${EDITOR_SRC})
 target_link_libraries(firework-editor firework-engine)

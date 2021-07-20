@@ -1,5 +1,3 @@
-// TODO FIXME REFACTOR HJKFKJ<GSF>SHBJdf
-
 #include "core/types/image2d.hpp"
 #include "core/types/mesh.hpp"
 #include "core/util.hpp"
@@ -12,7 +10,7 @@
 
 #include <SDL_scancode.h>
 #include <imgui.h>
-//#include <imgui_demo.cpp>
+#include <imgui_demo.cpp>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -139,7 +137,7 @@ editor_ui::editor_ui(fw::scene_manager *man)
 
 bool editor_ui::draw()
 {
-    // ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
 
     fw::scene *scene = m_scene_man->get_active_scene();
 

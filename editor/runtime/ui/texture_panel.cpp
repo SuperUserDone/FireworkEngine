@@ -1,6 +1,8 @@
 #include "core/types/image2d.hpp"
+#include "parts/imgui_utils.hpp"
 #include "render/fonts/codepoint.hpp"
 #include "texture_panel.hpp"
+#include "vfs/loader.hpp"
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
@@ -17,66 +19,31 @@ void texture_panel::update()
     ImGui::Begin("Textures", &m_show);
 
     fw::scene *scene = m_man->get_active_scene();
-    static ImVector<std::string> m_selections;
+    static std::vector<std::string> selections;
+    static std::vector<std::pair<uint32_t, std::string>> thumbs;
 
-    if (ImGui::BeginTable(
-            "Texture Table",
-            2,
-            ImGuiTableFlags_ScrollY,
-            ImVec2{-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing() - 8.f})) {
+    auto &textures = scene->get_textures();
 
-        ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthFixed, m_size + 4.f);
-        ImGui::TableSetupColumn("Texture Properties");
-        ImGui::TableHeadersRow();
+    thumbs.clear();
 
-        for (auto &&tex : scene->get_textures()) {
-            auto &&[key, val] = tex;
+    for (auto &&tex : textures) {
+        auto &&[key, val] = tex;
 
-            uint64_t id = *(uint32_t *)val->get_id();
-
-            ImGui::TableNextRow(ImGuiTableRowFlags_None, m_size);
-            ImGui::TableNextColumn();
-            auto pos = ImGui::GetCursorPos();
-
-            bool contains_selection = m_selections.contains(key);
-
-            if (ImGui::Selectable(
-                    ("##Selectable" + key).c_str(),
-                    contains_selection,
-                    ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap,
-                    ImVec2(0, m_size))) {
-
-                if (ImGui::GetIO().KeyCtrl) {
-                    if (contains_selection)
-                        m_selections.find_erase_unsorted(key);
-                    else
-                        m_selections.push_back(key);
-                } else {
-                    m_selections.clear();
-                    m_selections.push_back(key);
-                }
-            }
-
-            ImGui::SetCursorPos(pos);
-            if (val->get_id()) ImGui::Image((ImTextureID)id, {m_size, m_size});
-            ImGui::TableNextColumn();
-            ImGui::Text("%s", key.c_str());
-            ImGui::Text("Path: %s", val->m_path.c_str());
-        }
-
-        ImGui::EndTable();
+        thumbs.push_back({*(uint32_t *)val->get_id(), key});
     }
+
+    draw_grid(thumbs, selections, m_size);
 
     ImGui::Separator();
 
     if (ImGui::Button("Add")) m_open.show();
     ImGui::SameLine();
     if (ImGui::Button("Delete")) {
-        for (auto &a : m_selections) {
+        for (auto &a : selections) {
             scene->get_textures().erase(a);
             scene->set_dirty();
         }
-        m_selections.clear();
+        selections.clear();
     }
 
     ImGui::SameLine();
@@ -88,14 +55,29 @@ void texture_panel::update()
     m_open_error.update();
 
     if (m_open.update()) {
-        fw::image2d img;
-
+        fw::action act;
         std::string path = "root://" + m_name + ".fwtex";
+        std::string name = m_name;
 
-        if (!img.load_from_file(path))
-            m_open_error.show();
-        else
-            scene->get_textures()[m_name] = img.get_as_texture();
+        fw::ref<fw::image2d> img = fw::make_ref<fw::image2d>();
+
+        act.async_action = [path, img, this]() {
+            if (!img->load_from_file(path)) {
+                this->m_open_error.show();
+                return false;
+            }
+            return true;
+        };
+
+        act.post_sync_action = [scene, name, img, path]() {
+            auto tex = img->get_as_texture();
+            tex->m_path = path;
+            scene->get_textures()[name] = tex;
+            return true;
+        };
+        act.load_priority = 16;
+
+        fw::loader::get_instance().queue_action(act);
     }
 }
 

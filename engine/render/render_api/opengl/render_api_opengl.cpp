@@ -98,6 +98,35 @@ static GLuint to_gl_type(fw::color_format fil)
     return 0;
 }
 
+static GLuint to_gl_type_internal(fw::color_format fil)
+{
+    switch (fil) {
+    case fw::FORMAT_R:
+        return GL_RED;
+        break;
+    case fw::FORMAT_RG:
+        return GL_RG;
+        break;
+    case fw::FORMAT_RGB:
+    case fw::FORMAT_SRGB:
+        return GL_RGB;
+        break;
+    case fw::FORMAT_RGBA:
+    case fw::FORMAT_SRGBA:
+        return GL_RGBA;
+        break;
+    case fw::FORMAT_DEPTH24_STENCIL8:
+        return GL_DEPTH24_STENCIL8;
+        break;
+    case fw::FORMAT_DEPTH24:
+        return GL_DEPTH_COMPONENT24;
+        break;
+    }
+
+    FIREWORK_ASSERT(false, "Not implemented");
+    return 0;
+}
+
 static GLuint to_gl_type(fw::renderbuffer_format format)
 {
     switch (format) {
@@ -449,7 +478,7 @@ texture_id render_api_opengl::alloc_texture2d()
 void render_api_opengl::set_texture2d_data(texture_id id,
                                            uint32_t x,
                                            uint32_t y,
-                                           const color_format,
+                                           const color_format fmt,
                                            const void *data,
                                            texture_properties props)
 {
@@ -461,7 +490,15 @@ void render_api_opengl::set_texture2d_data(texture_id id,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, to_gl_type(props.min, props.mipmap));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, to_gl_type(props.mag));
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 to_gl_type(fmt),
+                 x,
+                 y,
+                 0,
+                 to_gl_type_internal(fmt),
+                 GL_UNSIGNED_BYTE,
+                 data);
 
     if (props.mipmap) glGenerateMipmap(GL_TEXTURE_2D);
 

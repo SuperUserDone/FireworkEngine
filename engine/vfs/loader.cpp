@@ -83,7 +83,7 @@ void loader::worker(uint8_t id)
             }
         }
 
-        act.async_action();
+        if (!act.async_action()) continue;
 
         if (flag) {
             std::lock_guard<std::mutex> lock_sync(m_sync_queue_lock);

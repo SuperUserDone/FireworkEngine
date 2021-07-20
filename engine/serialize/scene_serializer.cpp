@@ -169,8 +169,11 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
         ptr->get_meshes()[key] = n_mesh;
 
         action act;
-        act.async_action = [n_mesh, path]() { n_mesh->load_from_file(path); };
-        act.post_sync_action = [n_mesh]() { n_mesh->update(); };
+        act.async_action = [n_mesh, path]() { return n_mesh->load_from_file(path); };
+        act.post_sync_action = [n_mesh]() {
+            n_mesh->update();
+            return true;
+        };
         act.load_priority = 32;
 
         loader::get_instance().queue_action(act);
@@ -186,11 +189,12 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 
             ref<image2d> img = make_ref<image2d>();
 
-            act.async_action = [path, img]() { img->load_from_file(path); };
+            act.async_action = [path, img]() { return img->load_from_file(path); };
             act.post_sync_action = [ptr, key, img, path]() {
                 auto tex = img->get_as_texture();
                 tex->m_path = path;
                 ptr->get_textures()[key] = tex;
+                return true;
             };
             act.load_priority = 16;
 

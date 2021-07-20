@@ -12,8 +12,8 @@ namespace fw {
 
 struct action
 {
-    std::function<void(void)> async_action = []() {};
-    std::function<void(void)> post_sync_action = []() {};
+    std::function<bool(void)> async_action = []() { return true; };
+    std::function<bool(void)> post_sync_action = []() { return true; };
 
     uint8_t load_priority = 0;
 };
