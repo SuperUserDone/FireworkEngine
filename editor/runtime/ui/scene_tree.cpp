@@ -8,7 +8,7 @@ void scene_tree::update(uint32_t &curr)
 
     fw::scene *scene = m_man->get_active_scene();
 
-    ImGui::Begin("Scene View", &m_show);
+    ImGui::Begin("Scene View\t\ufb44", &m_show);
 
     entt::registry &reg = scene->get_registry();
 

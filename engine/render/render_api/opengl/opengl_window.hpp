@@ -113,10 +113,10 @@ public:
         ImVector<ImWchar> ranges = get_ranges();
 
         ImFontConfig config;
-        config.MergeMode = true;
 
-        // io.Fonts->AddFontFromMemoryCompressedTTF(
-        //    NotoSans_compressed_data, NotoSans_compressed_size, 18.f);
+        io.Fonts->AddFontFromMemoryCompressedTTF(
+            NotoSans_compressed_data, NotoSans_compressed_size, 18.f, &config);
+        config.MergeMode = true;
         io.Fonts->AddFontFromMemoryCompressedTTF(JetBrains_Mono_Regular_Nerd_compressed_data,
                                                  JetBrains_Mono_Regular_Nerd_compressed_size,
                                                  18.f,

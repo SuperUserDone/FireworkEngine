@@ -13,7 +13,7 @@ int draw_grid(const std::vector<std::pair<uint32_t, std::string>> &thumbs,
 
     if (ImGui::BeginTable(
             "Texture Table",
-            floor(ImGui::GetContentRegionMax().x / (thumb_size + 16.f)),
+            std::clamp(floor(ImGui::GetContentRegionMax().x / (thumb_size + 16.f)), 1.f, 64.f),
             ImGuiTableFlags_ScrollY,
             ImVec2{-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing() - 8.f})) {
 

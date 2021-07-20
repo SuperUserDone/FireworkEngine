@@ -6,7 +6,7 @@ void scene_view::update(glm::uvec2 &size, size_t id)
 {
     if (!m_show) return;
 
-    ImGui::Begin("Scene", &m_show);
+    ImGui::Begin("Scene\t\uf11b", &m_show);
 
     ImVec2 wsize{(ImGui::GetWindowSize().x - 15), (ImGui::GetWindowSize().y - 40)};
 

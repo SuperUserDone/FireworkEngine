@@ -52,7 +52,7 @@ void component_panel::update(const uint32_t &curr)
 {
     if (!m_show) return;
 
-    ImGui::Begin("Components", &m_show);
+    ImGui::Begin("Components\t\uf592", &m_show);
 
     fw::scene *scene = m_manager->get_active_scene();
 

@@ -8,7 +8,7 @@ void material_panel::update()
 {
     if (!m_show) return;
 
-    ImGui::Begin("Materials", &m_show);
+    ImGui::Begin("Materials\t\uf042", &m_show);
 
     ImGui::End();
 }

@@ -17,12 +17,10 @@ void texture_panel::update()
     if (!m_show) return;
     static int filtered = 0;
 
-    ImGui::Begin("Textures", &m_show);
+    ImGui::Begin("Textures\t\uf639", &m_show);
 
     std::string filter = "";
-    ImGui::InputText("Filter Textures", &filter);
-    ImGui::SameLine();
-    ImGui::Text("%s\t(%d)", utf8chr(0xf0b0).c_str(), filtered);
+    ImGui::InputText("\uf0b0\tFilter Textures", &filter);
 
     fw::scene *scene = m_man->get_active_scene();
     static std::vector<std::string> selections;
@@ -44,9 +42,9 @@ void texture_panel::update()
 
     ImGui::Separator();
 
-    if (ImGui::Button("Add")) m_open.show();
+    if (ImGui::Button("\uf0fe\tAdd")) m_open.show();
     ImGui::SameLine();
-    if (ImGui::Button("Delete")) {
+    if (ImGui::Button("\uf146\tDelete")) {
         for (auto &a : selections) {
             scene->get_textures().erase(a);
             scene->set_dirty();
@@ -56,7 +54,7 @@ void texture_panel::update()
 
     ImGui::SameLine();
     ImGui::SetNextItemWidth(256.f);
-    ImGui::SliderFloat("##Size", &m_size, 64.f, 256.f, "Thumb size: %.0f");
+    ImGui::SliderFloat("##Size", &m_size, 64.f, 256.f, "\ufb15\tThumb size: %.0f");
 
     ImGui::End();
 
