@@ -27,15 +27,13 @@ static inline const std::string utf8chr(int cp)
     return std::string(c);
 }
 
-#define CODEPOINT_FONTAWESOME_BEGIN 0xf000
-#define CODEPOINT_FONTAWESOME_END   0xf2e0
-static inline ImWchar range_fontawesome[] = {0xf000, 0xf2e0, 0};
+static inline ImWchar range_all[] = {0xe000, 0xff00, 0x2300, 0x2f00, 0x0};
 
 static inline ImVector<ImWchar> get_ranges()
 {
     ImVector<ImWchar> ranges;
     ImFontGlyphRangesBuilder builder;
-    builder.AddRanges(range_fontawesome);
+    builder.AddRanges(range_all);
     builder.BuildRanges(&ranges);
 
     return ranges;

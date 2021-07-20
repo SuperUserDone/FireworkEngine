@@ -15,8 +15,14 @@ texture_panel::texture_panel(fw::scene_manager *man)
 void texture_panel::update()
 {
     if (!m_show) return;
+    static int filtered = 0;
 
     ImGui::Begin("Textures", &m_show);
+
+    std::string filter = "";
+    ImGui::InputText("Filter Textures", &filter);
+    ImGui::SameLine();
+    ImGui::Text("%s\t(%d)", utf8chr(0xf0b0).c_str(), filtered);
 
     fw::scene *scene = m_man->get_active_scene();
     static std::vector<std::string> selections;
@@ -32,7 +38,9 @@ void texture_panel::update()
         thumbs.push_back({*(uint32_t *)val->get_id(), key});
     }
 
-    draw_grid(thumbs, selections, m_size);
+    filtered = draw_grid(thumbs, selections, m_size, filter, [](const std::string &name) {
+        LOG_DF("Edit texture: {}", name);
+    });
 
     ImGui::Separator();
 
