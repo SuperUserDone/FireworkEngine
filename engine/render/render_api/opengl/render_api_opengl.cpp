@@ -244,7 +244,7 @@ void render_api_opengl::set_fbo_depth_stencil_renderbuffer(framebuffer_id id, re
 {
     TracyGpuZone("Set Framebuffer depth/stencil Attatchment renderbuffer");
     glNamedFramebufferRenderbuffer(
-        *(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, *(uint32_t *)rb, 0);
+        *(uint32_t *)id, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, *(uint32_t *)rb);
 }
 
 void render_api_opengl::use_fbo(framebuffer_id id)

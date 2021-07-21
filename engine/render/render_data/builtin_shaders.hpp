@@ -5,6 +5,8 @@ static inline const char *vertex_screen = R"glsl(
 layout (location = 0) in vec3 aPos;
 layout (location = 3) in vec2 aTexCoords;
 
+layout(location = 0) uniform mat4 model;
+
 out vec2 TexCoords;
 void main()
 {

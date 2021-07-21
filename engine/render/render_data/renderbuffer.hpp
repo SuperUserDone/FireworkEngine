@@ -9,13 +9,13 @@ class renderbuffer
 public:
     renderbuffer(int x, int y)
     {
-        m_id = render_api_impl::get_api()->alloc_renderbuffer(x, x, RENDERBUFFER_DEPTH24);
+        m_id = render_api_impl::get_api()->alloc_renderbuffer(x, x, RENDERBUFFER_DEPTH24_STENCIL8);
     }
 
     void resize(int x, int y)
     {
         if (m_id != nullptr) render_api_impl::get_api()->delete_renderbuffer(m_id);
-        m_id = render_api_impl::get_api()->alloc_renderbuffer(x, x, RENDERBUFFER_DEPTH24);
+        m_id = render_api_impl::get_api()->alloc_renderbuffer(x, x, RENDERBUFFER_DEPTH24_STENCIL8);
     }
     renderbuffer_id get_id() const { return m_id; }
 
