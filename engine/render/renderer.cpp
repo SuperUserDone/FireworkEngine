@@ -182,7 +182,10 @@ void renderer::do_lookup(scene *scene, component_mesh &mesh, bool dirty)
 {
     if (mesh.lookup_count >= mesh.lookup_freq || dirty) {
         ZoneScopedN("mesh lookup");
-        if (scene->m_meshes.count(mesh.named_ref)) mesh.mesh_ref = scene->m_meshes[mesh.named_ref];
+        if (scene->m_meshes.count(mesh.named_ref))
+            mesh.mesh_ref = scene->m_meshes[mesh.named_ref];
+        else
+            mesh.mesh_ref = nullptr;
         mesh.lookup_count = 0;
     }
     mesh.lookup_count++;
