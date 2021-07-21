@@ -80,8 +80,6 @@ int draw_grid(const std::string &table_name,
                 ImGui::PushFont(font);
                 float a = ImGui::CalcTextSize(str.c_str(), str.end().base()).x - 10.f;
 
-                LOG_DF("{}", a);
-
                 auto pos = ImGui::GetCursorPos();
                 ImGui::SetCursorPos({pos.x + (a / 2.f), pos.y});
 
