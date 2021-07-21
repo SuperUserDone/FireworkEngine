@@ -43,5 +43,7 @@ struct mesh
     buffer m_buf;
     buffer m_index_buf;
     vertex_array m_vao;
+
+    void *editor_data = nullptr;
 };
 } // namespace fw

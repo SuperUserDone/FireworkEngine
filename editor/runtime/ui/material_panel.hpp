@@ -15,4 +15,6 @@ public:
 
 private:
     fw::scene_manager *m_man;
+
+    float m_size = 128.f;
 };

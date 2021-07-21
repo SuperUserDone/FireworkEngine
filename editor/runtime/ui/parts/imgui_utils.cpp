@@ -3,7 +3,8 @@
 #include <algorithm>
 #include <math.h>
 
-int draw_grid(const std::vector<std::pair<uint32_t, std::string>> &thumbs,
+int draw_grid(const std::string &table_name,
+              const std::vector<std::pair<uint32_t, std::string>> &thumbs,
               std::vector<std::string> &selections,
               float thumb_size,
               const std::string &filter,
@@ -12,7 +13,7 @@ int draw_grid(const std::vector<std::pair<uint32_t, std::string>> &thumbs,
     int filtered = 0;
 
     if (ImGui::BeginTable(
-            "Texture Table",
+            table_name.c_str(),
             std::clamp(floor(ImGui::GetContentRegionMax().x / (thumb_size + 16.f)), 1.f, 64.f),
             ImGuiTableFlags_ScrollY,
             ImVec2{-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing() - 8.f})) {
@@ -41,7 +42,7 @@ int draw_grid(const std::vector<std::pair<uint32_t, std::string>> &thumbs,
             auto pos = ImGui::GetCursorPos();
 
             bool clicked = ImGui::Selectable(
-                ("##Selectable" + name).c_str(),
+                ("##Selectable" + table_name + name).c_str(),
                 contains_selection,
                 ImGuiSelectableFlags_AllowItemOverlap | ImGuiSelectableFlags_AllowDoubleClick,
                 {thumb_size, thumb_size + ImGui::GetTextLineHeightWithSpacing()});

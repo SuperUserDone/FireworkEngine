@@ -71,6 +71,7 @@ void renderer::render_editor(scene *scene,
                              std::function<void(size_t)> set_tex_id)
 {
     rapi->begin();
+    for (auto &&mat : scene->get_materials()) render_preview(mat.second);
 
     glm::uvec2 size = get_size();
     set_tex_id(*(uint32_t *)m_edit_fbo.get_texture().get_id());
@@ -220,6 +221,56 @@ void renderer::do_lookup(scene *scene, component_material &mat, bool dirty)
         mat.lookup_count = 0;
     }
     mat.lookup_count++;
+}
+
+void renderer::render_preview(ref<material> mat)
+{
+    if (mat->m_edit_data == nullptr) mat->m_edit_data = make_ref<editor_data>();
+
+    auto &data = mat->m_edit_data;
+
+    if (data->dirty || data->preview_texture == nullptr) {
+
+        data->dirty = false;
+        glm::mat4 arr[2];
+
+        // todo cam
+        arr[0] = glm::mat4(1.f);
+        arr[1] = glm::mat4(1.f);
+
+        m_camera.set_data(128, arr, MODE_DYNAMIC);
+
+        // Todo lights
+
+        shader_program_id m_shader;
+
+        std::vector<attribute> attrs;
+
+        if (mat == nullptr || mat->m_shader_ref == nullptr) {
+            return;
+        } else {
+            m_shader = mat->m_shader_ref->get_id();
+            attrs = mat->m_attribs;
+        }
+
+        if (data->preview_texture == nullptr) data->preview_texture = make_ref<texture2d>();
+
+        data->preview_texture->set_data(
+            data->preview_size, data->preview_size, nullptr, FORMAT_RGB);
+
+        framebuffer fbo;
+        rapi->viewport(glm::uvec2(data->preview_size));
+        fbo.attach_color({data->preview_texture->get_id()});
+        fbo.use();
+        rapi->clear(glm::vec4(1.f));
+
+        rapi->draw_elements(m_quad_mesh.m_vao.get_id(),
+                            m_quad_mesh.m_index_buf.get_id(),
+                            m_quad_mesh.indicies.size(),
+                            glm::mat4(1.f),
+                            m_shader,
+                            attrs);
+    }
 }
 
 renderer::~renderer() {}

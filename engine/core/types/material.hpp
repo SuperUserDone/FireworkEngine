@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/util.hpp"
+#include "editor_data.hpp"
 #include "render/render_data/shader_program.hpp"
 #include "render/shader_attribs.hpp"
 
@@ -8,6 +9,7 @@
 #include <string>
 #include <vector>
 
+class material_panel;
 namespace fw {
 
 class material
@@ -31,9 +33,12 @@ private:
 
     std::vector<attribute> m_attribs;
 
+    ref<editor_data> m_edit_data = nullptr;
+
 private:
     friend class renderer;
     friend class scene_serializer;
+    friend class ::material_panel;
 };
 
 } // namespace fw
