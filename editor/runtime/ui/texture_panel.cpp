@@ -24,7 +24,7 @@ void texture_panel::update()
 
     fw::scene *scene = m_man->get_active_scene();
     static std::vector<std::string> selections;
-    static std::vector<std::pair<uint32_t, std::string>> thumbs;
+    static std::vector<thumbnail> thumbs;
 
     auto &textures = scene->get_textures();
 

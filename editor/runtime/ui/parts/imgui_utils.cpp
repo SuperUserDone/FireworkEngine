@@ -1,10 +1,11 @@
+#include "core/logger.hpp"
 #include "imgui_utils.hpp"
 
 #include <algorithm>
 #include <math.h>
 
 int draw_grid(const std::string &table_name,
-              const std::vector<std::pair<uint32_t, std::string>> &thumbs,
+              const std::vector<thumbnail> &thumbs,
               std::vector<std::string> &selections,
               float thumb_size,
               const std::string &filter,
@@ -19,7 +20,9 @@ int draw_grid(const std::string &table_name,
             ImVec2{-FLT_MIN, -FLT_MIN - ImGui::GetTextLineHeightWithSpacing() - 8.f})) {
 
         for (auto &&item : thumbs) {
-            auto &&[texid, name] = item;
+            auto &name = item.name;
+            auto &texid = item.tex_id;
+            auto &str = item.glyph;
 
             std::string name_dup = name;
             std::string filter_dup = filter;
@@ -69,7 +72,22 @@ int draw_grid(const std::string &table_name,
 
             ImGui::SetCursorPos(pos);
 
-            ImGui::Image((ImTextureID)id, {thumb_size, thumb_size});
+            if (str == "")
+                ImGui::Image((ImTextureID)id, {thumb_size, thumb_size});
+            else {
+                static auto &&font = ImGui::GetIO().Fonts->Fonts[1];
+
+                ImGui::PushFont(font);
+                float a = ImGui::CalcTextSize(str.c_str(), str.end().base()).x - 10.f;
+
+                LOG_DF("{}", a);
+
+                auto pos = ImGui::GetCursorPos();
+                ImGui::SetCursorPos({pos.x + (a / 2.f), pos.y});
+
+                ImGui::Text("%s", str.c_str());
+                ImGui::PopFont();
+            }
             ImGui::Text("%s", name.c_str());
         }
 

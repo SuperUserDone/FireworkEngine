@@ -111,17 +111,24 @@ public:
         ImGui::StyleColorsDark();
 
         ImVector<ImWchar> ranges = get_ranges();
+        ImVector<ImWchar> big_ranges = get_large_ranges();
 
         ImFontConfig config;
+        config.MergeMode = true;
 
         io.Fonts->AddFontFromMemoryCompressedTTF(
-            NotoSans_compressed_data, NotoSans_compressed_size, 18.f, &config);
-        config.MergeMode = true;
+            NotoSans_compressed_data, NotoSans_compressed_size, 18.f);
+
         io.Fonts->AddFontFromMemoryCompressedTTF(JetBrains_Mono_Regular_Nerd_compressed_data,
                                                  JetBrains_Mono_Regular_Nerd_compressed_size,
                                                  18.f,
                                                  &config,
                                                  ranges.Data);
+        io.Fonts->AddFontFromMemoryCompressedTTF(JetBrains_Mono_Regular_Nerd_compressed_data,
+                                                 JetBrains_Mono_Regular_Nerd_compressed_size,
+                                                 128.f,
+                                                 nullptr,
+                                                 big_ranges.Data);
         io.Fonts->Build();
 
         // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look

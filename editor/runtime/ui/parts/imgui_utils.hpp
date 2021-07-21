@@ -7,8 +7,15 @@
 #include <string>
 #include <vector>
 
+struct thumbnail
+{
+    uint32_t tex_id;
+    std::string name;
+    std::string glyph = "";
+};
+
 int draw_grid(const std::string &name,
-              const std::vector<std::pair<uint32_t, std::string>> &thumbs,
+              const std::vector<thumbnail> &thumbs,
               std::vector<std::string> &selections,
               float thumb_size,
               const std::string &filter,
