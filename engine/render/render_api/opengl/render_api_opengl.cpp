@@ -557,13 +557,78 @@ void render_api_opengl::draw_elements(vao_id varr,
     {
         TracyGpuZone("Bind Textures");
         for (auto &uniform : uniforms) {
-            if (uniform.type == ATTRIB_TYPE_TEXTURE) {
+            switch (uniform.type) {
+            case ATTRIB_TYPE_BOOL:
+                glUniform1i(uniform.bind_id, uniform.data.d_bool);
+                break;
+            case ATTRIB_TYPE_INT:
+                glUniform1i(uniform.bind_id, uniform.data.d_int);
+                break;
+            case ATTRIB_TYPE_UINT:
+                glUniform1ui(uniform.bind_id, uniform.data.d_uint);
+                break;
+            case ATTRIB_TYPE_FLOAT:
+                glUniform1f(uniform.bind_id, uniform.data.d_float);
+                break;
+            case ATTRIB_TYPE_DOUBLE:
+                glUniform1d(uniform.bind_id, uniform.data.d_double);
+                break;
+            case ATTRIB_TYPE_TEXTURE:
                 glActiveTexture(GL_TEXTURE0 + uniform.bind_id);
 
                 if (uniform.data.d_texture != nullptr)
                     glBindTexture(GL_TEXTURE_2D, *(uint32_t *)uniform.data.d_texture);
                 else
                     glUseProgram(*(uint32_t *)m_error_shader);
+                break;
+            case ATTRIB_TYPE_VEC2F:
+                glUniform2f(uniform.bind_id, uniform.data.d_vec2f.x, uniform.data.d_vec2f.y);
+                break;
+            case ATTRIB_TYPE_VEC2I:
+                glUniform2i(uniform.bind_id, uniform.data.d_vec2i.x, uniform.data.d_vec2i.y);
+                break;
+            case ATTRIB_TYPE_VEC2U:
+                glUniform2ui(uniform.bind_id, uniform.data.d_vec2u.x, uniform.data.d_vec2u.y);
+                break;
+            case ATTRIB_TYPE_VEC3F:
+                glUniform3f(uniform.bind_id,
+                            uniform.data.d_vec3f.x,
+                            uniform.data.d_vec3f.y,
+                            uniform.data.d_vec3f.z);
+                break;
+            case ATTRIB_TYPE_VEC3I:
+                glUniform3i(uniform.bind_id,
+                            uniform.data.d_vec3i.x,
+                            uniform.data.d_vec3i.y,
+                            uniform.data.d_vec3i.z);
+                break;
+            case ATTRIB_TYPE_VEC3U:
+                glUniform3ui(uniform.bind_id,
+                             uniform.data.d_vec3u.x,
+                             uniform.data.d_vec3u.y,
+                             uniform.data.d_vec3u.z);
+                break;
+            case ATTRIB_TYPE_VEC4F:
+                glUniform4f(uniform.bind_id,
+                            uniform.data.d_vec4f.x,
+                            uniform.data.d_vec4f.y,
+                            uniform.data.d_vec4f.z,
+                            uniform.data.d_vec4f.w);
+                break;
+            case ATTRIB_TYPE_VEC4I:
+                glUniform4i(uniform.bind_id,
+                            uniform.data.d_vec4i.x,
+                            uniform.data.d_vec4i.y,
+                            uniform.data.d_vec4i.z,
+                            uniform.data.d_vec4i.w);
+                break;
+            case ATTRIB_TYPE_VEC4U:
+                glUniform4ui(uniform.bind_id,
+                             uniform.data.d_vec4u.x,
+                             uniform.data.d_vec4u.y,
+                             uniform.data.d_vec4u.z,
+                             uniform.data.d_vec4u.w);
+                break;
             }
         }
     }

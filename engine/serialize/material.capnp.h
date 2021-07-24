@@ -16,7 +16,7 @@ namespace capnp {
 namespace schemas {
 
 CAPNP_DECLARE_SCHEMA(bd8c8b89aec5a9bf);
-CAPNP_DECLARE_SCHEMA(88e9de0ec0a47845);
+CAPNP_DECLARE_SCHEMA(b9a2b0447b6ca8c0);
 CAPNP_DECLARE_SCHEMA(c9cb9a6165050119);
 
 }  // namespace schemas
@@ -48,14 +48,8 @@ struct Attribute::Data {
   class Builder;
   class Pipeline;
   enum Which: uint16_t {
-    INT8,
-    INT16,
     INT32,
-    INT64,
-    UINT8,
-    UINT16,
     UINT32,
-    UINT64,
     FLOAT,
     DOUBLE,
     TEXTURE,
@@ -72,7 +66,7 @@ struct Attribute::Data {
   };
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(88e9de0ec0a47845, 2, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(b9a2b0447b6ca8c0, 2, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -115,10 +109,10 @@ public:
 
   inline  ::uint32_t getBindId() const;
 
-  inline typename Data::Reader getData() const;
-
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
+
+  inline typename Data::Reader getData() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -151,15 +145,15 @@ public:
   inline  ::uint32_t getBindId();
   inline void setBindId( ::uint32_t value);
 
-  inline typename Data::Builder getData();
-  inline typename Data::Builder initData();
-
   inline bool hasName();
   inline  ::capnp::Text::Builder getName();
   inline void setName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initName(unsigned int size);
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
+
+  inline typename Data::Builder getData();
+  inline typename Data::Builder initData();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -206,29 +200,11 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  inline bool isInt8() const;
-  inline  ::int8_t getInt8() const;
-
-  inline bool isInt16() const;
-  inline  ::int16_t getInt16() const;
-
   inline bool isInt32() const;
-  inline  ::int32_t getInt32() const;
-
-  inline bool isInt64() const;
-  inline  ::int64_t getInt64() const;
-
-  inline bool isUint8() const;
-  inline  ::uint8_t getUint8() const;
-
-  inline bool isUint16() const;
-  inline  ::uint16_t getUint16() const;
+  inline  ::int64_t getInt32() const;
 
   inline bool isUint32() const;
-  inline  ::uint32_t getUint32() const;
-
-  inline bool isUint64() const;
-  inline  ::uint64_t getUint64() const;
+  inline  ::uint64_t getUint32() const;
 
   inline bool isFloat() const;
   inline float getFloat() const;
@@ -308,37 +284,13 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  inline bool isInt8();
-  inline  ::int8_t getInt8();
-  inline void setInt8( ::int8_t value);
-
-  inline bool isInt16();
-  inline  ::int16_t getInt16();
-  inline void setInt16( ::int16_t value);
-
   inline bool isInt32();
-  inline  ::int32_t getInt32();
-  inline void setInt32( ::int32_t value);
-
-  inline bool isInt64();
-  inline  ::int64_t getInt64();
-  inline void setInt64( ::int64_t value);
-
-  inline bool isUint8();
-  inline  ::uint8_t getUint8();
-  inline void setUint8( ::uint8_t value);
-
-  inline bool isUint16();
-  inline  ::uint16_t getUint16();
-  inline void setUint16( ::uint16_t value);
+  inline  ::int64_t getInt32();
+  inline void setInt32( ::int64_t value);
 
   inline bool isUint32();
-  inline  ::uint32_t getUint32();
-  inline void setUint32( ::uint32_t value);
-
-  inline bool isUint64();
-  inline  ::uint64_t getUint64();
-  inline void setUint64( ::uint64_t value);
+  inline  ::uint64_t getUint32();
+  inline void setUint32( ::uint64_t value);
 
   inline bool isFloat();
   inline float getFloat();
@@ -565,6 +517,40 @@ inline void Attribute::Builder::setBindId( ::uint32_t value) {
       ::capnp::bounded<0>() * ::capnp::ELEMENTS, value);
 }
 
+inline bool Attribute::Reader::hasName() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+}
+inline bool Attribute::Builder::hasName() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Text::Reader Attribute::Reader::getName() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Text::Builder Attribute::Builder::getName() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+inline void Attribute::Builder::setName( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Text::Builder Attribute::Builder::initName(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), size);
+}
+inline void Attribute::Builder::adoptName(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Text> Attribute::Builder::disownName() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
+      ::capnp::bounded<0>() * ::capnp::POINTERS));
+}
+
 inline typename Attribute::Data::Reader Attribute::Reader::getData() const {
   return typename Attribute::Data::Reader(_reader);
 }
@@ -578,104 +564,17 @@ inline typename Attribute::Data::Pipeline Attribute::Pipeline::getData() {
 #endif  // !CAPNP_LITE
 inline typename Attribute::Data::Builder Attribute::Builder::initData() {
   _builder.setDataField< ::uint16_t>(::capnp::bounded<2>() * ::capnp::ELEMENTS, 0);
-  _builder.setDataField< ::uint16_t>(::capnp::bounded<3>() * ::capnp::ELEMENTS, 0);
   _builder.setDataField< ::uint64_t>(::capnp::bounded<1>() * ::capnp::ELEMENTS, 0);
-  _builder.getPointerField(::capnp::bounded<0>() * ::capnp::POINTERS).clear();
+  _builder.getPointerField(::capnp::bounded<1>() * ::capnp::POINTERS).clear();
   return typename Attribute::Data::Builder(_builder);
 }
-inline bool Attribute::Reader::hasName() const {
-  return !_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline bool Attribute::Builder::hasName() {
-  return !_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
-}
-inline  ::capnp::Text::Reader Attribute::Reader::getName() const {
-  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline  ::capnp::Text::Builder Attribute::Builder::getName() {
-  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-inline void Attribute::Builder::setName( ::capnp::Text::Reader value) {
-  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
-}
-inline  ::capnp::Text::Builder Attribute::Builder::initName(unsigned int size) {
-  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), size);
-}
-inline void Attribute::Builder::adoptName(
-    ::capnp::Orphan< ::capnp::Text>&& value) {
-  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
-}
-inline ::capnp::Orphan< ::capnp::Text> Attribute::Builder::disownName() {
-  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
-      ::capnp::bounded<1>() * ::capnp::POINTERS));
-}
-
 inline  ::fw::capnp::Attribute::Data::Which Attribute::Data::Reader::which() const {
   return _reader.getDataField<Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
 }
 inline  ::fw::capnp::Attribute::Data::Which Attribute::Data::Builder::which() {
   return _builder.getDataField<Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS);
-}
-
-inline bool Attribute::Data::Reader::isInt8() const {
-  return which() == Attribute::Data::INT8;
-}
-inline bool Attribute::Data::Builder::isInt8() {
-  return which() == Attribute::Data::INT8;
-}
-inline  ::int8_t Attribute::Data::Reader::getInt8() const {
-  KJ_IREQUIRE((which() == Attribute::Data::INT8),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::int8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
-}
-
-inline  ::int8_t Attribute::Data::Builder::getInt8() {
-  KJ_IREQUIRE((which() == Attribute::Data::INT8),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::int8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setInt8( ::int8_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::INT8);
-  _builder.setDataField< ::int8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS, value);
-}
-
-inline bool Attribute::Data::Reader::isInt16() const {
-  return which() == Attribute::Data::INT16;
-}
-inline bool Attribute::Data::Builder::isInt16() {
-  return which() == Attribute::Data::INT16;
-}
-inline  ::int16_t Attribute::Data::Reader::getInt16() const {
-  KJ_IREQUIRE((which() == Attribute::Data::INT16),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::int16_t>(
       ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-
-inline  ::int16_t Attribute::Data::Builder::getInt16() {
-  KJ_IREQUIRE((which() == Attribute::Data::INT16),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::int16_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setInt16( ::int16_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::INT16);
-  _builder.setDataField< ::int16_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
 }
 
 inline bool Attribute::Data::Reader::isInt32() const {
@@ -684,102 +583,24 @@ inline bool Attribute::Data::Reader::isInt32() const {
 inline bool Attribute::Data::Builder::isInt32() {
   return which() == Attribute::Data::INT32;
 }
-inline  ::int32_t Attribute::Data::Reader::getInt32() const {
+inline  ::int64_t Attribute::Data::Reader::getInt32() const {
   KJ_IREQUIRE((which() == Attribute::Data::INT32),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::int32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-
-inline  ::int32_t Attribute::Data::Builder::getInt32() {
-  KJ_IREQUIRE((which() == Attribute::Data::INT32),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::int32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setInt32( ::int32_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::INT32);
-  _builder.setDataField< ::int32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
-}
-
-inline bool Attribute::Data::Reader::isInt64() const {
-  return which() == Attribute::Data::INT64;
-}
-inline bool Attribute::Data::Builder::isInt64() {
-  return which() == Attribute::Data::INT64;
-}
-inline  ::int64_t Attribute::Data::Reader::getInt64() const {
-  KJ_IREQUIRE((which() == Attribute::Data::INT64),
               "Must check which() before get()ing a union member.");
   return _reader.getDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
 
-inline  ::int64_t Attribute::Data::Builder::getInt64() {
-  KJ_IREQUIRE((which() == Attribute::Data::INT64),
+inline  ::int64_t Attribute::Data::Builder::getInt32() {
+  KJ_IREQUIRE((which() == Attribute::Data::INT32),
               "Must check which() before get()ing a union member.");
   return _builder.getDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
-inline void Attribute::Data::Builder::setInt64( ::int64_t value) {
+inline void Attribute::Data::Builder::setInt32( ::int64_t value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::INT64);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::INT32);
   _builder.setDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
-}
-
-inline bool Attribute::Data::Reader::isUint8() const {
-  return which() == Attribute::Data::UINT8;
-}
-inline bool Attribute::Data::Builder::isUint8() {
-  return which() == Attribute::Data::UINT8;
-}
-inline  ::uint8_t Attribute::Data::Reader::getUint8() const {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT8),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::uint8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
-}
-
-inline  ::uint8_t Attribute::Data::Builder::getUint8() {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT8),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::uint8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setUint8( ::uint8_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::UINT8);
-  _builder.setDataField< ::uint8_t>(
-      ::capnp::bounded<4>() * ::capnp::ELEMENTS, value);
-}
-
-inline bool Attribute::Data::Reader::isUint16() const {
-  return which() == Attribute::Data::UINT16;
-}
-inline bool Attribute::Data::Builder::isUint16() {
-  return which() == Attribute::Data::UINT16;
-}
-inline  ::uint16_t Attribute::Data::Reader::getUint16() const {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT16),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::uint16_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-
-inline  ::uint16_t Attribute::Data::Builder::getUint16() {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT16),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::uint16_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setUint16( ::uint16_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::UINT16);
-  _builder.setDataField< ::uint16_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
 }
 
 inline bool Attribute::Data::Reader::isUint32() const {
@@ -788,48 +609,22 @@ inline bool Attribute::Data::Reader::isUint32() const {
 inline bool Attribute::Data::Builder::isUint32() {
   return which() == Attribute::Data::UINT32;
 }
-inline  ::uint32_t Attribute::Data::Reader::getUint32() const {
+inline  ::uint64_t Attribute::Data::Reader::getUint32() const {
   KJ_IREQUIRE((which() == Attribute::Data::UINT32),
-              "Must check which() before get()ing a union member.");
-  return _reader.getDataField< ::uint32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-
-inline  ::uint32_t Attribute::Data::Builder::getUint32() {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT32),
-              "Must check which() before get()ing a union member.");
-  return _builder.getDataField< ::uint32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
-}
-inline void Attribute::Data::Builder::setUint32( ::uint32_t value) {
-  _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::UINT32);
-  _builder.setDataField< ::uint32_t>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
-}
-
-inline bool Attribute::Data::Reader::isUint64() const {
-  return which() == Attribute::Data::UINT64;
-}
-inline bool Attribute::Data::Builder::isUint64() {
-  return which() == Attribute::Data::UINT64;
-}
-inline  ::uint64_t Attribute::Data::Reader::getUint64() const {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT64),
               "Must check which() before get()ing a union member.");
   return _reader.getDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
 
-inline  ::uint64_t Attribute::Data::Builder::getUint64() {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT64),
+inline  ::uint64_t Attribute::Data::Builder::getUint32() {
+  KJ_IREQUIRE((which() == Attribute::Data::UINT32),
               "Must check which() before get()ing a union member.");
   return _builder.getDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
-inline void Attribute::Data::Builder::setUint64( ::uint64_t value) {
+inline void Attribute::Data::Builder::setUint32( ::uint64_t value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::UINT64);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::UINT32);
   _builder.setDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
 }
@@ -855,7 +650,7 @@ inline float Attribute::Data::Builder::getFloat() {
 }
 inline void Attribute::Data::Builder::setFloat(float value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::FLOAT);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::FLOAT);
   _builder.setDataField<float>(
       ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
 }
@@ -881,7 +676,7 @@ inline double Attribute::Data::Builder::getDouble() {
 }
 inline void Attribute::Data::Builder::setDouble(double value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::DOUBLE);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::DOUBLE);
   _builder.setDataField<double>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
 }
@@ -895,49 +690,49 @@ inline bool Attribute::Data::Builder::isTexture() {
 inline bool Attribute::Data::Reader::hasTexture() const {
   if (which() != Attribute::Data::TEXTURE) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasTexture() {
   if (which() != Attribute::Data::TEXTURE) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::capnp::Text::Reader Attribute::Data::Reader::getTexture() const {
   KJ_IREQUIRE((which() == Attribute::Data::TEXTURE),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::capnp::Text::Builder Attribute::Data::Builder::getTexture() {
   KJ_IREQUIRE((which() == Attribute::Data::TEXTURE),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setTexture( ::capnp::Text::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
   ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::capnp::Text::Builder Attribute::Data::Builder::initTexture(unsigned int size) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
   return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), size);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), size);
 }
 inline void Attribute::Data::Builder::adoptTexture(
     ::capnp::Orphan< ::capnp::Text>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::TEXTURE);
   ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::capnp::Text> Attribute::Data::Builder::disownTexture() {
   KJ_IREQUIRE((which() == Attribute::Data::TEXTURE),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec2f() const {
@@ -949,49 +744,49 @@ inline bool Attribute::Data::Builder::isVec2f() {
 inline bool Attribute::Data::Reader::hasVec2f() const {
   if (which() != Attribute::Data::VEC2F) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec2f() {
   if (which() != Attribute::Data::VEC2F) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec2f::Reader Attribute::Data::Reader::getVec2f() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec2f::Builder Attribute::Data::Builder::getVec2f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec2f( ::fw::capnp::Vec2f::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec2f::Builder Attribute::Data::Builder::initVec2f() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec2f(
     ::capnp::Orphan< ::fw::capnp::Vec2f>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec2f> Attribute::Data::Builder::disownVec2f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2f>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec2i() const {
@@ -1003,49 +798,49 @@ inline bool Attribute::Data::Builder::isVec2i() {
 inline bool Attribute::Data::Reader::hasVec2i() const {
   if (which() != Attribute::Data::VEC2I) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec2i() {
   if (which() != Attribute::Data::VEC2I) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec2i::Reader Attribute::Data::Reader::getVec2i() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec2i::Builder Attribute::Data::Builder::getVec2i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec2i( ::fw::capnp::Vec2i::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec2i::Builder Attribute::Data::Builder::initVec2i() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec2i(
     ::capnp::Orphan< ::fw::capnp::Vec2i>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec2i> Attribute::Data::Builder::disownVec2i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2i>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec2u() const {
@@ -1057,49 +852,49 @@ inline bool Attribute::Data::Builder::isVec2u() {
 inline bool Attribute::Data::Reader::hasVec2u() const {
   if (which() != Attribute::Data::VEC2U) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec2u() {
   if (which() != Attribute::Data::VEC2U) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec2u::Reader Attribute::Data::Reader::getVec2u() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec2u::Builder Attribute::Data::Builder::getVec2u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec2u( ::fw::capnp::Vec2u::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec2u::Builder Attribute::Data::Builder::initVec2u() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec2u(
     ::capnp::Orphan< ::fw::capnp::Vec2u>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC2U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec2u> Attribute::Data::Builder::disownVec2u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC2U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec2u>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec3f() const {
@@ -1111,49 +906,49 @@ inline bool Attribute::Data::Builder::isVec3f() {
 inline bool Attribute::Data::Reader::hasVec3f() const {
   if (which() != Attribute::Data::VEC3F) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec3f() {
   if (which() != Attribute::Data::VEC3F) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec3f::Reader Attribute::Data::Reader::getVec3f() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec3f::Builder Attribute::Data::Builder::getVec3f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec3f( ::fw::capnp::Vec3f::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec3f::Builder Attribute::Data::Builder::initVec3f() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec3f(
     ::capnp::Orphan< ::fw::capnp::Vec3f>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec3f> Attribute::Data::Builder::disownVec3f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3f>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec3i() const {
@@ -1165,49 +960,49 @@ inline bool Attribute::Data::Builder::isVec3i() {
 inline bool Attribute::Data::Reader::hasVec3i() const {
   if (which() != Attribute::Data::VEC3I) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec3i() {
   if (which() != Attribute::Data::VEC3I) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec3i::Reader Attribute::Data::Reader::getVec3i() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec3i::Builder Attribute::Data::Builder::getVec3i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec3i( ::fw::capnp::Vec3i::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec3i::Builder Attribute::Data::Builder::initVec3i() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec3i(
     ::capnp::Orphan< ::fw::capnp::Vec3i>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec3i> Attribute::Data::Builder::disownVec3i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3i>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec3u() const {
@@ -1219,49 +1014,49 @@ inline bool Attribute::Data::Builder::isVec3u() {
 inline bool Attribute::Data::Reader::hasVec3u() const {
   if (which() != Attribute::Data::VEC3U) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec3u() {
   if (which() != Attribute::Data::VEC3U) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec3u::Reader Attribute::Data::Reader::getVec3u() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec3u::Builder Attribute::Data::Builder::getVec3u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec3u( ::fw::capnp::Vec3u::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec3u::Builder Attribute::Data::Builder::initVec3u() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec3u(
     ::capnp::Orphan< ::fw::capnp::Vec3u>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC3U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec3u> Attribute::Data::Builder::disownVec3u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC3U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec3u>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec4f() const {
@@ -1273,49 +1068,49 @@ inline bool Attribute::Data::Builder::isVec4f() {
 inline bool Attribute::Data::Reader::hasVec4f() const {
   if (which() != Attribute::Data::VEC4F) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec4f() {
   if (which() != Attribute::Data::VEC4F) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec4f::Reader Attribute::Data::Reader::getVec4f() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec4f::Builder Attribute::Data::Builder::getVec4f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec4f( ::fw::capnp::Vec4f::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec4f::Builder Attribute::Data::Builder::initVec4f() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec4f(
     ::capnp::Orphan< ::fw::capnp::Vec4f>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4F);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec4f> Attribute::Data::Builder::disownVec4f() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4F),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4f>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec4i() const {
@@ -1327,49 +1122,49 @@ inline bool Attribute::Data::Builder::isVec4i() {
 inline bool Attribute::Data::Reader::hasVec4i() const {
   if (which() != Attribute::Data::VEC4I) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec4i() {
   if (which() != Attribute::Data::VEC4I) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec4i::Reader Attribute::Data::Reader::getVec4i() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec4i::Builder Attribute::Data::Builder::getVec4i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec4i( ::fw::capnp::Vec4i::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec4i::Builder Attribute::Data::Builder::initVec4i() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec4i(
     ::capnp::Orphan< ::fw::capnp::Vec4i>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4I);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec4i> Attribute::Data::Builder::disownVec4i() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4I),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4i>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isVec4u() const {
@@ -1381,49 +1176,49 @@ inline bool Attribute::Data::Builder::isVec4u() {
 inline bool Attribute::Data::Reader::hasVec4u() const {
   if (which() != Attribute::Data::VEC4U) return false;
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline bool Attribute::Data::Builder::hasVec4u() {
   if (which() != Attribute::Data::VEC4U) return false;
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
 inline  ::fw::capnp::Vec4u::Reader Attribute::Data::Reader::getVec4u() const {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline  ::fw::capnp::Vec4u::Builder Attribute::Data::Builder::getVec4u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::setVec4u( ::fw::capnp::Vec4u::Reader value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
 inline  ::fw::capnp::Vec4u::Builder Attribute::Data::Builder::initVec4u() {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 inline void Attribute::Data::Builder::adoptVec4u(
     ::capnp::Orphan< ::fw::capnp::Vec4u>&& value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::VEC4U);
   ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
 inline ::capnp::Orphan< ::fw::capnp::Vec4u> Attribute::Data::Builder::disownVec4u() {
   KJ_IREQUIRE((which() == Attribute::Data::VEC4U),
               "Must check which() before get()ing a union member.");
   return ::capnp::_::PointerHelpers< ::fw::capnp::Vec4u>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool Attribute::Data::Reader::isBool() const {
@@ -1436,20 +1231,20 @@ inline bool Attribute::Data::Reader::getBool() const {
   KJ_IREQUIRE((which() == Attribute::Data::BOOL),
               "Must check which() before get()ing a union member.");
   return _reader.getDataField<bool>(
-      ::capnp::bounded<32>() * ::capnp::ELEMENTS);
+      ::capnp::bounded<64>() * ::capnp::ELEMENTS);
 }
 
 inline bool Attribute::Data::Builder::getBool() {
   KJ_IREQUIRE((which() == Attribute::Data::BOOL),
               "Must check which() before get()ing a union member.");
   return _builder.getDataField<bool>(
-      ::capnp::bounded<32>() * ::capnp::ELEMENTS);
+      ::capnp::bounded<64>() * ::capnp::ELEMENTS);
 }
 inline void Attribute::Data::Builder::setBool(bool value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<3>() * ::capnp::ELEMENTS, Attribute::Data::BOOL);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::BOOL);
   _builder.setDataField<bool>(
-      ::capnp::bounded<32>() * ::capnp::ELEMENTS, value);
+      ::capnp::bounded<64>() * ::capnp::ELEMENTS, value);
 }
 
 inline bool Material::Reader::hasAttributes() const {

@@ -42,8 +42,9 @@ private:
 
     void do_lookup(scene *scene, component_mesh &mesh, bool dirty);
     void do_lookup(scene *scene, component_material &mat, bool dirty);
+    void do_lookup(scene *scene, ref<material> mat);
 
-    void render_preview(ref<material> mat);
+    void render_preview(scene *scene, ref<material> mat);
 
 private:
     storage_type<std::string, ref<shader_program>> m_shaders;

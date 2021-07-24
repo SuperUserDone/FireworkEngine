@@ -54,7 +54,7 @@ in vec2 TexCoords;
 // Export
 layout(binding = 0) uniform sampler2D Texture;
 
-// Export 
+// Export [0.01, 0.0, 1.0]
 layout(location = 1) uniform vec4 color = vec4(1.0,1.0,1.0,1.0); 
 
 void main()
@@ -70,3 +70,43 @@ void main() {
     FragColor = vec4(1.0, 0.0, 1.0, 1.0); 
 }
 )glsl";
+
+static inline const char *fragment_test = R"glsl(
+#version 450 core
+out vec4 FragColor;
+
+in vec2 TexCoords;
+
+// Export
+layout(binding = 0) uniform sampler2D Texture;
+
+// Export [0.01, 0.0, 1.0]
+layout(location = 1) uniform vec4 color = vec4(1.0,1.0,1.0,1.0); 
+
+// Export [0.01, 0.0, 1.0]
+layout(location = 2) uniform vec3 color3 = vec3(1.0,1.0,1.0); 
+
+// Export
+layout(location = 3) uniform bool invert = false; 
+
+// Export
+layout(location = 4) uniform int weird = 1; 
+
+// Export
+layout(location = 5) uniform uint uweird = 1; 
+
+// Export [0.01, 0.0, 1.0]
+layout(location = 6) uniform float scalar = 1.0; 
+
+
+// Export [0.01, 0.0, 100.0]
+layout(location = 7) uniform double double_scalar = 100.0; 
+
+void main()
+{ 
+    FragColor = vec4(weird/uweird*scalar*double_scalar/100.0) + (texture(Texture, TexCoords) * color * vec4(color3, 1.0));
+    
+    if(invert)
+        FragColor.rgb = 1 - FragColor.rgb; 
+
+})glsl";

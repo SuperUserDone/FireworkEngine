@@ -43,6 +43,7 @@ static inline ImVector<ImWchar> get_large_ranges()
     ImVector<ImWchar> ranges;
     ImFontGlyphRangesBuilder builder;
     builder.AddChar(0xf6a6);
+    builder.AddChar(0xf071);
     builder.BuildRanges(&ranges);
 
     return ranges;

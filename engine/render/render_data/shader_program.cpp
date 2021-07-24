@@ -7,11 +7,8 @@ namespace fw {
 
 static bool read_bool(const char *str)
 {
-    int val = 0;
-
-    if (sscanf(str, "%d", &val)) return val;
-    if (strcmp(str, "false")) return false;
-    if (strcmp(str, "true")) return true;
+    if (strcmp(str, "false") == 0) return false;
+    if (strcmp(str, "true") == 0) return true;
 
     FIREWORK_ASSERTF(false, "Could not parse bool value {}", str);
     return false;
@@ -23,35 +20,15 @@ static void set_attr_data(attribute &attr, char *str)
     case ATTRIB_TYPE_BOOL:
         attr.data.d_bool = read_bool(str);
         break;
-
-    case ATTRIB_TYPE_INT8:
-        FIREWORK_ASSERTF(sscanf(str, "%hhd", &attr.data.d_int8), "Could not parse value {}", str);
+    case ATTRIB_TYPE_INT:
+        FIREWORK_ASSERTF(sscanf(str, "%ld", &attr.data.d_int), "Could not parse value {}", str);
         break;
-    case ATTRIB_TYPE_INT16:
-        FIREWORK_ASSERTF(sscanf(str, "%hd", &attr.data.d_int16), "Could not parse value {}", str);
+    case ATTRIB_TYPE_UINT:
+        FIREWORK_ASSERTF(sscanf(str, "%lu", &attr.data.d_uint), "Could not parse value {}", str);
         break;
-    case ATTRIB_TYPE_INT32:
-        FIREWORK_ASSERTF(sscanf(str, "%d", &attr.data.d_int32), "Could not parse value {}", str);
-        break;
-    case ATTRIB_TYPE_INT64:
-        FIREWORK_ASSERTF(sscanf(str, "%ld", &attr.data.d_int64), "Could not parse value {}", str);
-        break;
-
-    case ATTRIB_TYPE_UINT8:
-        FIREWORK_ASSERTF(sscanf(str, "%hhu", &attr.data.d_uint8), "Could not parse value {}", str);
-        break;
-    case ATTRIB_TYPE_UINT16:
-        FIREWORK_ASSERTF(sscanf(str, "%hu", &attr.data.d_uint16), "Could not parse value {}", str);
-        break;
-    case ATTRIB_TYPE_UINT32:
-        FIREWORK_ASSERTF(sscanf(str, "%u", &attr.data.d_uint32), "Could not parse value {}", str);
-        break;
-    case ATTRIB_TYPE_UINT64:
-        FIREWORK_ASSERTF(sscanf(str, "%lu", &attr.data.d_uint64), "Could not parse value {}", str);
-        break;
-
     case ATTRIB_TYPE_FLOAT:
         FIREWORK_ASSERTF(sscanf(str, "%f", &attr.data.d_float), "Could not parse value {}", str);
+        break;
     case ATTRIB_TYPE_DOUBLE:
         FIREWORK_ASSERTF(sscanf(str, "%lf", &attr.data.d_double), "Could not parse value {}", str);
         break;
@@ -166,6 +143,8 @@ void shader_program::preprocess(const std::string &src)
 
     for (std::string text; std::getline(ss, text);) {
         if (text.substr(0, 9) == "// Export") {
+            attribute attr;
+            sscanf(text.c_str(), "// Export [%f, %f, %f]", &attr.stepsize, &attr.min, &attr.max);
             std::getline(ss, text);
 
             char str[65];
@@ -182,7 +161,6 @@ void shader_program::preprocess(const std::string &src)
                        name,
                        default_val) == 4) {
 
-                attribute attr;
                 attr.bind_id = id;
                 attr.type = glsl_to_typename(str);
 

@@ -39,35 +39,17 @@ bool material::save_to_file()
         case ATTRIB_TYPE_BOOL:
             data.setBool(tosave.data.d_bool);
             break;
-        case ATTRIB_TYPE_INT8:
-            data.setBool(tosave.data.d_int8);
+        case ATTRIB_TYPE_INT:
+            data.setInt32(tosave.data.d_int);
             break;
-        case ATTRIB_TYPE_INT16:
-            data.setBool(tosave.data.d_int16);
-            break;
-        case ATTRIB_TYPE_INT32:
-            data.setBool(tosave.data.d_int32);
-            break;
-        case ATTRIB_TYPE_INT64:
-            data.setBool(tosave.data.d_int64);
-            break;
-        case ATTRIB_TYPE_UINT8:
-            data.setBool(tosave.data.d_uint8);
-            break;
-        case ATTRIB_TYPE_UINT16:
-            data.setBool(tosave.data.d_uint16);
-            break;
-        case ATTRIB_TYPE_UINT32:
-            data.setBool(tosave.data.d_uint32);
-            break;
-        case ATTRIB_TYPE_UINT64:
-            data.setBool(tosave.data.d_uint64);
+        case ATTRIB_TYPE_UINT:
+            data.setUint32(tosave.data.d_uint);
             break;
         case ATTRIB_TYPE_FLOAT:
-            data.setBool(tosave.data.d_float);
+            data.setFloat(tosave.data.d_float);
             break;
         case ATTRIB_TYPE_DOUBLE:
-            data.setBool(tosave.data.d_double);
+            data.setDouble(tosave.data.d_double);
             break;
         case ATTRIB_TYPE_TEXTURE:
             data.setTexture(tosave.data_texture_name);
@@ -131,37 +113,13 @@ bool material::load_from_file(const std::string &vfs_path)
         auto data = attr.getData();
 
         switch (data.which()) {
-        case capnp::Attribute::Data::INT8:
-            new_attr.type = ATTRIB_TYPE_INT8;
-            new_attr.data.d_int8 = data.getInt8();
-            break;
-        case capnp::Attribute::Data::INT16:
-            new_attr.type = ATTRIB_TYPE_INT16;
-            new_attr.data.d_int16 = data.getInt16();
-            break;
         case capnp::Attribute::Data::INT32:
-            new_attr.type = ATTRIB_TYPE_INT32;
-            new_attr.data.d_int32 = data.getInt32();
-            break;
-        case capnp::Attribute::Data::INT64:
-            new_attr.type = ATTRIB_TYPE_INT64;
-            new_attr.data.d_int64 = data.getInt64();
-            break;
-        case capnp::Attribute::Data::UINT8:
-            new_attr.type = ATTRIB_TYPE_INT8;
-            new_attr.data.d_int8 = data.getInt8();
-            break;
-        case capnp::Attribute::Data::UINT16:
-            new_attr.type = ATTRIB_TYPE_INT16;
-            new_attr.data.d_int16 = data.getInt16();
+            new_attr.type = ATTRIB_TYPE_INT;
+            new_attr.data.d_int = data.getInt32();
             break;
         case capnp::Attribute::Data::UINT32:
-            new_attr.type = ATTRIB_TYPE_INT32;
-            new_attr.data.d_int32 = data.getInt32();
-            break;
-        case capnp::Attribute::Data::UINT64:
-            new_attr.type = ATTRIB_TYPE_INT64;
-            new_attr.data.d_int64 = data.getInt64();
+            new_attr.type = ATTRIB_TYPE_INT;
+            new_attr.data.d_uint = data.getUint32();
             break;
         case capnp::Attribute::Data::FLOAT:
             new_attr.type = ATTRIB_TYPE_FLOAT;

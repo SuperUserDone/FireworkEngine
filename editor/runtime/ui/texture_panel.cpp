@@ -17,10 +17,10 @@ void texture_panel::update()
     if (!m_show) return;
     static int filtered = 0;
 
-    ImGui::Begin("Textures\t\uf639", &m_show);
+    ImGui::Begin(u8"Textures\t\uf639", &m_show);
 
     std::string filter = "";
-    ImGui::InputText("\uf0b0\tFilter Textures", &filter);
+    ImGui::InputText(u8"\uf0b0\tFilter Textures", &filter);
 
     fw::scene *scene = m_man->get_active_scene();
     static std::vector<std::string> selections;
@@ -43,9 +43,9 @@ void texture_panel::update()
 
     ImGui::Separator();
 
-    if (ImGui::Button("\uf0fe\tAdd")) m_open.show();
+    if (ImGui::Button(u8"\uf71f\tImport")) m_open.show();
     ImGui::SameLine();
-    if (ImGui::Button("\uf146\tDelete")) {
+    if (ImGui::Button(u8"\ufae7\tDelete")) {
         for (auto &a : selections) {
             scene->get_textures().erase(a);
             scene->set_dirty();

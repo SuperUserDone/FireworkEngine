@@ -30,6 +30,9 @@ renderer::renderer(render_settings &p_render_settings)
     m_shaders["flat_texmap"] = make_ref<shader_program>(vertex_std, fragment_texmap);
     m_shaders["flat_texmap"]->compile();
 
+    m_shaders["debug"] = make_ref<shader_program>(vertex_std, fragment_test);
+    m_shaders["debug"]->compile();
+
     m_camera.bind_uniform(0);
 }
 
@@ -71,7 +74,7 @@ void renderer::render_editor(scene *scene,
                              std::function<void(size_t)> set_tex_id)
 {
     rapi->begin();
-    for (auto &&mat : scene->get_materials()) render_preview(mat.second);
+    for (auto &&mat : scene->get_materials()) render_preview(scene, mat.second);
 
     glm::uvec2 size = get_size();
     set_tex_id(*(uint32_t *)m_edit_fbo.get_texture().get_id());
@@ -202,31 +205,34 @@ void renderer::do_lookup(scene *scene, component_material &mat, bool dirty)
             return;
         }
 
-        if (m_shaders.count(mat.material_ref->m_shader_named_ref)) {
-            mat.material_ref->m_shader_ref = m_shaders[mat.material_ref->m_shader_named_ref];
-
-            if (mat.material_ref->m_attribs.size() !=
-                mat.material_ref->m_shader_ref->get_attribs().size())
-                mat.material_ref->m_attribs = mat.material_ref->m_shader_ref->get_attribs();
-
-            for (auto &&attr : mat.material_ref->m_attribs) {
-                if (attr.type == ATTRIB_TYPE_TEXTURE) {
-                    if (scene->m_textures.count(attr.data_texture_name))
-                        attr.data.d_texture =
-                            scene->get_textures()[attr.data_texture_name]->get_id();
-                    else
-                        attr.data.d_texture = nullptr;
-                }
-            }
-        } else
-            mat.material_ref->m_shader_ref = nullptr;
+        do_lookup(scene, mat.material_ref);
 
         mat.lookup_count = 0;
     }
     mat.lookup_count++;
 }
 
-void renderer::render_preview(ref<material> mat)
+void renderer::do_lookup(scene *scene, ref<material> mat)
+{
+    if (m_shaders.count(mat->m_shader_named_ref)) {
+        mat->m_shader_ref = m_shaders[mat->m_shader_named_ref];
+
+        if (mat->m_attribs.size() != mat->m_shader_ref->get_attribs().size())
+            mat->m_attribs = mat->m_shader_ref->get_attribs();
+
+        for (auto &&attr : mat->m_attribs) {
+            if (attr.type == ATTRIB_TYPE_TEXTURE) {
+                if (scene->m_textures.count(attr.data_texture_name))
+                    attr.data.d_texture = scene->get_textures()[attr.data_texture_name]->get_id();
+                else
+                    attr.data.d_texture = nullptr;
+            }
+        }
+    } else
+        mat->m_shader_ref = nullptr;
+}
+
+void renderer::render_preview(scene *scene, ref<material> mat)
 {
     if (mat->m_edit_data == nullptr) mat->m_edit_data = make_ref<editor_data>();
 
@@ -249,12 +255,19 @@ void renderer::render_preview(ref<material> mat)
 
         std::vector<attribute> attrs;
 
-        if (mat == nullptr || mat->m_shader_ref == nullptr) {
-            return;
-        } else {
-            m_shader = mat->m_shader_ref->get_id();
-            attrs = mat->m_attribs;
+        if (mat == nullptr) return;
+
+        do_lookup(scene, mat);
+
+        if (mat->m_shader_ref == nullptr && m_shaders.count(mat->m_shader_named_ref)) {
+            mat->m_shader_ref = m_shaders[mat->m_shader_named_ref];
         }
+
+        m_shader = nullptr;
+
+        if (mat->m_shader_ref != nullptr) m_shader = mat->m_shader_ref->get_id();
+
+        attrs = mat->m_attribs;
 
         if (data->preview_texture == nullptr) data->preview_texture = make_ref<texture2d>();
 

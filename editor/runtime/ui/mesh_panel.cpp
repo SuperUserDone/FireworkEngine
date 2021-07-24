@@ -25,7 +25,7 @@ void mesh_panel::update()
     for (auto &&mesh : meshes) {
         auto &&[key, val] = mesh;
 
-        thumbs.push_back({0, key, "\uf6a6"});
+        thumbs.push_back({0, key, u8"\uf6a6"});
     }
 
     filtered =
@@ -37,7 +37,7 @@ void mesh_panel::update()
 
     // if (ImGui::Button("\uf0fe\tAdd")) m_open.show();
     ImGui::SameLine();
-    if (ImGui::Button("\uf146\tDelete")) {
+    if (ImGui::Button("\ufae7\tDelete")) {
         for (auto &a : selections) {
             scene->get_meshes().erase(a);
             scene->set_dirty();
