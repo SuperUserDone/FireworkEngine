@@ -64,22 +64,22 @@ bool material::save_to_file()
             write_vec2_direct(tosave.data.d_vec2u, data.initVec2u());
             break;
         case ATTRIB_TYPE_VEC3F:
-            write_vec2_direct(tosave.data.d_vec3f, data.initVec3f());
+            write_vec3_direct(tosave.data.d_vec3f, data.initVec3f());
             break;
         case ATTRIB_TYPE_VEC3I:
-            write_vec2_direct(tosave.data.d_vec3i, data.initVec3i());
+            write_vec3_direct(tosave.data.d_vec3i, data.initVec3i());
             break;
         case ATTRIB_TYPE_VEC3U:
-            write_vec2_direct(tosave.data.d_vec3u, data.initVec3u());
+            write_vec3_direct(tosave.data.d_vec3u, data.initVec3u());
             break;
         case ATTRIB_TYPE_VEC4F:
-            write_vec2_direct(tosave.data.d_vec4f, data.initVec4f());
+            write_vec4_direct(tosave.data.d_vec4f, data.initVec4f());
             break;
         case ATTRIB_TYPE_VEC4I:
-            write_vec2_direct(tosave.data.d_vec4i, data.initVec4u());
+            write_vec4_direct(tosave.data.d_vec4i, data.initVec4u());
             break;
         case ATTRIB_TYPE_VEC4U:
-            write_vec2_direct(tosave.data.d_vec4u, data.initVec4u());
+            write_vec4_direct(tosave.data.d_vec4u, data.initVec4u());
             break;
         }
     }
@@ -147,27 +147,27 @@ bool material::load_from_file(const std::string &vfs_path)
             break;
         case capnp::Attribute::Data::VEC3F:
             new_attr.type = ATTRIB_TYPE_VEC3F;
-            read_vec2(new_attr.data.d_vec3f, data.getVec3f());
+            read_vec3(new_attr.data.d_vec3f, data.getVec3f());
             break;
         case capnp::Attribute::Data::VEC3I:
             new_attr.type = ATTRIB_TYPE_VEC3I;
-            read_vec2(new_attr.data.d_vec3i, data.getVec3i());
+            read_vec3(new_attr.data.d_vec3i, data.getVec3i());
             break;
         case capnp::Attribute::Data::VEC3U:
             new_attr.type = ATTRIB_TYPE_VEC3U;
-            read_vec2(new_attr.data.d_vec3u, data.getVec3u());
+            read_vec3(new_attr.data.d_vec3u, data.getVec3u());
             break;
         case capnp::Attribute::Data::VEC4F:
             new_attr.type = ATTRIB_TYPE_VEC4F;
-            read_vec2(new_attr.data.d_vec4f, data.getVec4f());
+            read_vec4(new_attr.data.d_vec4f, data.getVec4f());
             break;
         case capnp::Attribute::Data::VEC4I:
             new_attr.type = ATTRIB_TYPE_VEC4I;
-            read_vec2(new_attr.data.d_vec4i, data.getVec4i());
+            read_vec4(new_attr.data.d_vec4i, data.getVec4i());
             break;
         case capnp::Attribute::Data::VEC4U:
             new_attr.type = ATTRIB_TYPE_VEC4U;
-            read_vec2(new_attr.data.d_vec4u, data.getVec4u());
+            read_vec4(new_attr.data.d_vec4u, data.getVec4u());
             break;
         case capnp::Attribute::Data::BOOL:
             new_attr.type = ATTRIB_TYPE_BOOL;

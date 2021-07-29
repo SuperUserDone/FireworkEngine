@@ -1,5 +1,7 @@
 #pragma once
 
+// Todo merge class with texture
+
 #include "core/util.hpp"
 #include "render/datatypes.hpp"
 #include "render/render_data/texture2d.hpp"

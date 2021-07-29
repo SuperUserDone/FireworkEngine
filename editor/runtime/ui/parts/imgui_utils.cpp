@@ -5,6 +5,7 @@
 #include <math.h>
 
 int draw_grid(const std::string &table_name,
+              const std::string &drag_and_drop_name,
               const std::vector<thumbnail> &thumbs,
               std::vector<std::string> &selections,
               float thumb_size,
@@ -49,6 +50,15 @@ int draw_grid(const std::string &table_name,
                 contains_selection,
                 ImGuiSelectableFlags_AllowItemOverlap | ImGuiSelectableFlags_AllowDoubleClick,
                 {thumb_size, thumb_size + ImGui::GetTextLineHeightWithSpacing()});
+
+            if (ImGui::BeginDragDropSource()) {
+                ImGui::SetDragDropPayload(
+                    drag_and_drop_name.c_str(), name.c_str(), name.size(), ImGuiCond_Once);
+
+                ImGui::SetTooltip("%s", name.c_str());
+
+                ImGui::EndDragDropSource();
+            }
 
             if (clicked) {
 

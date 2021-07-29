@@ -45,13 +45,35 @@ void material_panel::update()
     }
 }
 
+void accept_texture(fw::attribute &attr, const std::string &name)
+{
+    ImGui::InputText((attr.name + "##vec4f" + name).c_str(), &attr.data_texture_name);
+    if (ImGui::BeginDragDropTarget()) {
+
+        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE")) {
+            std::string name((const char *)payload->Data);
+
+            attr.data_texture_name = name;
+        }
+        ImGui::EndDragDropTarget();
+    }
+    if (ImGui::IsItemHovered() && attr.data.d_texture) {
+        ImGui::BeginTooltip();
+        uint64_t texture = *(uint32_t *)attr.data.d_texture;
+        ImGui::Image((ImTextureID)texture, {128.f, 128.f});
+        ImGui::EndTooltip();
+    }
+}
+
 void material_panel::draw_edit()
 {
     ImGui::Text("Editing %s", m_editing_name.c_str());
 
     fw::scene *scene = m_man->get_active_scene();
 
-    if (fw::input::is_key_down(fw::input::KEY_ESCAPE)) m_editing = false;
+    if (fw::input::is_key_down(fw::input::KEY_ESCAPE) &&
+        (ImGui::IsWindowHovered() || ImGui::IsWindowFocused()))
+        m_editing = false;
 
     if (m_editing_ref->m_edit_data) {
         if (m_editing_ref->m_edit_data->preview_texture) {
@@ -69,8 +91,11 @@ void material_panel::draw_edit()
     if (ImGui::InputText(
             ("Shader Ref##" + m_editing_name).c_str(), &m_editing_ref->m_shader_named_ref))
         m_editing_ref->m_attribs.clear();
+    ImGui::Separator();
 
-    if (ImGui::BeginTable(("##Table" + m_editing_name).c_str(), 3, ImGuiTableFlags_ScrollY)) {
+    if (ImGui::BeginTable(("##Table" + m_editing_name).c_str(),
+                          std::clamp(ImGui::GetContentRegionAvailWidth() / 300.f, 1.f, 64.f),
+                          ImGuiTableFlags_ScrollY)) {
         ImGui::TableNextColumn();
         for (auto &&attr : m_editing_ref->m_attribs) {
             switch (attr.type) {
@@ -84,8 +109,7 @@ void material_panel::draw_edit()
                 ImGui::DragScalar(attr.name.c_str(), ImGuiDataType_Double, &attr.data.d_double);
                 break;
             case fw::ATTRIB_TYPE_TEXTURE:
-                ImGui::InputText(
-                    (attr.name + "##vec4f" + m_editing_name).c_str(), &attr.data_texture_name);
+                accept_texture(attr, m_editing_name);
                 break;
             case fw::ATTRIB_TYPE_VEC2F:
                 ImGui::DragScalarN(
@@ -172,6 +196,7 @@ void material_panel::draw_all()
     }
 
     filtered = draw_grid("Material Table",
+                         "MATERIAL",
                          thumbs,
                          selections,
                          m_size,

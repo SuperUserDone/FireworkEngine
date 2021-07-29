@@ -36,10 +36,13 @@ void texture_panel::update()
         thumbs.push_back({*(uint32_t *)val->get_id(), key});
     }
 
-    filtered =
-        draw_grid("Texture Table", thumbs, selections, m_size, filter, [](const std::string &name) {
-            LOG_DF("Edit texture: {}", name);
-        });
+    filtered = draw_grid("Texture Table",
+                         "TEXTURE",
+                         thumbs,
+                         selections,
+                         m_size,
+                         filter,
+                         [](const std::string &name) { LOG_DF("Edit texture: {}", name); });
 
     ImGui::Separator();
 
