@@ -2,6 +2,9 @@
 
 #include <imgui.h>
 
+// Include ater Imgui
+#include <ImGuizmo/ImGuizmo.h>
+
 void scene_tree::update(uint64_t &curr)
 {
     if (!m_show) return;

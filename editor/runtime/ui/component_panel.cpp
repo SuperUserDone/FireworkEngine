@@ -1,23 +1,32 @@
 #include "component_panel.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
-static void draw_transform(fw::component_transform &comp)
+// Include after imgui
+#include <ImGuizmo/ImGuizmo.h>
+
+static void draw_transform(fw::component_transform &comp, ImGuizmo::OPERATION &opp)
 {
-    ImGui::DragFloat3("Position", &comp.pos.x, 0.01);
+    float pos[3], rot[3], scale[3];
+    glm::mat4 matrix;
 
-    // TODO fix broken
-    static bool euler = true;
-    ImGui::Checkbox("Rotation Euler", &euler);
-    if (euler) {
-        glm::vec3 euler = glm::degrees(glm::eulerAngles(comp.rot));
-        ImGui::DragFloat3("Rotation", &euler.x, 1.f);
-        comp.rot = glm::quat(glm::radians(glm::vec3(euler.x, euler.y, euler.z)));
-    } else
-        ImGui::DragFloat4("Rotation", &comp.rot.x, 0.1);
+    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr((glm::mat4)comp), pos, rot, scale);
 
-    ImGui::DragFloat3("Scale", &comp.scale.x, 0.1);
+    if (ImGui::RadioButton("Translate", opp == ImGuizmo::TRANSLATE)) opp = ImGuizmo::TRANSLATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Rotate", opp == ImGuizmo::ROTATE)) opp = ImGuizmo::ROTATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Scale", opp == ImGuizmo::SCALE)) opp = ImGuizmo::SCALE;
+
+    ImGui::DragFloat3("Position", pos, 0.01);
+    ImGui::DragFloat3("Rotation", rot);
+    ImGui::DragFloat3("Scale", scale, 0.1);
+
+    ImGuizmo::RecomposeMatrixFromComponents(pos, rot, scale, glm::value_ptr(matrix));
+
+    comp.set_matrix(matrix);
 }
 
 static void draw_camera(fw::component_camera &cam)
@@ -63,7 +72,7 @@ static void draw_mesh(fw::component_mesh_renderer &mesh)
 
 component_panel::component_panel(fw::scene_manager *man) : m_manager(man) {}
 
-void component_panel::update(const uint32_t &curr)
+void component_panel::update(const uint32_t &curr, ImGuizmo::OPERATION &opp)
 {
     if (!m_show) return;
 
@@ -96,7 +105,7 @@ void component_panel::update(const uint32_t &curr)
             if (ImGui::CollapsingHeader("Transform")) {
                 auto &trans =
                     scene->get_registry().get<fw::component_transform>((entt::entity)curr);
-                draw_transform(trans);
+                draw_transform(trans, opp);
             }
         }
 

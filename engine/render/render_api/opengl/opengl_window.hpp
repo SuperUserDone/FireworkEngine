@@ -8,6 +8,7 @@
 #include "render/fonts/NotoSans-Regular.hpp"
 #include "render/fonts/codepoint.hpp"
 
+#include <ImGuizmo/ImGuizmo.h>
 #include <SDL.h>
 #include <Tracy.hpp>
 #include <TracyOpenGL.hpp>
@@ -158,8 +159,9 @@ public:
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(m_window);
-
         ImGui::NewFrame();
+
+        ImGuizmo::BeginFrame();
 
         if (callback()) m_close = true;
 

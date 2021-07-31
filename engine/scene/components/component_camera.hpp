@@ -7,7 +7,7 @@ namespace fw {
 
 struct component_camera
 {
-    float fov = 90.f;
+    float fov = 60.f;
     float clip_near = 0.1f;
     float clip_far = 10000.f;
 

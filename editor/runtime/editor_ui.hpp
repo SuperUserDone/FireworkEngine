@@ -1,5 +1,6 @@
 #pragma once
 
+#include "editor_camera.hpp"
 #include "scene/scene.hpp"
 #include "scene/scene_manager.hpp"
 #include "serialize/scene_serializer.hpp"
@@ -31,9 +32,12 @@ public:
 
     ~editor_ui() {}
 
-private:
-    glm::uvec2 size = {10, 10};
+    editor_camera m_cam;
 
+private:
+    ImGuizmo::OPERATION m_opp = ImGuizmo::TRANSLATE;
+
+    glm::uvec2 size = {10, 10};
     size_t tex_id;
 
     fw::scene_manager *m_scene_man;

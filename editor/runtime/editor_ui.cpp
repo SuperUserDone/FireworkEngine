@@ -193,9 +193,12 @@ bool editor_ui::draw()
 
     ImGui::DockSpaceOverViewport();
 
+    scene = m_scene_man->get_active_scene();
+
     m_scene_tree_panel.update(m_curr);
-    m_component_panel.update(m_curr);
-    m_scene_view_panel.update(size, tex_id);
+    m_component_panel.update(m_curr, m_opp);
+    m_scene_view_panel.update(
+        size, tex_id, scene, m_curr, m_cam, m_cam.cam.get_projection(size.x, size.y), m_opp);
     m_mat_panel.update();
     m_mesh_panel.update();
     m_texture_panel.update();

@@ -35,12 +35,13 @@ void editor_loop::render(double frametime)
     // Draw frame
     using namespace std::placeholders;
 
-    m_renderer->render_editor(m_scene_manager->get_active_scene(),
-                              (glm::mat4)m_edit_cam,
-                              m_edit_cam.cam.get_projection(m_ui->get_size().x, m_ui->get_size().y),
-                              std::bind(&editor_ui::draw, m_ui.get()),
-                              std::bind(&editor_ui::get_size, m_ui.get()),
-                              std::bind(&editor_ui::set_tex_id, m_ui.get(), _1)
+    m_renderer->render_editor(
+        m_scene_manager->get_active_scene(),
+        (glm::mat4)m_ui->m_cam,
+        m_ui->m_cam.cam.get_projection(m_ui->get_size().x, m_ui->get_size().y),
+        std::bind(&editor_ui::draw, m_ui.get()),
+        std::bind(&editor_ui::get_size, m_ui.get()),
+        std::bind(&editor_ui::set_tex_id, m_ui.get(), _1)
 
     );
 

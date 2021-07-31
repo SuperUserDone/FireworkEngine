@@ -21,6 +21,7 @@ set(ENGINE_SRC
     "serialize/material.capnp.c++"
     "serialize/scene_serializer.cpp"
     "vfs/loader.cpp"
+    "../extern/include/ImGuizmo/ImGuizmo.cpp"
     "../extern/imgui-docking/imgui.cpp"
     "../extern/imgui-docking/backends/imgui_impl_opengl3.cpp"
     "../extern/imgui-docking/imgui_widgets.cpp"

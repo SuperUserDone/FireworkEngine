@@ -30,8 +30,6 @@ public:
     virtual void tickloop() override;
 
 private:
-    editor_camera m_edit_cam;
-
     fw::ref<editor_ui> m_ui;
 
 protected:
