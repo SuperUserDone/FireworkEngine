@@ -51,7 +51,7 @@ void accept_texture(fw::attribute &attr, const std::string &name)
     if (ImGui::BeginDragDropTarget()) {
 
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE")) {
-            std::string name((const char *)payload->Data);
+            std::string name((const char *)payload->Data, payload->DataSize);
 
             attr.data_texture_name = name;
         }

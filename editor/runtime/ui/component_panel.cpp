@@ -7,6 +7,7 @@ static void draw_transform(fw::component_transform &comp)
 {
     ImGui::DragFloat3("Position", &comp.pos.x, 0.01);
 
+    // TODO fix broken
     static bool euler = true;
     ImGui::Checkbox("Rotation Euler", &euler);
     if (euler) {
@@ -37,7 +38,7 @@ static void draw_mesh(fw::component_mesh_renderer &mesh)
     if (ImGui::BeginDragDropTarget()) {
 
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MESH")) {
-            std::string name((const char *)payload->Data);
+            std::string name((const char *)payload->Data, payload->DataSize);
             mesh.mesh_named_ref = name;
             dirty = true;
         }
@@ -49,7 +50,7 @@ static void draw_mesh(fw::component_mesh_renderer &mesh)
     if (ImGui::BeginDragDropTarget()) {
 
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MATERIAL")) {
-            std::string name((const char *)payload->Data);
+            std::string name((const char *)payload->Data, payload->DataSize);
             mesh.mat_named_ref = name;
             dirty = true;
         }

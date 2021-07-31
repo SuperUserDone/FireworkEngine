@@ -155,7 +155,6 @@ static inline void process_scene(const char *in, const char *out)
     flags |= aiProcess_CalcTangentSpace;
     flags |= aiProcess_Triangulate;
     flags |= aiProcess_GenNormals;
-    flags |= aiProcess_CalcTangentSpace;
     flags |= aiProcess_JoinIdenticalVertices;
     flags |= aiProcess_SortByPType;
     flags |= aiProcess_FlipUVs;
