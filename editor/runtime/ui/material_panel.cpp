@@ -181,6 +181,11 @@ void material_panel::draw_all()
     for (auto &&mat : materials) {
         auto &&[key, val] = mat;
 
+        if (!val) {
+            materials.erase(key);
+            break;
+        }
+
         if (val->m_edit_data) {
             if (val->m_edit_data->preview_texture)
                 thumbs.push_back({*(uint32_t *)val->m_edit_data->preview_texture->get_id(), key});

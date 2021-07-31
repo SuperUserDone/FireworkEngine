@@ -16,7 +16,12 @@ bool image2d::load_from_file(const std::string &vfs_path)
     m_path = vfs_path;
 
     FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
-    if (!fp) return false;
+
+    if (!fp) {
+        LOG_EF("Could not open VFS file for reading {}", vfs_path);
+        return false;
+    }
+
     ::capnp::PackedFdMessageReader msg(fileno(fp));
     capnp::Image::Reader image_ser = msg.getRoot<capnp::Image>();
 

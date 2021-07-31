@@ -71,6 +71,7 @@ void mesh_panel::update()
 
         act.post_sync_action = [scene, name, mesh, path]() {
             mesh->m_path = path;
+            mesh->update();
             scene->get_meshes()[name] = mesh;
             return true;
         };

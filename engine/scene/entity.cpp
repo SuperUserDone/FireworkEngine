@@ -10,6 +10,7 @@ entity::entity(entt::registry *reg, const std::string &name, uint32_t id) : m_re
     m_id = m_reg->create((entt::entity)id);
 
     m_reg->emplace<component_tag>(m_id, component_tag{name});
+    m_reg->emplace<component_transform>(m_id);
 }
 entity::~entity() {}
 

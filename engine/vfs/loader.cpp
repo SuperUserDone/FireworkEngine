@@ -28,7 +28,10 @@ void loader::update()
             m_sync_action_queue.pop();
             act.post_sync_action();
             m_loaded_count++;
-            LOG_DF("Loaded: {}/{}", m_loaded_count, m_queued_count);
+            LOG_DF("Loaded: {}/{} FAILED: {}",
+                   m_loaded_count,
+                   m_queued_count - m_failed_count,
+                   m_failed_count);
         }
     }
 }
@@ -83,8 +86,11 @@ void loader::worker(uint8_t id)
             }
         }
 
-        if (!act.async_action()) continue;
-
+        if (!act.async_action()) {
+            m_failed_count++;
+            LOG_EF("Fail to load, see prev log entries. (Total failed = {})", m_failed_count);
+            continue;
+        }
         if (flag) {
             std::lock_guard<std::mutex> lock_sync(m_sync_queue_lock);
             m_sync_action_queue.push(act);

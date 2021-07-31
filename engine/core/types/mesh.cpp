@@ -18,6 +18,11 @@ bool mesh::save_to_file()
 
     FILE *fp = vfs::vfs_fopen(m_path.c_str(), "wb");
 
+    if (!fp) {
+        LOG_EF("Could not open VFS file for writing {}", m_path);
+        return false;
+    }
+
     ::capnp::MallocMessageBuilder msg;
     fw::capnp::Mesh::Builder mesh_ser = msg.initRoot<fw::capnp::Mesh>();
 
@@ -44,7 +49,10 @@ bool mesh::load_from_file(const std::string &vfs_path)
 
     FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
 
-    if (!fp) return false;
+    if (!fp) {
+        LOG_EF("Could not open VFS file for reading {}", vfs_path);
+        return false;
+    }
 
     ::capnp::PackedFdMessageReader msg(fileno(fp));
 

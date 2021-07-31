@@ -31,6 +31,7 @@ public:
     void update();
 
     uint64_t get_queued() { return m_queued_count; }
+    uint64_t get_failed() { return m_queued_count; }
     uint64_t get_loaded() { return m_loaded_count; }
 
     void de_init();
@@ -51,6 +52,7 @@ private:
     std::atomic_bool m_running = {true};
     std::atomic_uint64_t m_loaded_count = 0;
     std::atomic_uint64_t m_queued_count = 0;
+    std::atomic_uint64_t m_failed_count = 0;
 
     std::vector<std::thread> m_threads;
 

@@ -116,7 +116,7 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
                 auto mesh_ser = entities[entities_count].initMeshRenderer();
                 mesh_ser.setMeshRefrence(mesh.mesh_named_ref);
-                mesh_ser.setMeshRefrence(mesh.mat_named_ref);
+                mesh_ser.setMatRefrence(mesh.mat_named_ref);
             }
         }
         entities_count++;
@@ -131,8 +131,10 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 {
     FILE *fp = vfs::vfs_fopen(vfs_path, "rb");
 
-    if (!fp) return false;
-
+    if (!fp) {
+        LOG_FF("Could not open scene VFS file: {}", vfs_path);
+        return false;
+    }
     ::capnp::PackedFdMessageReader msg(fileno(fp));
 
     capnp::Scene::Reader scene_ser = msg.getRoot<capnp::Scene>();
@@ -222,7 +224,7 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
 
             if (a.hasTransform()) {
                 auto trans = a.getTransform();
-                auto &comp = entity_new.add_component<component_transform>();
+                auto &comp = entity_new.get_component<component_transform>();
 
                 read_vec3(comp.pos, trans.getPos());
                 read_vec4(comp.rot, trans.getRot());

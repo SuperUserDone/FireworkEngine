@@ -57,6 +57,8 @@ int main(int argc, char const *argv[])
         new_scene->set_dirty();
         smr->stage_scene(new_scene);
         smr->swap();
+    } else {
+        return -1;
     }
 
     loop.tickloop();

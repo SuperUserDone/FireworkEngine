@@ -31,8 +31,33 @@ static void draw_camera(fw::component_camera &cam)
 
 static void draw_mesh(fw::component_mesh_renderer &mesh)
 {
-    // TODO
-    ImGui::Text("Not Implemented");
+    bool dirty = 0;
+
+    dirty |= ImGui::InputText("Mesh", &mesh.mesh_named_ref);
+    if (ImGui::BeginDragDropTarget()) {
+
+        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MESH")) {
+            std::string name((const char *)payload->Data);
+            mesh.mesh_named_ref = name;
+            dirty = true;
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
+    dirty |= ImGui::InputText("Material", &mesh.mat_named_ref);
+    if (ImGui::BeginDragDropTarget()) {
+
+        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MATERIAL")) {
+            std::string name((const char *)payload->Data);
+            mesh.mat_named_ref = name;
+            dirty = true;
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
+    if (dirty) mesh.lookup_count = mesh.lookup_freq + 1;
 }
 
 component_panel::component_panel(fw::scene_manager *man) : m_manager(man) {}
@@ -46,6 +71,7 @@ void component_panel::update(const uint32_t &curr)
     fw::scene *scene = m_manager->get_active_scene();
 
     if (curr != 0) {
+        ImGui::PushID(curr);
         if (scene->get_registry().any_of<fw::component_tag>((entt::entity)curr)) {
             auto &tag = scene->get_registry().get<fw::component_tag>((entt::entity)curr);
 
@@ -57,6 +83,11 @@ void component_panel::update(const uint32_t &curr)
             if (ImGui::CollapsingHeader("Camera")) {
                 auto &cam = scene->get_registry().get<fw::component_camera>((entt::entity)curr);
                 draw_camera(cam);
+
+                ImGui::Separator();
+                if (ImGui::Button("Remove Camera"))
+                    scene->get_registry().remove_if_exists<fw::component_camera>(
+                        (entt::entity)curr);
             }
         }
 
@@ -69,12 +100,38 @@ void component_panel::update(const uint32_t &curr)
         }
 
         if (scene->get_registry().any_of<fw::component_mesh_renderer>((entt::entity)curr)) {
-            if (ImGui::CollapsingHeader("Mesh")) {
+            if (ImGui::CollapsingHeader("Mesh Renderer")) {
                 auto &mesh =
                     scene->get_registry().get<fw::component_mesh_renderer>((entt::entity)curr);
                 draw_mesh(mesh);
+
+                ImGui::Separator();
+                if (ImGui::Button("Remove Mesh"))
+                    scene->get_registry().remove_if_exists<fw::component_mesh_renderer>(
+                        (entt::entity)curr);
             }
         }
+        ImGui::PopID();
+    }
+
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right) && curr != 0) {
+        ImGui::OpenPopup("Right Click Context");
+    }
+
+    if (ImGui::BeginPopup("Right Click Context", true)) {
+
+        if (ImGui::BeginMenu("Add")) {
+
+            if (ImGui::MenuItem("Add Component Mesh Renderer")) {
+                scene->get_registry().emplace<fw::component_mesh_renderer>((entt::entity)curr);
+            }
+            if (ImGui::MenuItem("Add Component Camera")) {
+                scene->get_registry().emplace<fw::component_camera>((entt::entity)curr);
+            }
+
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
     }
 
     ImGui::End();

@@ -9,10 +9,13 @@ public:
 
     bool m_show = true;
 
-    void update(uint32_t &curr);
+    void update(uint64_t &curr);
 
     ~scene_tree();
 
 private:
+    void add_entity();
+    void remove_entity(uint64_t &id);
+
     fw::scene_manager *m_man;
 };

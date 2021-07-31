@@ -46,5 +46,5 @@ private:
     mesh_panel m_mesh_panel;
     texture_panel m_texture_panel;
 
-    uint32_t m_curr = 0;
+    uint64_t m_curr = 0;
 };
