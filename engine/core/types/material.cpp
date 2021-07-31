@@ -40,10 +40,10 @@ bool material::save_to_file()
             data.setBool(tosave.data.d_bool);
             break;
         case ATTRIB_TYPE_INT:
-            data.setInt32(tosave.data.d_int);
+            data.setInt(tosave.data.d_int);
             break;
         case ATTRIB_TYPE_UINT:
-            data.setUint32(tosave.data.d_uint);
+            data.setUint(tosave.data.d_uint);
             break;
         case ATTRIB_TYPE_FLOAT:
             data.setFloat(tosave.data.d_float);
@@ -113,13 +113,13 @@ bool material::load_from_file(const std::string &vfs_path)
         auto data = attr.getData();
 
         switch (data.which()) {
-        case capnp::Attribute::Data::INT32:
+        case capnp::Attribute::Data::INT:
             new_attr.type = ATTRIB_TYPE_INT;
-            new_attr.data.d_int = data.getInt32();
+            new_attr.data.d_int = data.getInt();
             break;
-        case capnp::Attribute::Data::UINT32:
+        case capnp::Attribute::Data::UINT:
             new_attr.type = ATTRIB_TYPE_INT;
-            new_attr.data.d_uint = data.getUint32();
+            new_attr.data.d_uint = data.getUint();
             break;
         case capnp::Attribute::Data::FLOAT:
             new_attr.type = ATTRIB_TYPE_FLOAT;

@@ -111,18 +111,12 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
                 write_vec3(trans.scale, scale);
             }
 
-            if (reg.all_of<component_mesh>(entity)) {
-                component_mesh &mesh = reg.get<component_mesh>(entity);
+            if (reg.all_of<component_mesh_renderer>(entity)) {
+                component_mesh_renderer &mesh = reg.get<component_mesh_renderer>(entity);
 
-                auto mesh_ser = entities[entities_count].initMesh();
-                mesh_ser.setRefrence(mesh.named_ref);
-            }
-
-            if (reg.all_of<component_material>(entity)) {
-                component_material &mat = reg.get<component_material>(entity);
-
-                auto mat_ser = entities[entities_count].initMaterial();
-                mat_ser.setRefrence(mat.named_ref);
+                auto mesh_ser = entities[entities_count].initMeshRenderer();
+                mesh_ser.setMeshRefrence(mesh.mesh_named_ref);
+                mesh_ser.setMeshRefrence(mesh.mat_named_ref);
             }
         }
         entities_count++;
@@ -235,19 +229,15 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
                 read_vec3(comp.scale, trans.getScale());
             }
 
-            if (a.hasMesh()) {
-                auto mesh = a.getMesh();
-                auto &comp = entity_new.add_component<component_mesh>();
+            if (a.hasMeshRenderer()) {
+                auto mesh = a.getMeshRenderer();
+                auto &comp = entity_new.add_component<component_mesh_renderer>();
 
-                comp.named_ref = mesh.getRefrence().cStr();
-                comp.mesh_ref = ptr->m_meshes[comp.named_ref];
-            }
+                comp.mesh_named_ref = mesh.getMeshRefrence().cStr();
+                comp.mesh_ref = ptr->m_meshes[comp.mesh_named_ref];
 
-            if (a.hasMaterial()) {
-                auto mat = a.getMaterial();
-                auto &comp = entity_new.add_component<component_material>();
-
-                comp.named_ref = mat.getRefrence().cStr();
+                comp.mat_named_ref = mesh.getMatRefrence().cStr();
+                comp.material_ref = ptr->m_materials[comp.mat_named_ref];
             }
         }
     }

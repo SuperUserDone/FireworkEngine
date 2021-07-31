@@ -40,8 +40,7 @@ private:
                            shader_program_id shader,
                            bool srgb);
 
-    void do_lookup(scene *scene, component_mesh &mesh, bool dirty);
-    void do_lookup(scene *scene, component_material &mat, bool dirty);
+    void do_lookup(scene *scene, component_mesh_renderer &mesh, bool dirty);
     void do_lookup(scene *scene, ref<material> mat);
 
     void render_preview(scene *scene, ref<material> mat);

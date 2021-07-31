@@ -16,8 +16,7 @@ namespace capnp {
 namespace schemas {
 
 CAPNP_DECLARE_SCHEMA(94b6d250c3adc4e1);
-CAPNP_DECLARE_SCHEMA(90853abb41461dcd);
-CAPNP_DECLARE_SCHEMA(9aed93409b9d19c7);
+CAPNP_DECLARE_SCHEMA(b3919c27d4a14f3f);
 CAPNP_DECLARE_SCHEMA(cb075bca875e54a2);
 CAPNP_DECLARE_SCHEMA(be87ccb5daae5404);
 
@@ -42,30 +41,15 @@ struct ComponentCamera {
   };
 };
 
-struct ComponentMesh {
-  ComponentMesh() = delete;
+struct ComponentMeshRenderer {
+  ComponentMeshRenderer() = delete;
 
   class Reader;
   class Builder;
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(90853abb41461dcd, 0, 1)
-    #if !CAPNP_LITE
-    static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
-    #endif  // !CAPNP_LITE
-  };
-};
-
-struct ComponentMaterial {
-  ComponentMaterial() = delete;
-
-  class Reader;
-  class Builder;
-  class Pipeline;
-
-  struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(9aed93409b9d19c7, 0, 1)
+    CAPNP_DECLARE_STRUCT_HEADER(b3919c27d4a14f3f, 0, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -95,7 +79,7 @@ struct Entity {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(be87ccb5daae5404, 1, 5)
+    CAPNP_DECLARE_STRUCT_HEADER(be87ccb5daae5404, 1, 4)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -190,9 +174,9 @@ private:
 };
 #endif  // !CAPNP_LITE
 
-class ComponentMesh::Reader {
+class ComponentMeshRenderer::Reader {
 public:
-  typedef ComponentMesh Reads;
+  typedef ComponentMeshRenderer Reads;
 
   Reader() = default;
   inline explicit Reader(::capnp::_::StructReader base): _reader(base) {}
@@ -207,8 +191,11 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  inline bool hasRefrence() const;
-  inline  ::capnp::Text::Reader getRefrence() const;
+  inline bool hasMeshRefrence() const;
+  inline  ::capnp::Text::Reader getMeshRefrence() const;
+
+  inline bool hasMatRefrence() const;
+  inline  ::capnp::Text::Reader getMatRefrence() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -222,9 +209,9 @@ private:
   friend class ::capnp::Orphanage;
 };
 
-class ComponentMesh::Builder {
+class ComponentMeshRenderer::Builder {
 public:
-  typedef ComponentMesh Builds;
+  typedef ComponentMeshRenderer Builds;
 
   Builder() = delete;  // Deleted to discourage incorrect usage.
                        // You can explicitly initialize to nullptr instead.
@@ -238,12 +225,19 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  inline bool hasRefrence();
-  inline  ::capnp::Text::Builder getRefrence();
-  inline void setRefrence( ::capnp::Text::Reader value);
-  inline  ::capnp::Text::Builder initRefrence(unsigned int size);
-  inline void adoptRefrence(::capnp::Orphan< ::capnp::Text>&& value);
-  inline ::capnp::Orphan< ::capnp::Text> disownRefrence();
+  inline bool hasMeshRefrence();
+  inline  ::capnp::Text::Builder getMeshRefrence();
+  inline void setMeshRefrence( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initMeshRefrence(unsigned int size);
+  inline void adoptMeshRefrence(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownMeshRefrence();
+
+  inline bool hasMatRefrence();
+  inline  ::capnp::Text::Builder getMatRefrence();
+  inline void setMatRefrence( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initMatRefrence(unsigned int size);
+  inline void adoptMatRefrence(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownMatRefrence();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -255,90 +249,9 @@ private:
 };
 
 #if !CAPNP_LITE
-class ComponentMesh::Pipeline {
+class ComponentMeshRenderer::Pipeline {
 public:
-  typedef ComponentMesh Pipelines;
-
-  inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
-  inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
-      : _typeless(kj::mv(typeless)) {}
-
-private:
-  ::capnp::AnyPointer::Pipeline _typeless;
-  friend class ::capnp::PipelineHook;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-};
-#endif  // !CAPNP_LITE
-
-class ComponentMaterial::Reader {
-public:
-  typedef ComponentMaterial Reads;
-
-  Reader() = default;
-  inline explicit Reader(::capnp::_::StructReader base): _reader(base) {}
-
-  inline ::capnp::MessageSize totalSize() const {
-    return _reader.totalSize().asPublic();
-  }
-
-#if !CAPNP_LITE
-  inline ::kj::StringTree toString() const {
-    return ::capnp::_::structString(_reader, *_capnpPrivate::brand());
-  }
-#endif  // !CAPNP_LITE
-
-  inline bool hasRefrence() const;
-  inline  ::capnp::Text::Reader getRefrence() const;
-
-private:
-  ::capnp::_::StructReader _reader;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::_::PointerHelpers;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::List;
-  friend class ::capnp::MessageBuilder;
-  friend class ::capnp::Orphanage;
-};
-
-class ComponentMaterial::Builder {
-public:
-  typedef ComponentMaterial Builds;
-
-  Builder() = delete;  // Deleted to discourage incorrect usage.
-                       // You can explicitly initialize to nullptr instead.
-  inline Builder(decltype(nullptr)) {}
-  inline explicit Builder(::capnp::_::StructBuilder base): _builder(base) {}
-  inline operator Reader() const { return Reader(_builder.asReader()); }
-  inline Reader asReader() const { return *this; }
-
-  inline ::capnp::MessageSize totalSize() const { return asReader().totalSize(); }
-#if !CAPNP_LITE
-  inline ::kj::StringTree toString() const { return asReader().toString(); }
-#endif  // !CAPNP_LITE
-
-  inline bool hasRefrence();
-  inline  ::capnp::Text::Builder getRefrence();
-  inline void setRefrence( ::capnp::Text::Reader value);
-  inline  ::capnp::Text::Builder initRefrence(unsigned int size);
-  inline void adoptRefrence(::capnp::Orphan< ::capnp::Text>&& value);
-  inline ::capnp::Orphan< ::capnp::Text> disownRefrence();
-
-private:
-  ::capnp::_::StructBuilder _builder;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::ToDynamic_;
-  friend class ::capnp::Orphanage;
-  template <typename, ::capnp::Kind>
-  friend struct ::capnp::_::PointerHelpers;
-};
-
-#if !CAPNP_LITE
-class ComponentMaterial::Pipeline {
-public:
-  typedef ComponentMaterial Pipelines;
+  typedef ComponentMeshRenderer Pipelines;
 
   inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
   inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
@@ -481,14 +394,11 @@ public:
   inline bool hasCamera() const;
   inline  ::fw::capnp::ComponentCamera::Reader getCamera() const;
 
-  inline bool hasMesh() const;
-  inline  ::fw::capnp::ComponentMesh::Reader getMesh() const;
+  inline bool hasMeshRenderer() const;
+  inline  ::fw::capnp::ComponentMeshRenderer::Reader getMeshRenderer() const;
 
   inline bool hasTransform() const;
   inline  ::fw::capnp::ComponentTransform::Reader getTransform() const;
-
-  inline bool hasMaterial() const;
-  inline  ::fw::capnp::ComponentMaterial::Reader getMaterial() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -535,12 +445,12 @@ public:
   inline void adoptCamera(::capnp::Orphan< ::fw::capnp::ComponentCamera>&& value);
   inline ::capnp::Orphan< ::fw::capnp::ComponentCamera> disownCamera();
 
-  inline bool hasMesh();
-  inline  ::fw::capnp::ComponentMesh::Builder getMesh();
-  inline void setMesh( ::fw::capnp::ComponentMesh::Reader value);
-  inline  ::fw::capnp::ComponentMesh::Builder initMesh();
-  inline void adoptMesh(::capnp::Orphan< ::fw::capnp::ComponentMesh>&& value);
-  inline ::capnp::Orphan< ::fw::capnp::ComponentMesh> disownMesh();
+  inline bool hasMeshRenderer();
+  inline  ::fw::capnp::ComponentMeshRenderer::Builder getMeshRenderer();
+  inline void setMeshRenderer( ::fw::capnp::ComponentMeshRenderer::Reader value);
+  inline  ::fw::capnp::ComponentMeshRenderer::Builder initMeshRenderer();
+  inline void adoptMeshRenderer(::capnp::Orphan< ::fw::capnp::ComponentMeshRenderer>&& value);
+  inline ::capnp::Orphan< ::fw::capnp::ComponentMeshRenderer> disownMeshRenderer();
 
   inline bool hasTransform();
   inline  ::fw::capnp::ComponentTransform::Builder getTransform();
@@ -548,13 +458,6 @@ public:
   inline  ::fw::capnp::ComponentTransform::Builder initTransform();
   inline void adoptTransform(::capnp::Orphan< ::fw::capnp::ComponentTransform>&& value);
   inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> disownTransform();
-
-  inline bool hasMaterial();
-  inline  ::fw::capnp::ComponentMaterial::Builder getMaterial();
-  inline void setMaterial( ::fw::capnp::ComponentMaterial::Reader value);
-  inline  ::fw::capnp::ComponentMaterial::Builder initMaterial();
-  inline void adoptMaterial(::capnp::Orphan< ::fw::capnp::ComponentMaterial>&& value);
-  inline ::capnp::Orphan< ::fw::capnp::ComponentMaterial> disownMaterial();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -575,9 +478,8 @@ public:
       : _typeless(kj::mv(typeless)) {}
 
   inline  ::fw::capnp::ComponentCamera::Pipeline getCamera();
-  inline  ::fw::capnp::ComponentMesh::Pipeline getMesh();
+  inline  ::fw::capnp::ComponentMeshRenderer::Pipeline getMeshRenderer();
   inline  ::fw::capnp::ComponentTransform::Pipeline getTransform();
-  inline  ::fw::capnp::ComponentMaterial::Pipeline getMaterial();
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -630,72 +532,72 @@ inline void ComponentCamera::Builder::setFov(float value) {
       ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
 }
 
-inline bool ComponentMesh::Reader::hasRefrence() const {
+inline bool ComponentMeshRenderer::Reader::hasMeshRefrence() const {
   return !_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline bool ComponentMesh::Builder::hasRefrence() {
+inline bool ComponentMeshRenderer::Builder::hasMeshRefrence() {
   return !_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
 }
-inline  ::capnp::Text::Reader ComponentMesh::Reader::getRefrence() const {
+inline  ::capnp::Text::Reader ComponentMeshRenderer::Reader::getMeshRefrence() const {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline  ::capnp::Text::Builder ComponentMesh::Builder::getRefrence() {
+inline  ::capnp::Text::Builder ComponentMeshRenderer::Builder::getMeshRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
-inline void ComponentMesh::Builder::setRefrence( ::capnp::Text::Reader value) {
+inline void ComponentMeshRenderer::Builder::setMeshRefrence( ::capnp::Text::Reader value) {
   ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), value);
 }
-inline  ::capnp::Text::Builder ComponentMesh::Builder::initRefrence(unsigned int size) {
+inline  ::capnp::Text::Builder ComponentMeshRenderer::Builder::initMeshRefrence(unsigned int size) {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), size);
 }
-inline void ComponentMesh::Builder::adoptRefrence(
+inline void ComponentMeshRenderer::Builder::adoptMeshRefrence(
     ::capnp::Orphan< ::capnp::Text>&& value) {
   ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::capnp::Text> ComponentMesh::Builder::disownRefrence() {
+inline ::capnp::Orphan< ::capnp::Text> ComponentMeshRenderer::Builder::disownMeshRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS));
 }
 
-inline bool ComponentMaterial::Reader::hasRefrence() const {
+inline bool ComponentMeshRenderer::Reader::hasMatRefrence() const {
   return !_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
-inline bool ComponentMaterial::Builder::hasRefrence() {
+inline bool ComponentMeshRenderer::Builder::hasMatRefrence() {
   return !_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
+      ::capnp::bounded<1>() * ::capnp::POINTERS).isNull();
 }
-inline  ::capnp::Text::Reader ComponentMaterial::Reader::getRefrence() const {
+inline  ::capnp::Text::Reader ComponentMeshRenderer::Reader::getMatRefrence() const {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
-inline  ::capnp::Text::Builder ComponentMaterial::Builder::getRefrence() {
+inline  ::capnp::Text::Builder ComponentMeshRenderer::Builder::getMatRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
-inline void ComponentMaterial::Builder::setRefrence( ::capnp::Text::Reader value) {
+inline void ComponentMeshRenderer::Builder::setMatRefrence( ::capnp::Text::Reader value) {
   ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), value);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), value);
 }
-inline  ::capnp::Text::Builder ComponentMaterial::Builder::initRefrence(unsigned int size) {
+inline  ::capnp::Text::Builder ComponentMeshRenderer::Builder::initMatRefrence(unsigned int size) {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), size);
+      ::capnp::bounded<1>() * ::capnp::POINTERS), size);
 }
-inline void ComponentMaterial::Builder::adoptRefrence(
+inline void ComponentMeshRenderer::Builder::adoptMatRefrence(
     ::capnp::Orphan< ::capnp::Text>&& value) {
   ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS), kj::mv(value));
+      ::capnp::bounded<1>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::capnp::Text> ComponentMaterial::Builder::disownRefrence() {
+inline ::capnp::Orphan< ::capnp::Text> ComponentMeshRenderer::Builder::disownMatRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
-      ::capnp::bounded<0>() * ::capnp::POINTERS));
+      ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
 inline bool ComponentTransform::Reader::hasPos() const {
@@ -902,42 +804,42 @@ inline ::capnp::Orphan< ::fw::capnp::ComponentCamera> Entity::Builder::disownCam
       ::capnp::bounded<1>() * ::capnp::POINTERS));
 }
 
-inline bool Entity::Reader::hasMesh() const {
+inline bool Entity::Reader::hasMeshRenderer() const {
   return !_reader.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
-inline bool Entity::Builder::hasMesh() {
+inline bool Entity::Builder::hasMeshRenderer() {
   return !_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS).isNull();
 }
-inline  ::fw::capnp::ComponentMesh::Reader Entity::Reader::getMesh() const {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::get(_reader.getPointerField(
+inline  ::fw::capnp::ComponentMeshRenderer::Reader Entity::Reader::getMeshRenderer() const {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::get(_reader.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
-inline  ::fw::capnp::ComponentMesh::Builder Entity::Builder::getMesh() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::get(_builder.getPointerField(
+inline  ::fw::capnp::ComponentMeshRenderer::Builder Entity::Builder::getMeshRenderer() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::get(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 #if !CAPNP_LITE
-inline  ::fw::capnp::ComponentMesh::Pipeline Entity::Pipeline::getMesh() {
-  return  ::fw::capnp::ComponentMesh::Pipeline(_typeless.getPointerField(2));
+inline  ::fw::capnp::ComponentMeshRenderer::Pipeline Entity::Pipeline::getMeshRenderer() {
+  return  ::fw::capnp::ComponentMeshRenderer::Pipeline(_typeless.getPointerField(2));
 }
 #endif  // !CAPNP_LITE
-inline void Entity::Builder::setMesh( ::fw::capnp::ComponentMesh::Reader value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::set(_builder.getPointerField(
+inline void Entity::Builder::setMeshRenderer( ::fw::capnp::ComponentMeshRenderer::Reader value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::set(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), value);
 }
-inline  ::fw::capnp::ComponentMesh::Builder Entity::Builder::initMesh() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::init(_builder.getPointerField(
+inline  ::fw::capnp::ComponentMeshRenderer::Builder Entity::Builder::initMeshRenderer() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::init(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
-inline void Entity::Builder::adoptMesh(
-    ::capnp::Orphan< ::fw::capnp::ComponentMesh>&& value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::adopt(_builder.getPointerField(
+inline void Entity::Builder::adoptMeshRenderer(
+    ::capnp::Orphan< ::fw::capnp::ComponentMeshRenderer>&& value) {
+  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::adopt(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS), kj::mv(value));
 }
-inline ::capnp::Orphan< ::fw::capnp::ComponentMesh> Entity::Builder::disownMesh() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMesh>::disown(_builder.getPointerField(
+inline ::capnp::Orphan< ::fw::capnp::ComponentMeshRenderer> Entity::Builder::disownMeshRenderer() {
+  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMeshRenderer>::disown(_builder.getPointerField(
       ::capnp::bounded<2>() * ::capnp::POINTERS));
 }
 
@@ -978,45 +880,6 @@ inline void Entity::Builder::adoptTransform(
 inline ::capnp::Orphan< ::fw::capnp::ComponentTransform> Entity::Builder::disownTransform() {
   return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentTransform>::disown(_builder.getPointerField(
       ::capnp::bounded<3>() * ::capnp::POINTERS));
-}
-
-inline bool Entity::Reader::hasMaterial() const {
-  return !_reader.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
-}
-inline bool Entity::Builder::hasMaterial() {
-  return !_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
-}
-inline  ::fw::capnp::ComponentMaterial::Reader Entity::Reader::getMaterial() const {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::get(_reader.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
-}
-inline  ::fw::capnp::ComponentMaterial::Builder Entity::Builder::getMaterial() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::get(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
-}
-#if !CAPNP_LITE
-inline  ::fw::capnp::ComponentMaterial::Pipeline Entity::Pipeline::getMaterial() {
-  return  ::fw::capnp::ComponentMaterial::Pipeline(_typeless.getPointerField(4));
-}
-#endif  // !CAPNP_LITE
-inline void Entity::Builder::setMaterial( ::fw::capnp::ComponentMaterial::Reader value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::set(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS), value);
-}
-inline  ::fw::capnp::ComponentMaterial::Builder Entity::Builder::initMaterial() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::init(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
-}
-inline void Entity::Builder::adoptMaterial(
-    ::capnp::Orphan< ::fw::capnp::ComponentMaterial>&& value) {
-  ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::adopt(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS), kj::mv(value));
-}
-inline ::capnp::Orphan< ::fw::capnp::ComponentMaterial> Entity::Builder::disownMaterial() {
-  return ::capnp::_::PointerHelpers< ::fw::capnp::ComponentMaterial>::disown(_builder.getPointerField(
-      ::capnp::bounded<4>() * ::capnp::POINTERS));
 }
 
 }  // namespace

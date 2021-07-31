@@ -48,8 +48,8 @@ struct Attribute::Data {
   class Builder;
   class Pipeline;
   enum Which: uint16_t {
-    INT32,
-    UINT32,
+    INT,
+    UINT,
     FLOAT,
     DOUBLE,
     TEXTURE,
@@ -200,11 +200,11 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  inline bool isInt32() const;
-  inline  ::int64_t getInt32() const;
+  inline bool isInt() const;
+  inline  ::int64_t getInt() const;
 
-  inline bool isUint32() const;
-  inline  ::uint64_t getUint32() const;
+  inline bool isUint() const;
+  inline  ::uint64_t getUint() const;
 
   inline bool isFloat() const;
   inline float getFloat() const;
@@ -284,13 +284,13 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  inline bool isInt32();
-  inline  ::int64_t getInt32();
-  inline void setInt32( ::int64_t value);
+  inline bool isInt();
+  inline  ::int64_t getInt();
+  inline void setInt( ::int64_t value);
 
-  inline bool isUint32();
-  inline  ::uint64_t getUint32();
-  inline void setUint32( ::uint64_t value);
+  inline bool isUint();
+  inline  ::uint64_t getUint();
+  inline void setUint( ::uint64_t value);
 
   inline bool isFloat();
   inline float getFloat();
@@ -577,54 +577,54 @@ inline  ::fw::capnp::Attribute::Data::Which Attribute::Data::Builder::which() {
       ::capnp::bounded<2>() * ::capnp::ELEMENTS);
 }
 
-inline bool Attribute::Data::Reader::isInt32() const {
-  return which() == Attribute::Data::INT32;
+inline bool Attribute::Data::Reader::isInt() const {
+  return which() == Attribute::Data::INT;
 }
-inline bool Attribute::Data::Builder::isInt32() {
-  return which() == Attribute::Data::INT32;
+inline bool Attribute::Data::Builder::isInt() {
+  return which() == Attribute::Data::INT;
 }
-inline  ::int64_t Attribute::Data::Reader::getInt32() const {
-  KJ_IREQUIRE((which() == Attribute::Data::INT32),
+inline  ::int64_t Attribute::Data::Reader::getInt() const {
+  KJ_IREQUIRE((which() == Attribute::Data::INT),
               "Must check which() before get()ing a union member.");
   return _reader.getDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
 
-inline  ::int64_t Attribute::Data::Builder::getInt32() {
-  KJ_IREQUIRE((which() == Attribute::Data::INT32),
+inline  ::int64_t Attribute::Data::Builder::getInt() {
+  KJ_IREQUIRE((which() == Attribute::Data::INT),
               "Must check which() before get()ing a union member.");
   return _builder.getDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
-inline void Attribute::Data::Builder::setInt32( ::int64_t value) {
+inline void Attribute::Data::Builder::setInt( ::int64_t value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::INT32);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::INT);
   _builder.setDataField< ::int64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
 }
 
-inline bool Attribute::Data::Reader::isUint32() const {
-  return which() == Attribute::Data::UINT32;
+inline bool Attribute::Data::Reader::isUint() const {
+  return which() == Attribute::Data::UINT;
 }
-inline bool Attribute::Data::Builder::isUint32() {
-  return which() == Attribute::Data::UINT32;
+inline bool Attribute::Data::Builder::isUint() {
+  return which() == Attribute::Data::UINT;
 }
-inline  ::uint64_t Attribute::Data::Reader::getUint32() const {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT32),
+inline  ::uint64_t Attribute::Data::Reader::getUint() const {
+  KJ_IREQUIRE((which() == Attribute::Data::UINT),
               "Must check which() before get()ing a union member.");
   return _reader.getDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
 
-inline  ::uint64_t Attribute::Data::Builder::getUint32() {
-  KJ_IREQUIRE((which() == Attribute::Data::UINT32),
+inline  ::uint64_t Attribute::Data::Builder::getUint() {
+  KJ_IREQUIRE((which() == Attribute::Data::UINT),
               "Must check which() before get()ing a union member.");
   return _builder.getDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);
 }
-inline void Attribute::Data::Builder::setUint32( ::uint64_t value) {
+inline void Attribute::Data::Builder::setUint( ::uint64_t value) {
   _builder.setDataField<Attribute::Data::Which>(
-      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::UINT32);
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, Attribute::Data::UINT);
   _builder.setDataField< ::uint64_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
 }

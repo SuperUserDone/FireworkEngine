@@ -29,21 +29,10 @@ static void draw_camera(fw::component_camera &cam)
     if (preview) ImGui::Text("Not Implemented");
 }
 
-static void draw_mesh(fw::component_mesh &mesh)
+static void draw_mesh(fw::component_mesh_renderer &mesh)
 {
     // TODO
     ImGui::Text("Not Implemented");
-}
-
-static void draw_material(fw::scene *scene, fw::component_material &mat)
-{
-    ImGui::Text("%s", mat.named_ref.c_str());
-    if (mat.material_ref) {
-        ImGui::Text("%s", mat.material_ref->m_shader_named_ref.c_str());
-        if (mat.material_ref->get_attribs().size() > 0) {
-            ImGui::InputText("Text", &mat.material_ref->get_attribs()[0].data_texture_name);
-        }
-    };
 }
 
 component_panel::component_panel(fw::scene_manager *man) : m_manager(man) {}
@@ -79,16 +68,11 @@ void component_panel::update(const uint32_t &curr)
             }
         }
 
-        if (scene->get_registry().any_of<fw::component_mesh>((entt::entity)curr)) {
+        if (scene->get_registry().any_of<fw::component_mesh_renderer>((entt::entity)curr)) {
             if (ImGui::CollapsingHeader("Mesh")) {
-                auto &mesh = scene->get_registry().get<fw::component_mesh>((entt::entity)curr);
+                auto &mesh =
+                    scene->get_registry().get<fw::component_mesh_renderer>((entt::entity)curr);
                 draw_mesh(mesh);
-            }
-        }
-        if (scene->get_registry().any_of<fw::component_material>((entt::entity)curr)) {
-            if (ImGui::CollapsingHeader("Material")) {
-                auto &mesh = scene->get_registry().get<fw::component_material>((entt::entity)curr);
-                draw_material(scene, mesh);
             }
         }
     }

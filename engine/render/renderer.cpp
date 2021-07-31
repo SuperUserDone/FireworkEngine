@@ -117,13 +117,12 @@ void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 ca
 
     m_camera.set_data(128, arr, MODE_DYNAMIC);
 
-    auto meshes = scene->m_entt.view<component_transform, component_mesh, component_material>();
+    auto meshes = scene->m_entt.view<component_transform, component_mesh_renderer>();
 
     for (auto c : meshes) {
-        auto [trans, mesh, mat] = meshes.get(c);
+        auto [trans, mesh] = meshes.get(c);
 
         do_lookup(scene, mesh, scene->m_dirty);
-        do_lookup(scene, mat, scene->m_dirty);
 
         scene->m_dirty = false;
 
@@ -133,12 +132,12 @@ void renderer::renderpass_geom(scene *scene, glm::mat4 camera_view, glm::mat4 ca
 
         std::vector<attribute> attrs;
 
-        if (mat.material_ref == nullptr || mat.material_ref->m_shader_ref == nullptr) {
+        if (mesh.material_ref == nullptr || mesh.material_ref->m_shader_ref == nullptr) {
             m_shader = nullptr;
             attrs = {};
         } else {
-            m_shader = mat.material_ref->m_shader_ref->get_id();
-            attrs = mat.material_ref->m_attribs;
+            m_shader = mesh.material_ref->m_shader_ref->get_id();
+            attrs = mesh.material_ref->m_attribs;
         }
 
         rapi->draw_elements(mesh.mesh_ref->m_vao.get_id(),
@@ -181,35 +180,32 @@ void renderer::renderpass_postfx(texture2d &src,
     rapi->set_srgb(false);
 }
 
-void renderer::do_lookup(scene *scene, component_mesh &mesh, bool dirty)
+void renderer::do_lookup(scene *scene, component_mesh_renderer &mesh, bool dirty)
 {
     if (mesh.lookup_count >= mesh.lookup_freq || dirty) {
-        ZoneScopedN("mesh lookup");
-        if (scene->m_meshes.count(mesh.named_ref))
-            mesh.mesh_ref = scene->m_meshes[mesh.named_ref];
-        else
-            mesh.mesh_ref = nullptr;
+        {
+            ZoneScopedN("Mesh lookup");
+            if (scene->m_meshes.count(mesh.mesh_named_ref))
+                mesh.mesh_ref = scene->m_meshes[mesh.mesh_named_ref];
+            else
+                mesh.mesh_ref = nullptr;
+        }
+
+        {
+            ZoneScopedN("Material lookup");
+            if (scene->m_materials.count(mesh.mat_named_ref))
+                mesh.material_ref = scene->m_materials[mesh.mat_named_ref];
+            else {
+                mesh.material_ref = nullptr;
+                return;
+            }
+
+            do_lookup(scene, mesh.material_ref);
+        }
+
         mesh.lookup_count = 0;
     }
     mesh.lookup_count++;
-}
-
-void renderer::do_lookup(scene *scene, component_material &mat, bool dirty)
-{
-    if (mat.lookup_count >= mat.lookup_freq || dirty) {
-        ZoneScopedN("Material lookup");
-        if (scene->m_materials.count(mat.named_ref))
-            mat.material_ref = scene->m_materials[mat.named_ref];
-        else {
-            mat.material_ref = nullptr;
-            return;
-        }
-
-        do_lookup(scene, mat.material_ref);
-
-        mat.lookup_count = 0;
-    }
-    mat.lookup_count++;
 }
 
 void renderer::do_lookup(scene *scene, ref<material> mat)

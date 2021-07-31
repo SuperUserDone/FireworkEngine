@@ -12,14 +12,10 @@ struct ComponentCamera
     fov @2 :Float32;
 }
 
-struct ComponentMesh
+struct ComponentMeshRenderer
 {
-    refrence @0 :Text;
-}
-
-struct ComponentMaterial
-{
-    refrence @0 :Text;
+    meshRefrence @0 :Text;
+    matRefrence @1 :Text;
 }
 
 struct ComponentTransform
@@ -35,7 +31,6 @@ struct Entity
     id @1 :UInt32;
 
     camera @2 :ComponentCamera;
-    mesh @3 :ComponentMesh;
+    meshRenderer @3 :ComponentMeshRenderer;
     transform @4 :ComponentTransform;
-    material @5 :ComponentMaterial;
 }
