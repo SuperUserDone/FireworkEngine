@@ -38,10 +38,22 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
 
         auto &[key, value] = mat;
 
-        if (!value->save_to_file()) {
-            value->m_path = "root://" + key + ".fwmat";
-            value->save_to_file();
-        }
+        ref<material> m = value;
+        std::string k = key;
+
+        action act;
+
+        act.async_action = [m, k]() {
+            if (!m->save_to_file()) {
+                m->m_path = "root://" + k + ".fwmesh";
+            }
+
+            return m->save_to_file();
+        };
+
+        act.load_priority = 0;
+
+        loader::get_instance().queue_action(act);
 
         mat_ser.setKey(key);
         mat_ser.getValue().setPath(value->m_path);
@@ -52,12 +64,24 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
     for (auto &&mesh_data : meshes) {
         auto mesh_ser = smeshes[i];
 
-        auto &[key, value] = mesh_data;
+        auto [key, value] = mesh_data;
 
-        if (!value->save_to_file()) {
-            value->m_path = "root://" + key + ".fwmesh";
-            value->save_to_file();
-        }
+        ref<mesh> m = value;
+        std::string k = key;
+
+        action act;
+
+        act.async_action = [m, k]() {
+            if (!m->save_to_file()) {
+                m->m_path = "root://" + k + ".fwmesh";
+            }
+
+            return m->save_to_file();
+        };
+
+        act.load_priority = 0;
+
+        loader::get_instance().queue_action(act);
 
         mesh_ser.setKey(key);
         mesh_ser.getValue().setPath(value->m_path);

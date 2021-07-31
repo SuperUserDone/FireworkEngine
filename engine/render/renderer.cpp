@@ -33,6 +33,9 @@ renderer::renderer(render_settings &p_render_settings)
     m_shaders["debug"] = make_ref<shader_program>(vertex_std, fragment_test);
     m_shaders["debug"]->compile();
 
+    m_shaders["flat_color"] = make_ref<shader_program>(vertex_std, fragment_flat_color);
+    m_shaders["flat_color"]->compile();
+
     m_camera.bind_uniform(0);
 }
 

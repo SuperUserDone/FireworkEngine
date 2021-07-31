@@ -54,7 +54,11 @@ bool mesh::load_from_file(const std::string &vfs_path)
         return false;
     }
 
-    ::capnp::PackedFdMessageReader msg(fileno(fp));
+    ::capnp::ReaderOptions opts;
+
+    opts.traversalLimitInWords = UINT32_MAX;
+
+    ::capnp::PackedFdMessageReader msg(fileno(fp), opts);
 
     capnp::Mesh::Reader mesh_ser = msg.getRoot<capnp::Mesh>();
 

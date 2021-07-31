@@ -13,16 +13,17 @@ void scene_view::update(glm::uvec2 &size,
 {
     if (!m_show) return;
 
-    if (fw::input::is_key_down(fw::input::KEY_r)) opp = ImGuizmo::ROTATE;
-    if (fw::input::is_key_down(fw::input::KEY_t)) opp = ImGuizmo::TRANSLATE;
-    if (fw::input::is_key_down(fw::input::KEY_s)) opp = ImGuizmo::SCALE;
+    ImGui::Begin("Scene\t\uf11b", &m_show);
 
     static bool local = false;
+    if (ImGui::IsWindowHovered()) {
+        if (fw::input::is_key_down(fw::input::KEY_r)) opp = ImGuizmo::ROTATE;
+        if (fw::input::is_key_down(fw::input::KEY_g)) opp = ImGuizmo::TRANSLATE;
+        if (fw::input::is_key_down(fw::input::KEY_s)) opp = ImGuizmo::SCALE;
 
-    if (fw::input::is_key_down(fw::input::KEY_l)) local = true;
-    if (fw::input::is_key_down(fw::input::KEY_g)) local = false;
-
-    ImGui::Begin("Scene\t\uf11b", &m_show);
+        if (fw::input::is_key_down(fw::input::KEY_l)) local = true;
+        if (fw::input::is_key_down(fw::input::KEY_k)) local = false;
+    }
 
     ImVec2 wsize{(ImGui::GetWindowSize().x - 15), (ImGui::GetWindowSize().y - 40)};
 

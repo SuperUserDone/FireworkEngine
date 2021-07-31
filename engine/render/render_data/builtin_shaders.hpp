@@ -71,6 +71,18 @@ void main() {
 }
 )glsl";
 
+static inline const char *fragment_flat_color = R"glsl(
+#version 450 core
+out vec4 FragColor;
+
+// Export [0.01, 0.0, 1.0]
+layout(location = 1) uniform vec4 color = vec4(1.0,1.0,1.0,1.0); 
+
+void main() { 
+    FragColor = color; 
+}
+)glsl";
+
 static inline const char *fragment_test = R"glsl(
 #version 450 core
 out vec4 FragColor;

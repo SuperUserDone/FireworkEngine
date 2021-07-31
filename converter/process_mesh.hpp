@@ -125,7 +125,7 @@ static inline std::pair<std::string, std::string> process_mesh(const aiMesh *mes
         fw::convert_vec3(mesh->mTangents[i], vert_data.tan);
 
         if (mesh->mTextureCoords[0])
-            fw::convert_vec2(mesh->mVertices[i], vert_data.uvs);
+            fw::convert_vec2(mesh->mTextureCoords[0][i], vert_data.uvs);
         else
             vert_data.uvs = glm::vec2(0.f, 0.f);
 
