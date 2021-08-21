@@ -2,11 +2,13 @@
 #include "core/types/mesh.hpp"
 #include "core/util.hpp"
 #include "editor_ui.hpp"
+#include "imgui_internal.h"
 #include "render/render_data/texture2d.hpp"
 #include "scene/scene.hpp"
 #include "scene/scene_manager.hpp"
 #include "serialize/scene_serializer.hpp"
 #include "ui/parts/modal.hpp"
+#include "vfs/loader.hpp"
 
 #include <SDL_scancode.h>
 #include <imgui.h>
@@ -15,6 +17,32 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+
+int rotation_start_index;
+void ImRotateStart() { rotation_start_index = ImGui::GetWindowDrawList()->VtxBuffer.Size; }
+
+ImVec2 ImRotationCenter()
+{
+    ImVec2 l(FLT_MAX, FLT_MAX), u(-FLT_MAX, -FLT_MAX); // bounds
+
+    const auto &buf = ImGui::GetWindowDrawList()->VtxBuffer;
+    for (int i = rotation_start_index; i < buf.Size; i++)
+        l = ImMin(l, buf[i].pos), u = ImMax(u, buf[i].pos);
+
+    return ImVec2((l.x + u.x) / 2, (l.y + u.y) / 2); // or use _ClipRectStack?
+}
+
+ImVec2 operator-(const ImVec2 &l, const ImVec2 &r) { return {l.x - r.x, l.y - r.y}; }
+
+void ImRotateEnd(float rad, ImVec2 center = ImRotationCenter())
+{
+    float s = sin(rad), c = cos(rad);
+    center = ImRotate(center, s, c) - center;
+
+    auto &buf = ImGui::GetWindowDrawList()->VtxBuffer;
+    for (int i = rotation_start_index; i < buf.Size; i++)
+        buf[i].pos = ImRotate(buf[i].pos, s, c) - center;
+}
 
 float SRGBToLinear(float in)
 {
@@ -175,6 +203,27 @@ bool editor_ui::draw()
             ImGui::EndMenu();
         }
 
+        bool loading =
+            (fw::loader::get_instance().get_queued() != fw::loader::get_instance().get_loaded());
+
+        std::string str = fmt::format("{}/{} ({})",
+                                      fw::loader::get_instance().get_loaded(),
+                                      fw::loader::get_instance().get_queued(),
+                                      fw::loader::get_instance().get_failed());
+        ImGui::SameLine(ImGui::GetContentRegionMax().x - ImGui::CalcTextSize(str.c_str()).x -
+                        ImGui::CalcTextSize("\t\t").x);
+
+        ImRotateStart();
+        ImGui::Text("%s", loading ? u8"\uf9e5" : u8"\uf62b");
+
+        int ts = fw::get_precise_time_us() / 1000;
+
+        ImRotateEnd(0.005f * ts * loading + M_PI / 2);
+
+        ImGui::TextColored(loading ? ImVec4(1.f, 0.5f, 0.5f, 1.f) : ImVec4(0.5f, 1.f, 0.5f, 1.f),
+                           "%s",
+                           str.c_str());
+
         ImGui::EndMainMenuBar();
     }
 
@@ -198,7 +247,7 @@ bool editor_ui::draw()
     m_scene_tree_panel.update(m_curr);
     m_component_panel.update(m_curr, m_opp);
     m_scene_view_panel.update(
-        size, tex_id, scene, m_curr, m_cam, m_cam.cam.get_projection(size.x, size.y), m_opp);
+        size, tex_id, scene, m_curr, m_opp, m_cam);
     m_mat_panel.update();
     m_mesh_panel.update();
     m_texture_panel.update();

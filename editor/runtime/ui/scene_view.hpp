@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../editor_camera.hpp"
 #include "glm/glm.hpp"
 #include "scene/scene.hpp"
 
@@ -19,9 +20,10 @@ public:
                 size_t id,
                 fw::scene *scene,
                 uint32_t curr,
-                const glm::mat4 &view,
-                const glm::mat4 &proj,
-                ImGuizmo::OPERATION &opp);
+                ImGuizmo::OPERATION &opp,
+                editor_camera &cam);
+
+    void camera(editor_camera &cam, float x, float y);
 
     ~scene_view();
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
 #include <assert.h>
 #include <fmt/format.h>
 #include <fstream>
@@ -95,6 +97,57 @@
 
 #endif
 
+template <>
+struct fmt::formatter<glm::vec3>
+{
+    char presentation = 'f';
+
+    constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin())
+    {
+        auto it = ctx.begin(), end = ctx.end();
+        if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+        if (it != end && *it != '}') throw format_error("invalid format");
+        return it;
+    }
+
+    template <typename FormatContext>
+    auto format(const glm::vec3 &p, FormatContext &ctx) -> decltype(ctx.out())
+    {
+        // ctx.out() is an output iterator to write to.
+        return format_to(
+            ctx.out(),
+            presentation == 'f' ? "({:.4f}, {:.4f}, {:.4f})" : "({:.4e}, {:.4e},  {:.4e})",
+            p.x,
+            p.y,
+            p.z);
+    }
+};
+template <>
+struct fmt::formatter<glm::vec4>
+{
+    char presentation = 'f';
+
+    constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin())
+    {
+        auto it = ctx.begin(), end = ctx.end();
+        if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+        if (it != end && *it != '}') throw format_error("invalid format");
+        return it;
+    }
+
+    template <typename FormatContext>
+    auto format(const glm::vec4 &p, FormatContext &ctx) -> decltype(ctx.out())
+    {
+        // ctx.out() is an output iterator to write to.
+        return format_to(ctx.out(),
+                         presentation == 'f' ? "({:.4f}, {:.4f}, {:.4f}, {:.4f})"
+                                             : "({:.4e}, {:.4e}, {:.4e}, {:.ef})",
+                         p.x,
+                         p.y,
+                         p.z,
+                         p.w);
+    }
+};
 class Logger
 {
 public:

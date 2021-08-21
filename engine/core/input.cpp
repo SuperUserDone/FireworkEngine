@@ -28,6 +28,8 @@ std::string modifier_to_string(mod_keys keys)
     return out;
 }
 
+void showcursor(bool show) { SDL_SetRelativeMouseMode(!show ? SDL_TRUE : SDL_FALSE); }
+
 bool is_key_down(key key_code)
 {
     if (!keyboard_state) keyboard_state = SDL_GetKeyboardState(nullptr);

@@ -31,7 +31,7 @@ public:
     void update();
 
     uint64_t get_queued() { return m_queued_count; }
-    uint64_t get_failed() { return m_queued_count; }
+    uint64_t get_failed() { return m_failed_count; }
     uint64_t get_loaded() { return m_loaded_count; }
 
     void de_init();

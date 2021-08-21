@@ -2766,7 +2766,7 @@ void ViewManipulate(float *view, float length, ImVec2 position, ImVec2 size, ImU
                     gContext.mDrawList->AddConvexPolyFilled(
                         faceCoordsScreen,
                         4,
-                        (directionColor[normalIndex] | IM_COL32(0x80, 0x80, 0x80, 0x80)) |
+                        (directionColor[normalIndex] | IM_COL32(0x10, 0x10, 0x10, 0xff)) |
                             (isInside ? IM_COL32(0x08, 0x08, 0x08, 0) : 0));
                     if (boxes[boxCoordInt]) {
                         gContext.mDrawList->AddConvexPolyFilled(
