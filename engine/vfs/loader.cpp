@@ -15,7 +15,7 @@ loader::loader(uint8_t nthreads)
     }
 }
 
-bool loader::is_empty() { return m_queued_count > m_loaded_count; }
+bool loader::is_empty() { return m_queued_count == m_loaded_count; }
 
 void loader::update()
 {

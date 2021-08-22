@@ -16,6 +16,8 @@ struct ComponentMeshRenderer
 {
     meshRefrence @0 :Text;
     matRefrence @1 :Text;
+
+    updateFreq @2 :Int32;
 }
 
 struct ComponentTransform

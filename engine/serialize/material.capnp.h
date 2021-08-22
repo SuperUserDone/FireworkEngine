@@ -34,7 +34,7 @@ struct Attribute {
   struct Data;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(bd8c8b89aec5a9bf, 2, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(bd8c8b89aec5a9bf, 4, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -66,7 +66,7 @@ struct Attribute::Data {
   };
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(b9a2b0447b6ca8c0, 2, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(b9a2b0447b6ca8c0, 4, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -114,6 +114,12 @@ public:
 
   inline typename Data::Reader getData() const;
 
+  inline float getStepsize() const;
+
+  inline float getMin() const;
+
+  inline float getMax() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -154,6 +160,15 @@ public:
 
   inline typename Data::Builder getData();
   inline typename Data::Builder initData();
+
+  inline float getStepsize();
+  inline void setStepsize(float value);
+
+  inline float getMin();
+  inline void setMin(float value);
+
+  inline float getMax();
+  inline void setMax(float value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -568,6 +583,48 @@ inline typename Attribute::Data::Builder Attribute::Builder::initData() {
   _builder.getPointerField(::capnp::bounded<1>() * ::capnp::POINTERS).clear();
   return typename Attribute::Data::Builder(_builder);
 }
+inline float Attribute::Reader::getStepsize() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+
+inline float Attribute::Builder::getStepsize() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+inline void Attribute::Builder::setStepsize(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS, value);
+}
+
+inline float Attribute::Reader::getMin() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS);
+}
+
+inline float Attribute::Builder::getMin() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS);
+}
+inline void Attribute::Builder::setMin(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS, value);
+}
+
+inline float Attribute::Reader::getMax() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS);
+}
+
+inline float Attribute::Builder::getMax() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS);
+}
+inline void Attribute::Builder::setMax(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS, value);
+}
+
 inline  ::fw::capnp::Attribute::Data::Which Attribute::Data::Reader::which() const {
   return _reader.getDataField<Which>(
       ::capnp::bounded<2>() * ::capnp::ELEMENTS);

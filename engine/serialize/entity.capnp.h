@@ -49,7 +49,7 @@ struct ComponentMeshRenderer {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(b3919c27d4a14f3f, 0, 2)
+    CAPNP_DECLARE_STRUCT_HEADER(b3919c27d4a14f3f, 1, 2)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -197,6 +197,8 @@ public:
   inline bool hasMatRefrence() const;
   inline  ::capnp::Text::Reader getMatRefrence() const;
 
+  inline  ::int32_t getUpdateFreq() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -238,6 +240,9 @@ public:
   inline  ::capnp::Text::Builder initMatRefrence(unsigned int size);
   inline void adoptMatRefrence(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownMatRefrence();
+
+  inline  ::int32_t getUpdateFreq();
+  inline void setUpdateFreq( ::int32_t value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -598,6 +603,20 @@ inline void ComponentMeshRenderer::Builder::adoptMatRefrence(
 inline ::capnp::Orphan< ::capnp::Text> ComponentMeshRenderer::Builder::disownMatRefrence() {
   return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
       ::capnp::bounded<1>() * ::capnp::POINTERS));
+}
+
+inline  ::int32_t ComponentMeshRenderer::Reader::getUpdateFreq() const {
+  return _reader.getDataField< ::int32_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS);
+}
+
+inline  ::int32_t ComponentMeshRenderer::Builder::getUpdateFreq() {
+  return _builder.getDataField< ::int32_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS);
+}
+inline void ComponentMeshRenderer::Builder::setUpdateFreq( ::int32_t value) {
+  _builder.setDataField< ::int32_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS, value);
 }
 
 inline bool ComponentTransform::Reader::hasPos() const {

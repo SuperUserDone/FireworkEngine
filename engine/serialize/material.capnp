@@ -7,8 +7,12 @@ using Vec = import "vector.capnp";
 
 struct Attribute
 {
-    bindId @0 :UInt32;
-    name @1: Text;
+    bindId  @0 :UInt32;
+    name    @1 :Text;
+
+    stepsize    @17:Float32;
+    min         @18:Float32;
+    max         @19:Float32;
 
     data :union 
     {

@@ -93,7 +93,7 @@ struct attribute
 
     float stepsize = 1.f;
     float min = FLT_MIN;
-    float max = -FLT_MAX;
+    float max = FLT_MAX;
 
     std::string data_texture_name;
 

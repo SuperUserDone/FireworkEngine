@@ -41,15 +41,13 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
         ref<material> m = value;
         std::string k = key;
 
+        if (m->m_path.empty()) {
+            m->m_path = "root://" + k + ".fwmesh";
+        }
+
         action act;
 
-        act.async_action = [m, k]() {
-            if (!m->save_to_file()) {
-                m->m_path = "root://" + k + ".fwmesh";
-            }
-
-            return m->save_to_file();
-        };
+        act.async_action = [m, k]() { return m->save_to_file(); };
 
         act.load_priority = 0;
 
@@ -69,15 +67,13 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
         ref<mesh> m = value;
         std::string k = key;
 
+        if (m->m_path.empty()) {
+            m->m_path = "root://" + k + ".fwmesh";
+        }
+
         action act;
 
-        act.async_action = [m, k]() {
-            if (!m->save_to_file()) {
-                m->m_path = "root://" + k + ".fwmesh";
-            }
-
-            return m->save_to_file();
-        };
+        act.async_action = [m, k]() { return m->save_to_file(); };
 
         act.load_priority = 0;
 
@@ -141,6 +137,8 @@ bool scene_serializer::serialize(scene *ptr, const std::string &vfs_path)
                 auto mesh_ser = entities[entities_count].initMeshRenderer();
                 mesh_ser.setMeshRefrence(mesh.mesh_named_ref);
                 mesh_ser.setMatRefrence(mesh.mat_named_ref);
+
+                mesh_ser.setUpdateFreq(mesh.lookup_freq);
             }
         }
         entities_count++;
@@ -260,10 +258,14 @@ bool scene_serializer::deserialize(scene *ptr, const std::string &vfs_path)
                 auto &comp = entity_new.add_component<component_mesh_renderer>();
 
                 comp.mesh_named_ref = mesh.getMeshRefrence().cStr();
-                comp.mesh_ref = ptr->m_meshes[comp.mesh_named_ref];
+                if (!comp.mesh_named_ref.empty())
+                    comp.mesh_ref = ptr->m_meshes[comp.mesh_named_ref];
 
                 comp.mat_named_ref = mesh.getMatRefrence().cStr();
-                comp.material_ref = ptr->m_materials[comp.mat_named_ref];
+                if (!comp.mat_named_ref.empty())
+                    comp.material_ref = ptr->m_materials[comp.mat_named_ref];
+
+                comp.lookup_freq = mesh.getUpdateFreq();
             }
         }
     }

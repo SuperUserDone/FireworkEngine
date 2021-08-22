@@ -7,3 +7,4 @@ imgui.ini
 .ccls-cache
 compile_commands.json
 vcpkg_installed
+test_data/ignore

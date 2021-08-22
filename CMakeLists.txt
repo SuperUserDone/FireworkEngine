@@ -42,11 +42,13 @@ find_package(assimp CONFIG REQUIRED)
 find_package(CapnProto CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
 add_subdirectory(engine)
 add_subdirectory(player)
 add_subdirectory(editor)
 add_subdirectory(converter)
+add_subdirectory(tests)
 
 install(
   DIRECTORY engine/

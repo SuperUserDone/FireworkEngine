@@ -40,6 +40,10 @@ bool material::save_to_file()
 
         attr.setName(tosave.name);
 
+        attr.setStepsize(tosave.stepsize);
+        attr.setMin(tosave.min);
+        attr.setMax(tosave.max);
+
         switch (tosave.type) {
         case ATTRIB_TYPE_BOOL:
             data.setBool(tosave.data.d_bool);
@@ -81,7 +85,7 @@ bool material::save_to_file()
             write_vec4_direct(tosave.data.d_vec4f, data.initVec4f());
             break;
         case ATTRIB_TYPE_VEC4I:
-            write_vec4_direct(tosave.data.d_vec4i, data.initVec4u());
+            write_vec4_direct(tosave.data.d_vec4i, data.initVec4i());
             break;
         case ATTRIB_TYPE_VEC4U:
             write_vec4_direct(tosave.data.d_vec4u, data.initVec4u());
@@ -118,6 +122,10 @@ bool material::load_from_file(const std::string &vfs_path)
         new_attr.bind_id = attr.getBindId();
         new_attr.name = attr.getName();
 
+        new_attr.max = attr.getMax();
+        new_attr.min = attr.getMin();
+        new_attr.stepsize = attr.getStepsize();
+
         auto data = attr.getData();
 
         switch (data.which()) {
@@ -126,7 +134,7 @@ bool material::load_from_file(const std::string &vfs_path)
             new_attr.data.d_int = data.getInt();
             break;
         case capnp::Attribute::Data::UINT:
-            new_attr.type = ATTRIB_TYPE_INT;
+            new_attr.type = ATTRIB_TYPE_UINT;
             new_attr.data.d_uint = data.getUint();
             break;
         case capnp::Attribute::Data::FLOAT:
